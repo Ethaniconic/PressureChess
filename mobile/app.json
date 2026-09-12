@@ -21,7 +21,15 @@
         "backgroundColor": "#07080B"
       },
       "package": "com.pressurechess.app",
-      "permissions": ["INTERNET"]
-    }
+      "permissions": [
+        "INTERNET"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c7c76e24-fc00-4546-b5ff-8ce4722fbd64"
+      }
+    },
+    "owner": "ethaniconic"
   }
 }

@@ -98,13 +98,16 @@ export const HomePage = ({ onNavigate }) => {
       {/* ========================================================= */}
       {/* 1. TOP HERO: ACADEMY SPOTLIGHT & ACTIVE PROGRESS (FRONT & CENTER) */}
       {/* ========================================================= */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-dark-900 via-dark-850 to-dark-900 border border-cyan-500/30 p-6 sm:p-8 shadow-2xl shadow-cyan-950/40">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#1c2847] to-[#141c33] border border-white/[0.14] border-t-white/45 p-6 sm:p-8 shadow-2xl shadow-black/30">
+        {/* iOS Specular Top Reflection / Light Sheen */}
+        <div className="pointer-events-none absolute top-0 left-0 right-0 h-44 bg-gradient-to-b from-white/[0.12] via-white/[0.03] to-transparent rounded-t-3xl" />
+
         <div className="absolute -right-16 -top-16 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -left-16 -bottom-16 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-brand text-xs font-black uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-t-white/50 border-cyan-500/40 text-cyan-brand text-xs font-black uppercase tracking-wider shadow-sm">
               <Sparkles className="w-3.5 h-3.5 animate-pulse text-cyan-brand" />
               <span>Interactive Chess Academy • 3 Mastery Tiers</span>
             </div>
@@ -123,7 +126,7 @@ export const HomePage = ({ onNavigate }) => {
                 <div 
                   key={tier.id}
                   onClick={() => onNavigate('academy')}
-                  className="px-3 py-1.5 rounded-xl bg-dark-800/80 border border-white/10 hover:border-cyan-500/40 text-xs font-semibold text-slate-300 hover:text-white cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-xl bg-[#1e2b4d]/80 border border-white/12 border-t-white/30 hover:border-cyan-500/40 text-xs font-semibold text-slate-200 hover:text-white cursor-pointer transition-all flex items-center gap-1.5 shadow-sm"
                 >
                   <span>{tier.icon}</span>
                   <span>{tier.badge}</span>
@@ -136,7 +139,7 @@ export const HomePage = ({ onNavigate }) => {
           <div className="w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3">
             <button
               onClick={handleResumeAcademy}
-              className="group px-7 py-4 rounded-2xl bg-gradient-to-r from-cyan-brand via-sky-400 to-cyan-500 hover:from-cyan-400 hover:to-sky-300 text-black font-black flex items-center justify-center gap-3 shadow-glow-cyan hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              className="group px-7 py-4 rounded-2xl bg-gradient-to-r from-cyan-brand via-sky-400 to-cyan-500 hover:from-cyan-400 hover:to-sky-300 text-black font-black flex items-center justify-center gap-3 shadow-glow-cyan hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-t-white/60 border-cyan-400"
             >
               <GraduationCap className="w-5 h-5 fill-black" />
               <div className="text-left">
@@ -148,11 +151,12 @@ export const HomePage = ({ onNavigate }) => {
 
             <button
               onClick={() => onNavigate('multiplayer')}
-              className="px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-sky-500/20 hover:from-cyan-500/30 hover:to-sky-500/30 border border-cyan-400/50 text-cyan-300 hover:text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-glow-cyan"
+              className="px-5 py-3 rounded-2xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-t-white/40 border-cyan-400/50 text-cyan-200 hover:text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all shadow-glow-cyan"
             >
               <Swords className="w-4 h-4 text-cyan-400" />
               <span>Play Online (Bullet / Blitz / Rapid)</span>
             </button>
+
 
             <button
               onClick={() => onNavigate('pressure-trainer')}
@@ -407,71 +411,116 @@ export const HomePage = ({ onNavigate }) => {
             </div>
           </GlassCard>
 
-          {/* Quick Launchpad Buttons (Properly padded, modern grid) */}
+          {/* Quick Launchpad Buttons (iOS Bubble Glass Tiles) */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
-              Training Modes & Quick Play
-            </h4>
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-brand" />
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-300">
+                Training Modes & Quick Play
+              </h4>
+            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
               
               <button
                 onClick={() => onNavigate('game-review')}
-                className="p-4 rounded-2xl bg-dark-850/80 border border-cyan-brand/30 hover:border-cyan-brand/60 hover:bg-cyan-950/20 transition-all text-left group"
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-cyan-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
               >
-                <div className="w-9 h-9 rounded-xl bg-cyan-brand/10 border border-cyan-brand/20 flex items-center justify-center text-cyan-brand mb-2.5 group-hover:scale-110 transition-transform">
-                  <Bot className="w-4 h-4" />
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400/30 border-t-white/40 flex items-center justify-center text-cyan-brand mb-2.5 group-hover:scale-110 transition-transform">
+                  <Bot className="w-5 h-5" />
                 </div>
-                <div className="font-bold text-white text-xs sm:text-sm">AI Game Review</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">Coach Orion & Eval</div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">AI Game Review</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">Coach Orion & Eval</div>
               </button>
 
               <button
                 onClick={() => onNavigate('play')}
-                className="p-4 rounded-2xl bg-dark-850/80 border border-white/[0.08] hover:border-emerald-500/40 hover:bg-emerald-950/15 transition-all text-left group"
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-emerald-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
               >
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-2.5 group-hover:scale-110 transition-transform">
-                  <Swords className="w-4 h-4" />
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 border-t-white/40 flex items-center justify-center text-emerald-400 mb-2.5 group-hover:scale-110 transition-transform">
+                  <Swords className="w-5 h-5" />
                 </div>
-                <div className="font-bold text-white text-xs sm:text-sm">Offline Play</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">2-Player clock</div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">Offline Play</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">2-Player clock</div>
               </button>
 
               <button
                 onClick={() => onNavigate('academy')}
-                className="p-4 rounded-2xl bg-dark-850/80 border border-white/[0.08] hover:border-cyan-500/40 hover:bg-cyan-950/15 transition-all text-left group"
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-cyan-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
               >
-                <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-brand mb-2.5 group-hover:scale-110 transition-transform">
-                  <GraduationCap className="w-4 h-4" />
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400/30 border-t-white/40 flex items-center justify-center text-cyan-brand mb-2.5 group-hover:scale-110 transition-transform">
+                  <GraduationCap className="w-5 h-5" />
                 </div>
-                <div className="font-bold text-white text-xs sm:text-sm">All Lessons</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">17 Structured units</div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">All Lessons</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">17 Structured units</div>
               </button>
 
               <button
                 onClick={() => onNavigate('progress')}
-                className="p-4 rounded-2xl bg-dark-850/80 border border-white/[0.08] hover:border-gold-500/40 hover:bg-gold-950/15 transition-all text-left group"
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-amber-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
               >
-                <div className="w-9 h-9 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center text-gold-400 mb-2.5 group-hover:scale-110 transition-transform">
-                  <Trophy className="w-4 h-4" />
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 border-t-white/40 flex items-center justify-center text-amber-400 mb-2.5 group-hover:scale-110 transition-transform">
+                  <Trophy className="w-5 h-5" />
                 </div>
-                <div className="font-bold text-white text-xs sm:text-sm">Progress Hub</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">Level & Stars</div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">Progress Hub</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">Level & Stars</div>
+              </button>
+
+              <button
+                onClick={() => onNavigate('pressure-trainer')}
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-amber-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
+              >
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 border-t-white/40 flex items-center justify-center text-amber-400 mb-2.5 group-hover:scale-110 transition-transform">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">Pressure Trainer</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">10s–30s Scramble</div>
+              </button>
+
+              <button
+                onClick={() => onNavigate('leaderboard')}
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-amber-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
+              >
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/30 border-t-white/40 flex items-center justify-center text-amber-400 mb-2.5 group-hover:scale-110 transition-transform">
+                  <Trophy className="w-5 h-5" />
+                </div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">Leaderboards</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">Global Rankings</div>
+              </button>
+
+              <button
+                onClick={() => onNavigate('review-dashboard')}
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-emerald-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
+              >
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/30 border-t-white/40 flex items-center justify-center text-emerald-400 mb-2.5 group-hover:scale-110 transition-transform">
+                  <Target className="w-5 h-5" />
+                </div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">Coach Analytics</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">Dashboard stats</div>
               </button>
 
               <button
                 onClick={() => onNavigate('settings')}
-                className="p-4 rounded-2xl bg-dark-850/80 border border-white/[0.08] hover:border-purple-500/40 hover:bg-purple-950/15 transition-all text-left group"
+                className="relative overflow-hidden p-4 rounded-2xl bg-[#1c2847]/85 border border-white/[0.12] border-t-white/40 hover:border-purple-400/50 hover:bg-[#223157] transition-all text-left group shadow-lg shadow-black/20"
               >
-                <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-2.5 group-hover:scale-110 transition-transform">
-                  <SettingsIcon className="w-4 h-4" />
+                <div className="pointer-events-none absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-white/[0.08] to-transparent rounded-t-2xl" />
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-400/30 border-t-white/40 flex items-center justify-center text-purple-400 mb-2.5 group-hover:scale-110 transition-transform">
+                  <SettingsIcon className="w-5 h-5" />
                 </div>
-                <div className="font-bold text-white text-xs sm:text-sm">Studio Settings</div>
-                <div className="text-[11px] text-slate-400 mt-0.5">Themes & audio</div>
+                <div className="font-extrabold text-white text-xs sm:text-sm">Studio Settings</div>
+                <div className="text-[11px] text-slate-300 mt-0.5 font-medium">Themes & audio</div>
               </button>
 
             </div>
           </div>
+
 
         </div>
 

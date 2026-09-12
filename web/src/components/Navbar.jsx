@@ -21,7 +21,10 @@ export const Navbar = ({ currentTab, onNavigate }) => {
   const isMultiplayerActive = currentTab === 'multiplayer' || currentTab === 'multiplayer-game';
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/[0.08] bg-dark-950/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 w-full border-b border-white/[0.12] bg-[#121829]/85 backdrop-blur-2xl shadow-lg shadow-black/20">
+      {/* Top light reflection line */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand */}
@@ -29,15 +32,15 @@ export const Navbar = ({ currentTab, onNavigate }) => {
           onClick={() => onNavigate('home')}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-brand via-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/25 group-hover:scale-105 transition-transform duration-300 overflow-hidden">
+          <div className="relative w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-brand via-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/25 group-hover:scale-105 transition-transform duration-300 overflow-hidden border border-t-white/50 border-white/20">
             <img 
               src="/icon.jpg" 
               alt="PressureChess" 
-              className="absolute inset-0 w-full h-full object-cover rounded-xl"
+              className="absolute inset-0 w-full h-full object-cover rounded-2xl"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
             <span className="text-xl drop-shadow-sm">⚡</span>
-            <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-gold-400 border-2 border-dark-950 flex items-center justify-center text-[7px] font-black text-black">
+            <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-gold-400 border-2 border-[#121829] flex items-center justify-center text-[7px] font-black text-black">
               ♟
             </div>
           </div>
@@ -51,7 +54,7 @@ export const Navbar = ({ currentTab, onNavigate }) => {
                   e.stopPropagation();
                   openWelcomeModal();
                 }}
-                className="px-1.5 py-0.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-amber-500/20 text-cyan-300 border border-cyan-400/60 text-[9px] font-black uppercase tracking-wider shadow-glow-cyan hover:scale-105 transition-transform"
+                className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-t-white/50 border-cyan-400/60 text-[9px] font-black uppercase tracking-wider shadow-glow-cyan hover:scale-105 transition-transform"
                 title="Public Beta (100% Free) - Click to view Founding Player benefits"
               >
                 BETA
@@ -64,13 +67,13 @@ export const Navbar = ({ currentTab, onNavigate }) => {
           </div>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="flex items-center gap-1 sm:gap-1.5">
+        {/* Navigation Items (iOS Bubble Pills) */}
+        <nav className="flex items-center gap-1 sm:gap-1.5 bg-[#18223a]/70 p-1 rounded-2xl border border-white/10 border-t-white/30 backdrop-blur-lg">
           <button
             onClick={() => onNavigate('home')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all relative overflow-hidden ${
               currentTab === 'home' 
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 shadow-sm' 
+                ? 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 border-t-white/60 shadow-sm font-bold' 
                 : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
           >
@@ -82,8 +85,8 @@ export const Navbar = ({ currentTab, onNavigate }) => {
             onClick={() => onNavigate('multiplayer')}
             className={`px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 ${
               isMultiplayerActive
-                ? 'bg-gradient-to-r from-cyan-500/30 to-sky-500/30 text-cyan-300 border border-cyan-400/60 shadow-glow-cyan font-black' 
-                : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-cyan-500/20 font-bold'
+                ? 'bg-gradient-to-r from-cyan-500/35 to-sky-500/35 text-cyan-200 border border-cyan-400/60 border-t-white/60 shadow-glow-cyan font-black' 
+                : 'text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-transparent font-bold'
             }`}
           >
             <Swords className="w-3.5 h-3.5" />
@@ -95,55 +98,55 @@ export const Navbar = ({ currentTab, onNavigate }) => {
             onClick={() => onNavigate('leaderboard')}
             className={`px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 ${
               currentTab === 'leaderboard'
-                ? 'bg-amber-500/25 text-amber-300 border border-amber-400/60 shadow-glow-gold font-black' 
+                ? 'bg-amber-500/25 text-amber-200 border border-amber-400/60 border-t-white/60 shadow-glow-gold font-black' 
                 : 'text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 border border-transparent font-bold'
             }`}
           >
             <Trophy className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Leaderboards</span>
+            <span className="hidden sm:inline">Leaderboard</span>
           </button>
 
           <button
             onClick={() => onNavigate('academy')}
             className={`px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 ${
               currentTab === 'academy' || currentTab === 'lesson-player'
-                ? 'bg-cyan-500/25 text-white border border-cyan-400/60 shadow-glow-cyan font-black' 
+                ? 'bg-cyan-500/25 text-white border border-cyan-400/60 border-t-white/60 shadow-glow-cyan font-black' 
                 : 'text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 border border-transparent font-bold'
             }`}
           >
             <span className="text-sm">🎓</span>
-            <span className="font-black text-white tracking-wide">Academy</span>
+            <span className="font-bold text-white tracking-wide">Academy</span>
           </button>
 
           <button
             onClick={() => onNavigate('pressure-trainer')}
             className={`px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 ${
               currentTab === 'pressure-trainer' || currentTab === 'puzzle-player' || currentTab === 'tactics-stats'
-                ? 'bg-amber-500/25 text-white border border-amber-400/60 shadow-glow-gold font-black' 
+                ? 'bg-amber-500/25 text-white border border-amber-400/60 border-t-white/60 shadow-glow-gold font-black' 
                 : 'text-slate-300 hover:text-amber-300 hover:bg-amber-500/10 border border-transparent font-bold'
             }`}
           >
             <span className="text-sm">⚡</span>
-            <span className="font-black text-white tracking-wide">Pressure</span>
+            <span className="font-bold text-white tracking-wide">Pressure</span>
           </button>
 
           <button
             onClick={() => onNavigate('game-review')}
             className={`px-3 py-1.5 rounded-xl text-xs transition-all flex items-center gap-1.5 ${
               currentTab === 'game-review' || currentTab === 'review-dashboard'
-                ? 'bg-cyan-500/25 text-white border border-cyan-400/60 shadow-glow-cyan font-black' 
+                ? 'bg-cyan-500/25 text-white border border-cyan-400/60 border-t-white/60 shadow-glow-cyan font-black' 
                 : 'text-slate-300 hover:text-cyan-300 hover:bg-cyan-500/10 border border-transparent font-bold'
             }`}
           >
             <span className="text-sm">🤖</span>
-            <span className="font-black text-white tracking-wide">Coach Review</span>
+            <span className="font-bold text-white tracking-wide">Coach</span>
           </button>
 
           <button
             onClick={() => onNavigate('changelog')}
             className={`px-2.5 py-1.5 rounded-xl text-xs transition-all hidden xl:flex items-center gap-1.5 ${
               currentTab === 'changelog'
-                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 font-bold'
+                ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 border-t-white/50 font-bold'
                 : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
             title="Changelog & Roadmap"
@@ -156,7 +159,7 @@ export const Navbar = ({ currentTab, onNavigate }) => {
             onClick={() => onNavigate('settings')}
             className={`px-2 sm:px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
               currentTab === 'settings' 
-                ? 'bg-white/15 text-white border border-white/20' 
+                ? 'bg-white/20 text-white border border-white/30 border-t-white/60' 
                 : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
             }`}
             title="Settings"
@@ -171,12 +174,13 @@ export const Navbar = ({ currentTab, onNavigate }) => {
           {/* Quick Feedback Button */}
           <button
             onClick={() => openFeedback('feature', 'General', 5)}
-            className="px-2.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"
+            className="px-2.5 py-1.5 rounded-xl bg-amber-500/18 hover:bg-amber-500/28 border border-amber-400/40 border-t-white/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"
             title="Give Feedback directly to founders"
           >
             <MessageSquarePlus className="w-3.5 h-3.5 text-amber-400" />
             <span className="hidden md:inline">Feedback</span>
           </button>
+
 
           {user ? (
             <div className="flex items-center gap-2">
