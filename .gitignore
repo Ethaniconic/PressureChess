@@ -1,0 +1,67 @@
+# Dependencies
+node_modules/
+*/node_modules/
+venv/
+*/venv/
+env/
+*/env/
+.venv/
+*/.venv/
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+*.env
+*.env.*
+!*.env.example
+
+# Python cache & build
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Vite / Web builds
+web/dist/
+web/dist-ssr/
+*.local
+
+# Mobile / Expo / EAS
+.expo/
+*/.expo/
+.expo-shared/
+*/.expo-shared/
+*.apk
+*.aab
+*.ipa
+*.jks
+*.keystore
+
+# Operating System files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*~
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

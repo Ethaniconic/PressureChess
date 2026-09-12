@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "PressureChess",
+    "slug": "pressurechess",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "icon": "./assets/icon.jpg",
+    "splash": {
+      "image": "./assets/icon.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#07080B"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pressurechess.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.jpg",
+        "backgroundColor": "#07080B"
+      },
+      "package": "com.pressurechess.app",
+      "permissions": ["INTERNET"]
+    }
+  }
+}

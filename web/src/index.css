@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: 
+    radial-gradient(circle at 50% -20%, rgba(0, 229, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 100% 60%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 0% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+    #070B14;
+  color: #F8FAFC;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #070B14;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0284C7;
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.015) 100%), rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 229, 255, 0.35);
+  box-shadow: 0 12px 36px -4px rgba(0, 229, 255, 0.15), 0 8px 24px -2px rgba(0, 0, 0, 0.6);
+}
+
+/* Chess Board Themes */
+.theme-emerald .sq-light {
+  background-color: #e2e8f0;
+}
+.theme-emerald .sq-dark {
+  background-color: #059669;
+}
+
+.theme-midnight .sq-light {
+  background-color: #334155;
+}
+.theme-midnight .sq-dark {
+  background-color: #0f172a;
+}
+
+.theme-wood .sq-light {
+  background-color: #f0d9b5;
+}
+.theme-wood .sq-dark {
+  background-color: #b58863;
+}
+
+.theme-gold .sq-light {
+  background-color: #fef3c7;
+}
+.theme-gold .sq-dark {
+  background-color: #b45309;
+}
+
+/* Square Highlight Animations */
+.square-selected {
+  background-color: rgba(245, 158, 11, 0.5) !important;
+}
+
+.square-last-move {
+  background-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+.square-check {
+  background-color: rgba(239, 68, 68, 0.65) !important;
+  animation: pulse-danger 1.5s infinite;
+}
+
+@keyframes pulse-danger {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}

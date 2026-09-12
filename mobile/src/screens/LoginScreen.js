@@ -1,0 +1,227 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../theme/colors';
+import { GlassCard } from '../components/GlassCard';
+import { useAuth } from '../context/AuthContext';
+import { Mail, Lock, LogIn, UserCheck } from 'lucide-react-native';
+
+export const LoginScreen = ({ navigation }) => {
+  const { login, loginAsGuest } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Missing Fields', 'Please enter both email and password.');
+      return;
+    }
+    setLoading(true);
+    try {
+      await login(email, password);
+    } catch (e) {
+      Alert.alert('Login Failed', e.message || 'Check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGuest = async () => {
+    await loginAsGuest();
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        
+        <View style={styles.header}>
+          <Text style={styles.logo}>♟️</Text>
+          <Text style={styles.title}>PressureChess</Text>
+          <Text style={styles.subtitle}>Sign in to track rating & match history</Text>
+        </View>
+
+        <GlassCard style={styles.card}>
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Email Address</Text>
+            <View style={styles.inputWrapper}>
+              <Mail size={18} color={colors.textMuted} />
+              <TextInput
+                style={styles.input}
+                placeholder="grandmaster@pressurechess.com"
+                placeholderTextColor={colors.textMuted}
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <View style={styles.passwordHeader}>
+              <Text style={styles.label}>Password</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                <Text style={styles.forgotText}>Forgot?</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.inputWrapper}>
+              <Lock size={18} color={colors.textMuted} />
+              <TextInput
+                style={styles.input}
+                placeholder="••••••••"
+                placeholderTextColor={colors.textMuted}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            <LogIn size={18} color="#000" />
+            <Text style={styles.loginText}>
+              {loading ? 'AUTHENTICATING...' : 'SIGN IN'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.guestBtn}
+            onPress={handleGuest}
+          >
+            <UserCheck size={18} color={colors.emerald} />
+            <Text style={styles.guestText}>Continue as Guest</Text>
+          </TouchableOpacity>
+        </GlassCard>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Don't have an account? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <Text style={styles.signupLink}>Create Account</Text>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  logo: {
+    fontSize: 48,
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: '900',
+    color: colors.text,
+  },
+  subtitle: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginTop: 4,
+  },
+  card: {
+    gap: 16,
+    padding: 20,
+    borderColor: 'rgba(245, 158, 11, 0.3)',
+  },
+  inputGroup: {
+    gap: 6,
+  },
+  passwordHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  label: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+  },
+  forgotText: {
+    fontSize: 11,
+    color: colors.gold,
+    fontWeight: '700',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surfaceLight,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingHorizontal: 12,
+    gap: 10,
+  },
+  input: {
+    flex: 1,
+    height: 48,
+    color: colors.text,
+    fontSize: 14,
+  },
+  loginBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.gold,
+    paddingVertical: 14,
+    borderRadius: 14,
+    marginTop: 4,
+  },
+  loginText: {
+    fontSize: 13,
+    fontWeight: '900',
+    color: '#000',
+    letterSpacing: 0.5,
+  },
+  guestBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.surfaceLight,
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingVertical: 12,
+    borderRadius: 14,
+  },
+  guestText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 24,
+  },
+  footerText: {
+    fontSize: 12,
+    color: colors.textMuted,
+  },
+  signupLink: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.gold,
+  }
+});
