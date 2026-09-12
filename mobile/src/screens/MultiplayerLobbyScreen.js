@@ -97,7 +97,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
             <View>
               <Text style={styles.usernameText}>{user?.username || 'Tactician'}</Text>
               <Text style={styles.userModeRating}>
-                {activeModeConfig.name} Rating: <Text style={{ color: colors.gold, fontWeight: 'bold' }}>{userRatings[selectedMode] || 1340}</Text>
+                {activeModeConfig.name} Rating: <Text style={{ color: colors.gold, fontWeight: 'bold' }}>{userRatings[selectedMode] || 1200}</Text>
               </Text>
             </View>
           </View>
@@ -133,7 +133,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
                   {mode.name}
                 </Text>
                 <Text style={[styles.modeRatingBadge, isSelected && { color: colors.goldLight }]}>
-                  {userRatings[mode.id] || 1300}
+                  {userRatings[mode.id] || 1200}
                 </Text>
               </TouchableOpacity>
             );
@@ -174,7 +174,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
           <View style={styles.actionCardInfo}>
             <Text style={styles.actionTitle}>Ranked Matchmaking</Text>
             <Text style={styles.actionDesc}>
-              Pair against a live opponent around your Elo rating ({userRatings[selectedMode] || 1340}).
+              Pair against a live opponent around your Elo rating ({userRatings[selectedMode] || 1200}).
             </Text>
           </View>
 

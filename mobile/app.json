@@ -5,25 +5,29 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
-    "icon": "./assets/icon.jpg",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/icon.jpg",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#07080B"
+      "backgroundColor": "#08080A"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pressurechess.app"
+      "bundleIdentifier": "com.pressurechess.app",
+      "icon": "./assets/icon.png"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.jpg",
-        "backgroundColor": "#07080B"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#08080A"
       },
       "package": "com.pressurechess.app",
       "permissions": [
         "INTERNET"
       ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {

@@ -86,12 +86,3 @@ export const MOCK_LEADERBOARDS = {
   daily: [],
   friends: []
 };
-
-export const SIMULATED_OPPONENTS = [
-  { username: "Hikaru_Fan99", country: "US", rating: 1380, avatar: "🔥" },
-  { username: "Vishy_Prodigy", country: "IN", rating: 1410, avatar: "👑" },
-  { username: "Nordic_Crusher", country: "SE", rating: 1350, avatar: "❄️" },
-  { username: "Berlin_Knight", country: "DE", rating: 1290, avatar: "🏰" },
-  { username: "French_Defenseur", country: "FR", rating: 1330, avatar: "🎯" },
-  { username: "Samba_Tactics", country: "BR", rating: 1320, avatar: "🌴" }
-];

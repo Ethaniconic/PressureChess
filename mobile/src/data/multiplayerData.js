@@ -63,15 +63,6 @@ export const COUNTRIES = {
   PL: { name: 'Poland', flag: '🇵🇱' }
 };
 
-export const SIMULATED_OPPONENTS = [
-  { id: 'sim_1', name: 'Hikaru_Fan99', rating: 1420, country: 'US', avatar: '⚡' },
-  { id: 'sim_2', name: 'Vishy_Prodigy', rating: 1380, country: 'IN', avatar: '♟️' },
-  { id: 'sim_3', name: 'Nordic_Crusher', rating: 1460, country: 'NO', avatar: '🛡️' },
-  { id: 'sim_4', name: 'Tashkent_Tactics', rating: 1490, country: 'UZ', avatar: '⚔️' },
-  { id: 'sim_5', name: 'Berlin_Wall_88', rating: 1350, country: 'DE', avatar: '🏰' },
-  { id: 'sim_6', name: 'Paris_Knight', rating: 1310, country: 'FR', avatar: '🐴' }
-];
-
 export const MOCK_LEADERBOARDS = {
   global: [],
   weekly: [],

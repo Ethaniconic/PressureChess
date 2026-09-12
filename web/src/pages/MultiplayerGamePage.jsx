@@ -244,7 +244,7 @@ export const MultiplayerGamePage = ({ onNavigate }) => {
                 </span>
               </div>
               <div className="text-[10px] text-cyan-brand font-bold font-mono">
-                {userRatings[activeGame?.mode || 'blitz'] || 1340} Elo
+                {userRatings[activeGame?.mode || 'blitz'] || 1200} Elo
               </div>
             </div>
           </div>

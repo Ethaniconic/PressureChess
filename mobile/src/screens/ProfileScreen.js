@@ -209,8 +209,12 @@ export const ProfileScreen = ({ navigation }) => {
           <View style={styles.badgesRow}>
             <View style={styles.badgeItem}>
               <Trophy size={16} color="#00E5FF" />
-              <Text style={[styles.badgeNum, { color: '#00E5FF' }]}>{userRatings.overall || 1340}</Text>
-              <Text style={styles.badgeLabel}>OVERALL ELO</Text>
+              <Text style={[styles.badgeNum, { color: '#00E5FF' }]}>
+                {totalMatches > 0 ? (userRatings.overall || 1200) : '1200?'}
+              </Text>
+              <Text style={styles.badgeLabel}>
+                {totalMatches > 0 ? 'OVERALL ELO' : 'PROVISIONAL'}
+              </Text>
             </View>
 
             <View style={styles.badgeItem}>
@@ -393,25 +397,25 @@ export const ProfileScreen = ({ navigation }) => {
           <View style={[styles.modeRatingCard, { borderColor: 'rgba(255, 107, 0, 0.3)' }]}>
             <Text style={styles.modeCardIcon}>⚡</Text>
             <Text style={styles.modeCardName}>Bullet</Text>
-            <Text style={styles.modeCardVal}>{userRatings.bullet || 1300}</Text>
+            <Text style={styles.modeCardVal}>{totalMatches > 0 ? (userRatings.bullet || 1200) : '1200?'}</Text>
           </View>
 
           <View style={[styles.modeRatingCard, { borderColor: 'rgba(245, 158, 11, 0.3)' }]}>
             <Text style={styles.modeCardIcon}>🔥</Text>
             <Text style={styles.modeCardName}>Blitz</Text>
-            <Text style={styles.modeCardVal}>{userRatings.blitz || 1340}</Text>
+            <Text style={styles.modeCardVal}>{totalMatches > 0 ? (userRatings.blitz || 1200) : '1200?'}</Text>
           </View>
 
           <View style={[styles.modeRatingCard, { borderColor: 'rgba(0, 229, 255, 0.3)' }]}>
             <Text style={styles.modeCardIcon}>⏱️</Text>
             <Text style={styles.modeCardName}>Rapid</Text>
-            <Text style={styles.modeCardVal}>{userRatings.rapid || 1400}</Text>
+            <Text style={styles.modeCardVal}>{totalMatches > 0 ? (userRatings.rapid || 1200) : '1200?'}</Text>
           </View>
 
           <View style={[styles.modeRatingCard, { borderColor: 'rgba(16, 185, 129, 0.3)' }]}>
             <Text style={styles.modeCardIcon}>🏛️</Text>
             <Text style={styles.modeCardName}>Classical</Text>
-            <Text style={styles.modeCardVal}>{userRatings.classical || 1440}</Text>
+            <Text style={styles.modeCardVal}>{totalMatches > 0 ? (userRatings.classical || 1200) : '1200?'}</Text>
           </View>
         </View>
 

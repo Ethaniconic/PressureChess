@@ -4,7 +4,7 @@ import { useAuth } from './AuthContext';
 import { Chess } from 'chess.js';
 import { soundEngine } from '../utils/sound';
 import confetti from 'canvas-confetti';
-import { MULTIPLAYER_MODES, SIMULATED_OPPONENTS, COUNTRIES } from '../data/multiplayerData';
+import { MULTIPLAYER_MODES, COUNTRIES } from '../data/multiplayerData';
 
 const MultiplayerContext = createContext({});
 
@@ -73,7 +73,6 @@ export const MultiplayerProvider = ({ children }) => {
   const clockIntervalRef = useRef(null);
   const searchTimeoutRef = useRef(null);
   const realtimeChannelRef = useRef(null);
-  const simulatedBotTimerRef = useRef(null);
 
   // Save profile to localStorage
   useEffect(() => {
@@ -168,7 +167,6 @@ export const MultiplayerProvider = ({ children }) => {
     return () => {
       if (clockIntervalRef.current) clearInterval(clockIntervalRef.current);
       if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
-      if (simulatedBotTimerRef.current) clearTimeout(simulatedBotTimerRef.current);
       if (realtimeChannelRef.current) realtimeChannelRef.current.unsubscribe();
     };
   }, []);
@@ -361,90 +359,138 @@ export const MultiplayerProvider = ({ children }) => {
     setSelectedTimeControl(timeControl);
     setMatchmakingState('searching');
 
-    const myCurrentRating = userRatings[mode] || 1340;
+    const myCurrentRating = userRatings[mode] || 1200;
 
-    try {
-      let matched = false;
-
-      // Try Backend API queue
+    if (isSupabaseConfigured && supabase) {
       try {
-        const response = await fetch(`${API_BASE}/api/multiplayer/queue/join`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        // Query for another live human player waiting in queue
+        const { data: waitingQueue, error: qErr } = await supabase
+          .from('matchmaking_queue')
+          .select('*')
+          .eq('mode', mode)
+          .eq('time_control', timeControl)
+          .eq('status', 'searching')
+          .neq('user_id', userId)
+          .order('created_at', { ascending: true })
+          .limit(1);
+
+        if (!qErr && waitingQueue && waitingQueue.length > 0) {
+          const oppEntry = waitingQueue[0];
+          const gameId = `game_${Date.now()}`;
+          const roomCode = `PR-${Math.floor(1000 + Math.random() * 9000)}`;
+          const { initial, inc } = getTimeControlSeconds(timeControl);
+
+          const amIWhite = Math.random() > 0.5;
+          const whitePlayer = amIWhite ? { id: userId, username, rating: myCurrentRating, country: userCountry } : oppEntry;
+          const blackPlayer = amIWhite ? oppEntry : { id: userId, username, rating: myCurrentRating, country: userCountry };
+
+          const newGame = {
+            id: gameId,
+            room_code: roomCode,
             mode,
             time_control: timeControl,
+            initial_time_seconds: initial,
+            increment_seconds: inc,
+            white_player_id: whitePlayer.id || whitePlayer.user_id,
+            black_player_id: blackPlayer.id || blackPlayer.user_id,
+            white_username: whitePlayer.username,
+            black_username: blackPlayer.username,
+            white_rating: whitePlayer.rating || 1200,
+            black_rating: blackPlayer.rating || 1200,
+            white_country: whitePlayer.country || 'US',
+            black_country: blackPlayer.country || 'US',
+            status: 'active',
+            current_turn: 'white',
+            fen: new Chess().fen(),
+            moves: []
+          };
+
+          await supabase.from('multiplayer_games').insert(newGame);
+
+          await supabase
+            .from('matchmaking_queue')
+            .update({ status: 'matched', matched_game_id: gameId })
+            .eq('id', oppEntry.id);
+
+          initializeGame(newGame, amIWhite ? 'white' : 'black', {
+            username: oppEntry.username,
+            country: oppEntry.country || 'US',
+            rating: oppEntry.rating || 1200,
+            avatar: '♟️'
+          });
+          return;
+        }
+
+        // Clean previous queue rows for this player
+        await supabase.from('matchmaking_queue').delete().eq('user_id', userId);
+
+        // Add self to matchmaking queue
+        const { data: myQueueEntry } = await supabase
+          .from('matchmaking_queue')
+          .insert({
             user_id: userId,
             username,
+            rating: myCurrentRating,
             country: userCountry,
-            rating: myCurrentRating
+            mode,
+            time_control: timeControl,
+            status: 'searching'
           })
-        });
+          .select()
+          .single();
 
-        if (response.ok) {
-          const data = await response.json();
-          if (data.status === 'matched') {
-            matched = true;
-            const oppData = {
-              username: data.player_color === 'white' ? data.game.black_username : data.game.white_username,
-              country: data.player_color === 'white' ? data.game.black_country : data.game.white_country,
-              rating: data.player_color === 'white' ? data.game.black_rating : data.game.white_rating,
-              avatar: '⚡'
-            };
-            initializeGame(data.game, data.player_color, oppData);
-            return;
-          }
+        if (myQueueEntry) {
+          if (realtimeChannelRef.current) supabase.removeChannel(realtimeChannelRef.current);
+
+          const queueChannel = supabase
+            .channel(`web_queue_${myQueueEntry.id}`)
+            .on('postgres_changes', {
+              event: 'UPDATE',
+              schema: 'public',
+              table: 'matchmaking_queue',
+              filter: `id=eq.${myQueueEntry.id}`
+            }, async (payload) => {
+              const updated = payload.new;
+              if (updated && updated.status === 'matched' && updated.matched_game_id) {
+                const { data: matchedGame } = await supabase
+                  .from('multiplayer_games')
+                  .select('*')
+                  .eq('id', updated.matched_game_id)
+                  .single();
+
+                if (matchedGame) {
+                  const myColor = matchedGame.white_player_id === userId ? 'white' : 'black';
+                  const oppData = {
+                    username: myColor === 'white' ? matchedGame.black_username : matchedGame.white_username,
+                    country: myColor === 'white' ? matchedGame.black_country : matchedGame.white_country,
+                    rating: myColor === 'white' ? matchedGame.black_rating : matchedGame.white_rating,
+                    avatar: '♟️'
+                  };
+                  initializeGame(matchedGame, myColor, oppData);
+                }
+              }
+            })
+            .subscribe();
+
+          realtimeChannelRef.current = queueChannel;
         }
-      } catch (e) {
-        console.warn('Backend matchmaking unreachable, using simulated matchmaking engine:', e);
+      } catch (err) {
+        console.warn('Live matchmaking queue error:', err);
       }
-
-      // If still searching after 2.5s, pair with simulated grandmaster sparring player
-      searchTimeoutRef.current = setTimeout(() => {
-        const opp = SIMULATED_OPPONENTS[Math.floor(Math.random() * SIMULATED_OPPONENTS.length)];
-        const myColor = Math.random() > 0.5 ? 'white' : 'black';
-        const dummyGameId = `game_${Date.now()}`;
-        const dummyCode = `PR-${Math.floor(1000 + Math.random() * 9000)}`;
-        const { initial, inc } = getTimeControlSeconds(timeControl);
-
-        const dummyGame = {
-          id: dummyGameId,
-          room_code: dummyCode,
-          mode,
-          time_control: timeControl,
-          initial_time_seconds: initial,
-          increment_seconds: inc,
-          white_username: myColor === 'white' ? username : opp.username,
-          black_username: myColor === 'black' ? username : opp.username,
-          white_country: myColor === 'white' ? userCountry : opp.country,
-          black_country: myColor === 'black' ? userCountry : opp.country,
-          white_rating: myColor === 'white' ? myCurrentRating : opp.rating,
-          black_rating: myColor === 'black' ? myCurrentRating : opp.rating
-        };
-
-        initializeGame(dummyGame, myColor, opp);
-
-        // If user is black, schedule opponent's opening move
-        if (myColor === 'black') {
-          scheduleSimulatedOpponentMove(new Chess().fen(), initial, initial);
-        }
-      }, 2500);
-    } catch (err) {
-      setMatchmakingState('idle');
     }
   };
 
   const cancelMatchmaking = async () => {
-    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    if (realtimeChannelRef.current && supabase) {
+      supabase.removeChannel(realtimeChannelRef.current);
+      realtimeChannelRef.current = null;
+    }
+    if (isSupabaseConfigured && supabase && userId) {
+      try {
+        await supabase.from('matchmaking_queue').delete().eq('user_id', userId);
+      } catch (e) {}
+    }
     setMatchmakingState('idle');
-
-    try {
-      await fetch(`${API_BASE}/api/multiplayer/queue/leave`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId })
-      });
-    } catch (e) {}
   };
 
   // Create private custom room
@@ -584,21 +630,7 @@ export const MultiplayerProvider = ({ children }) => {
     }
 
     if (!gameData) {
-      // Create fallback peer game for testing
-      gameData = {
-        id: `room_${cleanCode}`,
-        room_code: cleanCode,
-        mode: selectedMode || 'blitz',
-        time_control: selectedTimeControl || '3+0',
-        initial_time_seconds: 180,
-        increment_seconds: 0,
-        white_username: 'Player 1',
-        black_username: username,
-        white_country: 'US',
-        black_country: userCountry,
-        white_rating: 1200,
-        black_rating: myCurrentRating
-      };
+      throw new Error(`Room "${cleanCode}" was not found or has already expired.`);
     }
 
     setRoomCode(gameData.room_code);
@@ -716,9 +748,6 @@ export const MultiplayerProvider = ({ children }) => {
         finishGame(winResult, `Checkmate! ${playerColor === 'white' ? 'White' : 'Black'} delivered mate.`);
       } else if (chessInstance.isStalemate() || chessInstance.isInsufficientMaterial() || chessInstance.isThreefoldRepetition()) {
         finishGame('1/2-1/2', 'Draw by stalemate or insufficient material.');
-      } else {
-        // If playing simulated opponent, trigger automated reply
-        scheduleSimulatedOpponentMove(newFen, newWTime, newBTime);
       }
 
       return true;
@@ -771,81 +800,6 @@ export const MultiplayerProvider = ({ children }) => {
     }
   };
 
-  // Automated sparring engine response for simulated games
-  const scheduleSimulatedOpponentMove = (currentFenStr, wTime, bTime) => {
-    if (simulatedBotTimerRef.current) clearTimeout(simulatedBotTimerRef.current);
-
-    // Natural delay (1.2 to 2.8 seconds)
-    const thinkDelay = 1200 + Math.random() * 1600;
-
-    simulatedBotTimerRef.current = setTimeout(() => {
-      try {
-        const chessInstance = new Chess(currentFenStr);
-        if (chessInstance.isGameOver()) return;
-
-        const legalMoves = chessInstance.moves({ verbose: true });
-        if (legalMoves.length === 0) return;
-
-        // Prioritize captures and checks, otherwise pick solid move
-        const captureMoves = legalMoves.filter((m) => m.captured || m.flags.includes('c'));
-        const chosenMove = captureMoves.length > 0 && Math.random() > 0.4
-          ? captureMoves[Math.floor(Math.random() * captureMoves.length)]
-          : legalMoves[Math.floor(Math.random() * legalMoves.length)];
-
-        const isCapture = Boolean(chosenMove.captured);
-        chessInstance.move(chosenMove);
-
-        const newFen = chessInstance.fen();
-        setFen(newFen);
-
-        const inc = activeGame?.increment_seconds || 0;
-        const oppColor = playerColor === 'white' ? 'black' : 'white';
-        let updatedW = wTime;
-        let updatedB = bTime;
-
-        if (oppColor === 'white') updatedW += inc;
-        else updatedB += inc;
-
-        setWhiteTime(updatedW);
-        setBlackTime(updatedB);
-        setCurrentTurn(playerColor);
-
-        // Audio
-        if (chessInstance.isCheckmate()) {
-          soundEngine.playGameEnd(true);
-        } else if (chessInstance.inCheck()) {
-          soundEngine.playCheck(true);
-        } else if (isCapture) {
-          soundEngine.playCapture(true);
-        } else {
-          soundEngine.playMove(true);
-        }
-
-        const moveObj = {
-          from: chosenMove.from,
-          to: chosenMove.to,
-          san: chosenMove.san,
-          uci: `${chosenMove.from}${chosenMove.to}`,
-          turn: oppColor,
-          fen: newFen,
-          whiteTime: updatedW,
-          blackTime: updatedB,
-          captured: chosenMove.captured
-        };
-
-        setMoves((prev) => [...prev, moveObj]);
-
-        if (chessInstance.isCheckmate()) {
-          finishGame(oppColor === 'white' ? '1-0' : '0-1', 'Opponent delivered checkmate.');
-        } else if (chessInstance.isGameOver()) {
-          finishGame('1/2-1/2', 'Draw.');
-        }
-      } catch (err) {
-        console.error('Error in simulated opponent move:', err);
-      }
-    }, thinkDelay);
-  };
-
   // Draw handlers
   const offerDraw = () => {
     if (matchmakingState !== 'in_game' || gameResult) return;
@@ -858,15 +812,6 @@ export const MultiplayerProvider = ({ children }) => {
         payload: { offeredBy: playerColor }
       });
     }
-
-    // If playing simulated bot, 50% acceptance chance in balanced position
-    setTimeout(() => {
-      if (Math.random() > 0.4) {
-        acceptDraw();
-      } else {
-        declineDraw();
-      }
-    }, 1800);
   };
 
   const acceptDraw = () => {
@@ -926,8 +871,8 @@ export const MultiplayerProvider = ({ children }) => {
     const isDraw = res === '1/2-1/2' || res === 'draw';
 
     const currentModeKey = activeGame?.mode || selectedMode;
-    const currentElo = userRatings[currentModeKey] || 1340;
-    const oppElo = opponent?.rating || 1350;
+    const currentElo = userRatings[currentModeKey] || 1200;
+    const oppElo = opponent?.rating || 1200;
 
     // Calculate rating delta
     const expected = 1.0 / (1.0 + Math.pow(10, (oppElo - currentElo) / 400.0));
@@ -952,7 +897,7 @@ export const MultiplayerProvider = ({ children }) => {
 
     // Update rating
     setUserRatings((prev) => {
-      const newModeRating = Math.max(100, (prev[currentModeKey] || 1340) + delta);
+      const newModeRating = Math.max(100, (prev[currentModeKey] || 1200) + delta);
       return {
         ...prev,
         [currentModeKey]: newModeRating,
