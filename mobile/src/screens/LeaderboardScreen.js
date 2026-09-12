@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
   StyleSheet, 
   ScrollView, 
-  TouchableOpacity 
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMultiplayer } from '../context/MultiplayerContext';
+import { supabase, isSupabaseConfigured } from '../services/supabase';
 import { MULTIPLAYER_MODES, COUNTRIES } from '../data/multiplayerData';
-import { MULTI_METRIC_LEADERBOARDS } from '../data/betaData';
 import { 
   ChevronLeft, 
   Trophy, 
@@ -37,21 +38,125 @@ export const LeaderboardScreen = ({ navigation }) => {
   const [activeMetric, setActiveMetric] = useState('elo');
   const [activeTimeframe, setActiveTimeframe] = useState('global'); // 'global' | 'weekly' | 'daily' | 'friends'
   const [activeMode, setActiveMode] = useState('blitz');
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Determine which dataset to display
-  let leaderboardData = [];
-  if (activeMetric === 'elo') {
-    leaderboardData = getLeaderboard(activeTimeframe);
-  } else {
-    const raw = MULTI_METRIC_LEADERBOARDS[activeMetric] || [];
-    leaderboardData = raw.map((item) => ({
-      ...item,
-      rating: item.score,
-      tier: item.tag,
-      wins: item.score,
-      losses: '-'
-    }));
-  }
+  const loadData = async (isMounted = true) => {
+    setIsLoading(true);
+    try {
+      if (activeMetric === 'elo') {
+        const data = await getLeaderboard(activeTimeframe, activeMode);
+        if (isMounted) {
+          setLeaderboardData(Array.isArray(data) ? data : []);
+          setIsLoading(false);
+        }
+      } else if (activeMetric === 'beta_founders') {
+        if (isSupabaseConfigured && supabase) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('id, username, country, avatar_url, supporter_title, is_founding_player')
+            .eq('is_founding_player', true)
+            .order('created_at', { ascending: true })
+            .limit(50);
+
+          if (isMounted) {
+            setLeaderboardData((data || []).map((p, i) => ({
+              rank: i + 1,
+              id: p.id,
+              username: p.username || `Founder_${p.id.slice(0, 4)}`,
+              country: p.country || 'US',
+              avatar: p.avatar_url || '✨',
+              rating: `Founder #${String(i + 1).padStart(3, '0')}`,
+              tier: p.supporter_title || 'Founding Beta Player',
+              wins: '✨',
+              losses: '-'
+            })));
+            setIsLoading(false);
+          }
+        } else if (isMounted) {
+          setLeaderboardData([]);
+          setIsLoading(false);
+        }
+      } else if (activeMetric === 'puzzle_streak') {
+        if (isSupabaseConfigured && supabase) {
+          const { data } = await supabase
+            .from('user_puzzle_stats')
+            .select('user_id, highest_streak, current_streak, puzzle_rating')
+            .order('highest_streak', { ascending: false })
+            .limit(50);
+
+          if (isMounted) {
+            setLeaderboardData((data || []).map((p, i) => ({
+              rank: i + 1,
+              id: p.user_id,
+              username: `Tactician_${p.user_id.slice(0, 4)}`,
+              country: 'US',
+              avatar: '⚡',
+              rating: `${p.highest_streak || 0} Streak`,
+              tier: `Rating ${p.puzzle_rating || 1200}`,
+              wins: `${p.highest_streak || 0}`,
+              losses: '-'
+            })));
+            setIsLoading(false);
+          }
+        } else if (isMounted) {
+          setLeaderboardData([]);
+          setIsLoading(false);
+        }
+      } else {
+        if (isSupabaseConfigured && supabase) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('id, username, country, avatar_url, elo_rating, daily_streak')
+            .order('elo_rating', { ascending: false })
+            .limit(50);
+
+          if (isMounted) {
+            setLeaderboardData((data || []).map((p, i) => ({
+              rank: i + 1,
+              id: p.id,
+              username: p.username || `Player_${p.id.slice(0, 4)}`,
+              country: p.country || 'US',
+              avatar: p.avatar_url || '♟️',
+              rating: `${(p.elo_rating || 1200) * 3} XP`,
+              tier: `${p.daily_streak || 1}d Streak`,
+              wins: `${(p.elo_rating || 1200) * 3}`,
+              losses: '-'
+            })));
+            setIsLoading(false);
+          }
+        } else if (isMounted) {
+          setLeaderboardData([]);
+          setIsLoading(false);
+        }
+      }
+    } catch (err) {
+      if (isMounted) {
+        setLeaderboardData([]);
+        setIsLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    loadData(isMounted);
+
+    let sub = null;
+    if (isSupabaseConfigured && supabase) {
+      sub = supabase
+        .channel('mobile_leaderboard_feed')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => {
+          if (isMounted) loadData(isMounted);
+        })
+        .subscribe();
+    }
+
+    return () => {
+      isMounted = false;
+      if (sub) sub.unsubscribe();
+    };
+  }, [activeMetric, activeTimeframe, activeMode]);
 
   const topThree = leaderboardData.slice(0, 3);
   const remaining = leaderboardData.slice(3);
@@ -149,111 +254,131 @@ export const LeaderboardScreen = ({ navigation }) => {
         )}
 
 
-        {/* TOP 3 PODIUM */}
-        <View style={styles.podiumContainer}>
-          
-          {/* Rank 2 - Silver */}
-          {topThree[1] && (
-            <View style={[styles.podiumCol, styles.podiumColSilver]}>
-              <View style={[styles.podiumAvatar, styles.silverBorder]}>
-                <Text style={{ fontSize: 20 }}>🥈</Text>
-                <Text style={styles.podiumFlag}>{COUNTRIES[topThree[1].country]?.flag || '🌐'}</Text>
-              </View>
-              <Text style={styles.podiumUsername} numberOfLines={1}>{topThree[1].username}</Text>
-              <Text style={styles.podiumRating}>{topThree[1].rating}</Text>
-              <View style={styles.podiumStepSilver}>
-                <Text style={styles.podiumStepNum}>#2</Text>
-              </View>
-            </View>
-          )}
-
-          {/* Rank 1 - Gold */}
-          {topThree[0] && (
-            <View style={[styles.podiumCol, styles.podiumColGold]}>
-              <View style={[styles.podiumAvatar, styles.goldBorder]}>
-                <Text style={{ fontSize: 24 }}>👑</Text>
-                <Text style={styles.podiumFlag}>{COUNTRIES[topThree[0].country]?.flag || '🌐'}</Text>
-              </View>
-              <Text style={[styles.podiumUsername, { color: '#F59E0B' }]} numberOfLines={1}>
-                {topThree[0].username}
-              </Text>
-              <Text style={[styles.podiumRating, { color: '#FFF' }]}>{topThree[0].rating}</Text>
-              <View style={styles.podiumStepGold}>
-                <Text style={[styles.podiumStepNum, { color: '#000' }]}>#1</Text>
-              </View>
-            </View>
-          )}
-
-          {/* Rank 3 - Bronze */}
-          {topThree[2] && (
-            <View style={[styles.podiumCol, styles.podiumColBronze]}>
-              <View style={[styles.podiumAvatar, styles.bronzeBorder]}>
-                <Text style={{ fontSize: 18 }}>🥉</Text>
-                <Text style={styles.podiumFlag}>{COUNTRIES[topThree[2].country]?.flag || '🌐'}</Text>
-              </View>
-              <Text style={styles.podiumUsername} numberOfLines={1}>{topThree[2].username}</Text>
-              <Text style={styles.podiumRating}>{topThree[2].rating}</Text>
-              <View style={styles.podiumStepBronze}>
-                <Text style={styles.podiumStepNum}>#3</Text>
-              </View>
-            </View>
-          )}
-        </View>
-
-        {/* RANKED LIST (Remaining) */}
-        <View style={styles.listCard}>
-          <View style={styles.listHeaderRow}>
-            <Text style={[styles.listHeaderCol, { width: 44 }]}>RANK</Text>
-            <Text style={[styles.listHeaderCol, { flex: 1 }]}>PLAYER</Text>
-            <Text style={[styles.listHeaderCol, { width: 70, textAlign: 'right' }]}>ELO</Text>
-            <Text style={[styles.listHeaderCol, { width: 64, textAlign: 'right' }]}>W/L</Text>
+        {isLoading ? (
+          <View style={{ padding: 60, alignItems: 'center', justifyContent: 'center' }}>
+            <ActivityIndicator size="large" color="#E5A93C" />
+            <Text style={{ color: '#94A3B8', fontSize: 13, marginTop: 12 }}>Connecting to live leaderboards...</Text>
           </View>
-
-          {remaining.map((item, idx) => {
-            const countryData = COUNTRIES[item.country] || COUNTRIES['US'];
-            const isMe = item.isCurrentUser;
-
-            return (
-              <View 
-                key={idx} 
-                style={[
-                  styles.listRow,
-                  isMe && styles.listRowMe
-                ]}
-              >
-                <View style={{ width: 44, flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={[styles.rankNum, isMe && { color: '#00E5FF' }]}>
-                    #{item.rank}
-                  </Text>
-                </View>
-
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <Text style={{ fontSize: 16 }}>{countryData.flag}</Text>
-                  <View>
-                    <Text style={[styles.rowUsername, isMe && { color: '#00E5FF', fontWeight: 'bold' }]}>
-                      {item.username}
-                    </Text>
-                    {item.tier && (
-                      <Text style={styles.rowTier}>{item.tier}</Text>
-                    )}
+        ) : leaderboardData.length === 0 ? (
+          <View style={{ padding: 48, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 36, marginBottom: 8 }}>♟️</Text>
+            <Text style={{ color: '#FFF', fontWeight: 'bold', fontSize: 16 }}>No Ranked Players Yet</Text>
+            <Text style={{ color: '#888', fontSize: 13, textAlign: 'center', marginTop: 6, maxWidth: 260 }}>
+              Play matches and solve tactical challenges to claim the #1 spot!
+            </Text>
+          </View>
+        ) : (
+          <>
+            {/* TOP 3 PODIUM */}
+            {topThree.length > 0 && (
+              <View style={styles.podiumContainer}>
+                {/* Rank 2 - Silver */}
+                {topThree[1] && (
+                  <View style={[styles.podiumCol, styles.podiumColSilver]}>
+                    <View style={[styles.podiumAvatar, styles.silverBorder]}>
+                      <Text style={{ fontSize: 20 }}>🥈</Text>
+                      <Text style={styles.podiumFlag}>{COUNTRIES[topThree[1].country]?.flag || '🌐'}</Text>
+                    </View>
+                    <Text style={styles.podiumUsername} numberOfLines={1}>{topThree[1].username}</Text>
+                    <Text style={styles.podiumRating}>{topThree[1].rating}</Text>
+                    <View style={styles.podiumStepSilver}>
+                      <Text style={styles.podiumStepNum}>#2</Text>
+                    </View>
                   </View>
-                </View>
+                )}
 
-                <View style={{ width: 70, alignItems: 'flex-end' }}>
-                  <Text style={[styles.rowRating, isMe && { color: '#00E5FF' }]}>
-                    {item.rating}
-                  </Text>
-                </View>
+                {/* Rank 1 - Gold */}
+                {topThree[0] && (
+                  <View style={[styles.podiumCol, styles.podiumColGold]}>
+                    <View style={[styles.podiumAvatar, styles.goldBorder]}>
+                      <Text style={{ fontSize: 24 }}>👑</Text>
+                      <Text style={styles.podiumFlag}>{COUNTRIES[topThree[0].country]?.flag || '🌐'}</Text>
+                    </View>
+                    <Text style={[styles.podiumUsername, { color: '#F59E0B' }]} numberOfLines={1}>
+                      {topThree[0].username}
+                    </Text>
+                    <Text style={[styles.podiumRating, { color: '#FFF' }]}>{topThree[0].rating}</Text>
+                    <View style={styles.podiumStepGold}>
+                      <Text style={[styles.podiumStepNum, { color: '#000' }]}>#1</Text>
+                    </View>
+                  </View>
+                )}
 
-                <View style={{ width: 64, alignItems: 'flex-end' }}>
-                  <Text style={styles.rowStats}>
-                    {item.wins}W / {item.losses}L
-                  </Text>
-                </View>
+                {/* Rank 3 - Bronze */}
+                {topThree[2] && (
+                  <View style={[styles.podiumCol, styles.podiumColBronze]}>
+                    <View style={[styles.podiumAvatar, styles.bronzeBorder]}>
+                      <Text style={{ fontSize: 18 }}>🥉</Text>
+                      <Text style={styles.podiumFlag}>{COUNTRIES[topThree[2].country]?.flag || '🌐'}</Text>
+                    </View>
+                    <Text style={styles.podiumUsername} numberOfLines={1}>{topThree[2].username}</Text>
+                    <Text style={styles.podiumRating}>{topThree[2].rating}</Text>
+                    <View style={styles.podiumStepBronze}>
+                      <Text style={styles.podiumStepNum}>#3</Text>
+                    </View>
+                  </View>
+                )}
               </View>
-            );
-          })}
-        </View>
+            )}
+
+            {/* RANKED LIST (Remaining) */}
+            {remaining.length > 0 && (
+              <View style={styles.listCard}>
+                <View style={styles.listHeaderRow}>
+                  <Text style={[styles.listHeaderCol, { width: 44 }]}>RANK</Text>
+                  <Text style={[styles.listHeaderCol, { flex: 1 }]}>PLAYER</Text>
+                  <Text style={[styles.listHeaderCol, { width: 70, textAlign: 'right' }]}>ELO</Text>
+                  <Text style={[styles.listHeaderCol, { width: 64, textAlign: 'right' }]}>W/L</Text>
+                </View>
+
+                {remaining.map((item, idx) => {
+                  const countryData = COUNTRIES[item.country] || COUNTRIES['US'];
+                  const isMe = item.isCurrentUser;
+
+                  return (
+                    <View 
+                      key={idx} 
+                      style={[
+                        styles.listRow,
+                        isMe && styles.listRowMe
+                      ]}
+                    >
+                      <View style={{ width: 44, flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={[styles.rankNum, isMe && { color: '#00E5FF' }]}>
+                          #{item.rank}
+                        </Text>
+                      </View>
+
+                      <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                        <Text style={{ fontSize: 16 }}>{countryData.flag}</Text>
+                        <View>
+                          <Text style={[styles.rowUsername, isMe && { color: '#00E5FF', fontWeight: 'bold' }]}>
+                            {item.username}
+                          </Text>
+                          {item.tier && (
+                            <Text style={styles.rowTier}>{item.tier}</Text>
+                          )}
+                        </View>
+                      </View>
+
+                      <View style={{ width: 70, alignItems: 'flex-end' }}>
+                        <Text style={[styles.rowRating, isMe && { color: '#00E5FF' }]}>
+                          {item.rating}
+                        </Text>
+                      </View>
+
+                      <View style={{ width: 64, alignItems: 'flex-end' }}>
+                        <Text style={styles.rowStats}>
+                          {item.wins}W / {item.losses}L
+                        </Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            )}
+          </>
+        )}
 
       </ScrollView>
     </SafeAreaView>
@@ -263,7 +388,7 @@ export const LeaderboardScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#070B14'
+    backgroundColor: '#080808'
   },
   header: {
     flexDirection: 'row',
@@ -272,12 +397,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)'
+    borderBottomColor: '#242424'
   },
   backBtn: {
     padding: 8,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)'
+    borderRadius: 5,
+    backgroundColor: '#141414',
+    borderWidth: 1,
+    borderColor: '#242424'
   },
   titleContainer: {
     alignItems: 'center'
@@ -308,30 +435,30 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 12,
-    backgroundColor: 'rgba(0, 229, 255, 0.08)',
+    borderRadius: 4,
+    backgroundColor: '#141414',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.2)'
+    borderColor: '#242424'
   },
   metricChipSelected: {
-    backgroundColor: '#00E5FF',
-    borderColor: '#00E5FF'
+    backgroundColor: '#F59E0B',
+    borderColor: '#F59E0B'
   },
   metricChipText: {
-    color: '#00E5FF',
+    color: '#CBD5E1',
     fontSize: 12,
     fontWeight: '800'
   },
   metricChipTextSelected: {
-    color: '#000'
+    color: '#080808'
   },
   timeframeTabsRow: {
     flexDirection: 'row',
     padding: 4,
-    borderRadius: 14,
-    backgroundColor: '#0F172A',
+    borderRadius: 5,
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderColor: '#242424',
     marginBottom: 12
   },
   timeframeTab: {
@@ -341,10 +468,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 4,
     paddingVertical: 8,
-    borderRadius: 10
+    borderRadius: 4
   },
   timeframeTabSelected: {
-    backgroundColor: '#00E5FF'
+    backgroundColor: '#F59E0B'
   },
   timeframeTabText: {
     color: '#94A3B8',
@@ -352,7 +479,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   timeframeTabTextSelected: {
-    color: '#000',
+    color: '#080808',
     fontWeight: '900'
   },
   modeChipsRow: {
@@ -367,10 +494,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 4,
     paddingVertical: 8,
-    borderRadius: 12,
-    backgroundColor: '#0F172A',
+    borderRadius: 4,
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)'
+    borderColor: '#242424'
   },
   modeChipText: {
     color: '#CBD5E1',
@@ -402,8 +529,8 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: 52,
     height: 52,
-    borderRadius: 18,
-    backgroundColor: '#1E293B',
+    borderRadius: 5,
+    backgroundColor: '#181818',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 6
@@ -413,17 +540,17 @@ const styles = StyleSheet.create({
     height: 60,
     borderWidth: 2,
     borderColor: '#F59E0B',
-    backgroundColor: 'rgba(245, 158, 11, 0.15)'
+    backgroundColor: '#1C190E'
   },
   silverBorder: {
     borderWidth: 2,
     borderColor: '#94A3B8',
-    backgroundColor: 'rgba(148, 163, 184, 0.15)'
+    backgroundColor: '#181818'
   },
   bronzeBorder: {
     borderWidth: 2,
     borderColor: '#D97706',
-    backgroundColor: 'rgba(217, 119, 6, 0.15)'
+    backgroundColor: '#1A140A'
   },
   podiumFlag: {
     position: 'absolute',
@@ -449,26 +576,26 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 72,
     backgroundColor: '#F59E0B',
-    borderTopLeftRadius: 14,
-    borderTopRightRadius: 14,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
     alignItems: 'center',
     justifyContent: 'center'
   },
   podiumStepSilver: {
     width: '100%',
     height: 52,
-    backgroundColor: '#334155',
-    borderTopLeftRadius: 14,
-    borderTopRightRadius: 14,
+    backgroundColor: '#2A2A2A',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
     alignItems: 'center',
     justifyContent: 'center'
   },
   podiumStepBronze: {
     width: '100%',
     height: 38,
-    backgroundColor: '#1E293B',
-    borderTopLeftRadius: 14,
-    borderTopRightRadius: 14,
+    backgroundColor: '#1E1E1E',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -478,10 +605,11 @@ const styles = StyleSheet.create({
     fontWeight: '900'
   },
   listCard: {
-    borderRadius: 20,
-    backgroundColor: '#0F172A',
+    borderRadius: 5,
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     overflow: 'hidden'
   },
   listHeaderRow: {
@@ -489,11 +617,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.06)',
-    backgroundColor: 'rgba(255, 255, 255, 0.02)'
+    borderBottomColor: '#202020',
+    backgroundColor: '#161616'
   },
   listHeaderCol: {
-    color: '#64748B',
+    color: '#8E8E93',
     fontSize: 10,
     fontWeight: 'bold',
     letterSpacing: 0.5
@@ -504,12 +632,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.04)'
+    borderBottomColor: '#1A1A1A'
   },
   listRowMe: {
-    backgroundColor: 'rgba(0, 229, 255, 0.08)',
+    backgroundColor: '#1C190E',
     borderLeftWidth: 3,
-    borderLeftColor: '#00E5FF'
+    borderLeftColor: '#F59E0B'
   },
   rankNum: {
     color: '#94A3B8',
@@ -523,7 +651,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   rowTier: {
-    color: '#64748B',
+    color: '#8E8E93',
     fontSize: 9
   },
   rowRating: {
@@ -533,7 +661,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   rowStats: {
-    color: '#64748B',
+    color: '#8E8E93',
     fontSize: 11
   }
 });

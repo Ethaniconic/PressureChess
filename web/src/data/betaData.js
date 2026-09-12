@@ -46,34 +46,10 @@ export const FAVORITE_OPENINGS = [
 ];
 
 export const MULTI_METRIC_LEADERBOARDS = {
-  weekly_xp: [
-    { rank: 1, username: 'Tactician (You)', country: 'US', score: '3,850 XP', tag: 'Top Learner', isCurrentUser: true },
-    { rank: 2, username: 'Pragg_Storm', country: 'IN', score: '3,420 XP', tag: 'Fast Solver' },
-    { rank: 3, username: 'Magnus_Clone', country: 'NO', score: '3,180 XP', tag: 'Mastery Tier III' },
-    { rank: 4, username: 'Hikaru_Stream', country: 'US', score: '2,940 XP', tag: 'Tactics Rush' },
-    { rank: 5, username: 'Nodirbek_Speed', country: 'UZ', score: '2,750 XP', tag: 'Forks Expert' }
-  ],
-  monthly_xp: [
-    { rank: 1, username: 'Pragg_Storm', country: 'IN', score: '14,200 XP', tag: 'Academy Champion' },
-    { rank: 2, username: 'Magnus_Clone', country: 'NO', score: '13,850 XP', tag: 'All 17 Units' },
-    { rank: 3, username: 'Tactician (You)', country: 'US', score: '12,900 XP', tag: 'Beta Pioneer', isCurrentUser: true },
-    { rank: 4, username: 'Alireza_Flair', country: 'FR', score: '11,400 XP', tag: 'Sacrifice Master' },
-    { rank: 5, username: 'Hikaru_Stream', country: 'US', score: '10,950 XP', tag: 'Bullet Specialist' }
-  ],
-  puzzle_streak: [
-    { rank: 1, username: 'Nodirbek_Speed', country: 'UZ', score: '34 Streak', tag: 'Flawless 10s' },
-    { rank: 2, username: 'Tactician (You)', country: 'US', score: '28 Streak', tag: 'Pin Smasher', isCurrentUser: true },
-    { rank: 3, username: 'Duda_Tactics', country: 'PL', score: '26 Streak', tag: 'Sudden Death' },
-    { rank: 4, username: 'Keymer_Precision', country: 'DE', score: '22 Streak', tag: 'Endgame Pro' },
-    { rank: 5, username: 'Vishy_Prodigy', country: 'IN', score: '21 Streak', tag: 'Tactics Rusher' }
-  ],
-  beta_founders: [
-    { rank: 1, username: 'Tactician (You)', country: 'US', score: 'Founder #001', tag: 'Founding Beta Player', isCurrentUser: true },
-    { rank: 2, username: 'Dan_Pioneer', country: 'CA', score: 'Founder #002', tag: 'Founding Beta Player' },
-    { rank: 3, username: 'Elena_Tactics', country: 'UK', score: 'Founder #003', tag: 'Founding Beta Player' },
-    { rank: 4, username: 'Kai_Speed', country: 'JP', score: 'Founder #004', tag: 'Founding Beta Player' },
-    { rank: 5, username: 'Mateo_Gambit', country: 'ES', score: 'Founder #005', tag: 'Founding Beta Player' }
-  ]
+  weekly_xp: [],
+  monthly_xp: [],
+  puzzle_streak: [],
+  beta_founders: []
 };
 
 export const CHANGELOG_HISTORY = [

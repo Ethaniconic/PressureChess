@@ -198,17 +198,17 @@ export const GameReviewPage = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Top Header / Action Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#24262E]">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-cyan-brand/20 via-sky-500/10 to-transparent border border-cyan-brand/30 flex items-center justify-center text-cyan-brand shadow-glow-cyan/50">
-            <Bot className="w-6 h-6" />
+          <div className="w-10 h-10 rounded-[5px] bg-[#141518] border border-[#282B34] flex items-center justify-center text-[#E5A93C] shadow-md shadow-black/60">
+            <Bot className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-black uppercase tracking-widest text-cyan-brand">
+              <span className="text-[11px] font-black uppercase tracking-widest text-[#E5A93C]">
                 AI Game Review Studio
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-brand/10 border border-cyan-brand/20 text-cyan-300 font-bold">
+              <span className="text-[10px] px-2 py-0.5 rounded-[3px] bg-[#E5A93C]/15 border border-[#E5A93C]/30 text-[#E5A93C] font-bold">
                 Coach Orion
               </span>
             </div>
@@ -216,7 +216,7 @@ export const GameReviewPage = ({ onNavigate }) => {
               <span>{activeGame?.headers?.white || 'White'}</span>
               <span className="text-slate-500 text-sm font-normal">vs</span>
               <span>{activeGame?.headers?.black || 'Black'}</span>
-              <span className="text-xs px-2 py-0.5 rounded bg-white/10 text-slate-300 ml-1">
+              <span className="text-xs px-2 py-0.5 rounded-[3px] bg-[#18191E] border border-[#282A33] text-slate-300 ml-1">
                 {activeGame?.headers?.result || '*'}
               </span>
             </h1>
@@ -226,15 +226,15 @@ export const GameReviewPage = ({ onNavigate }) => {
         <div className="flex items-center flex-wrap gap-2.5">
           <button
             onClick={() => onNavigate?.('review-dashboard')}
-            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all"
+            className="px-3.5 py-2 rounded-[5px] bg-[#141518] hover:bg-[#1A1C22] text-slate-200 hover:text-white border border-[#262830] text-xs font-bold flex items-center gap-1.5 transition-all"
           >
-            <BarChart3 className="w-4 h-4 text-cyan-brand" />
+            <BarChart3 className="w-4 h-4 text-[#E5A93C]" />
             <span>Dashboard</span>
           </button>
 
           <button
             onClick={() => setShowOpeningModal(true)}
-            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-1.5 transition-all"
+            className="px-3.5 py-2 rounded-[5px] bg-[#141518] hover:bg-[#1A1C22] text-slate-200 hover:text-white border border-[#262830] text-xs font-bold flex items-center gap-1.5 transition-all"
           >
             <BookOpen className="w-4 h-4 text-amber-400" />
             <span>{activeGame?.opening?.eco || 'A00'} Opening</span>
@@ -242,7 +242,7 @@ export const GameReviewPage = ({ onNavigate }) => {
 
           <button
             onClick={() => setShowImportModal(true)}
-            className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-brand to-sky-400 hover:from-cyan-400 hover:to-sky-300 text-black font-black text-xs flex items-center gap-2 shadow-glow-cyan transition-all"
+            className="px-4 py-2 rounded-[5px] bg-[#E5A93C] hover:bg-[#F3BA54] text-black font-black text-xs flex items-center gap-2 shadow-[0_0_12px_rgba(229,169,60,0.3)] transition-all"
           >
             <Upload className="w-4 h-4" />
             <span>Import / Sample</span>
@@ -255,7 +255,7 @@ export const GameReviewPage = ({ onNavigate }) => {
         {/* LEFT COLUMN: Chess Board & Eval Bar (7 cols) */}
         <div className="lg:col-span-7 flex flex-col items-center gap-4">
           {/* Match Scoreboard & Accuracy summary */}
-          <div className="w-full flex items-center justify-between px-4 py-2.5 rounded-2xl bg-slate-900/80 border border-white/[0.08] backdrop-blur-md">
+          <div className="w-full flex items-center justify-between px-4 py-2.5 rounded-[5px] bg-[#121316] border border-[#24262E] backdrop-blur-md">
             {/* White Player */}
             <div className="flex items-center gap-2.5">
               <div className="w-3.5 h-3.5 rounded-full bg-white border border-slate-400 shadow-sm" />
@@ -263,14 +263,14 @@ export const GameReviewPage = ({ onNavigate }) => {
                 <div className="text-xs font-bold text-white leading-tight truncate max-w-[120px] sm:max-w-[160px]">
                   {activeGame?.headers?.white || 'White'}
                 </div>
-                <div className="text-[10px] text-cyan-brand font-semibold">
+                <div className="text-[10px] text-[#E5A93C] font-semibold">
                   Acc: {activeGame?.accuracy?.white || 82}%
                 </div>
               </div>
             </div>
 
             {/* Middle Result Badge */}
-            <div className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] font-black tracking-wider text-slate-300">
+            <div className="px-3 py-1 rounded-[4px] bg-[#18191E] border border-[#2C2E38] text-[11px] font-black tracking-wider text-slate-300">
               {activeGame?.headers?.result || '*'}
             </div>
 
@@ -280,7 +280,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                 <div className="text-xs font-bold text-white leading-tight truncate max-w-[120px] sm:max-w-[160px]">
                   {activeGame?.headers?.black || 'Black'}
                 </div>
-                <div className="text-[10px] text-sky-400 font-semibold">
+                <div className="text-[10px] text-slate-300 font-semibold">
                   Acc: {activeGame?.accuracy?.black || 79}%
                 </div>
               </div>
@@ -292,10 +292,10 @@ export const GameReviewPage = ({ onNavigate }) => {
           <div className="w-full flex justify-center items-stretch gap-3 sm:gap-4">
             {/* Dynamic Evaluation Bar */}
             <div className="flex flex-col items-center w-7 sm:w-8 py-1">
-              <div className="relative w-full h-[340px] sm:h-[460px] md:h-[500px] rounded-full overflow-hidden bg-slate-950 border border-white/10 shadow-inner flex flex-col justify-end">
+              <div className="relative w-full h-[340px] sm:h-[460px] md:h-[500px] rounded-[3px] overflow-hidden bg-[#101114] border border-[#24262E] shadow-inner flex flex-col justify-end">
                 {/* White Advantage Fill (bottom up) */}
                 <div
-                  className="w-full bg-gradient-to-t from-cyan-brand via-sky-400 to-white transition-all duration-300"
+                  className="w-full bg-gradient-to-t from-[#E5A93C] via-[#F5C768] to-white transition-all duration-300"
                   style={{ height: `${evalHeightPct}%` }}
                 />
 
@@ -306,8 +306,8 @@ export const GameReviewPage = ({ onNavigate }) => {
                 <div
                   className={`absolute left-0 right-0 text-[10px] font-black text-center py-0.5 tracking-tight transition-all duration-300 pointer-events-none ${
                     evalHeightPct > 50
-                      ? 'bottom-2 text-slate-950 bg-white/90 rounded-full mx-1'
-                      : 'top-2 text-white bg-slate-900/90 rounded-full mx-1'
+                      ? 'bottom-2 text-slate-950 bg-white/90 rounded-[3px] mx-1'
+                      : 'top-2 text-white bg-[#101114]/90 rounded-[3px] mx-1'
                   }`}
                 >
                   {currentEvalStr}
@@ -317,7 +317,7 @@ export const GameReviewPage = ({ onNavigate }) => {
             </div>
 
             {/* Chess Board Container */}
-            <div className="flex-1 max-w-[500px] aspect-square rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative bg-slate-900">
+            <div className="flex-1 max-w-[500px] aspect-square rounded-[5px] overflow-hidden border border-[#24262E] shadow-2xl relative bg-[#101114]">
               <Board
                 game={replayChess}
                 disabled={true}
@@ -329,12 +329,12 @@ export const GameReviewPage = ({ onNavigate }) => {
 
               {/* Move Indicator Overlay */}
               {currentMove && (
-                <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded-lg bg-slate-950/80 backdrop-blur-md border border-white/10 text-[11px] font-black text-white flex items-center gap-1.5 shadow-lg">
-                  <span className="text-cyan-brand font-mono">
+                <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded-[4px] bg-[#0E0F12]/90 backdrop-blur-md border border-[#262830] text-[11px] font-black text-white flex items-center gap-1.5 shadow-lg">
+                  <span className="text-[#E5A93C] font-mono">
                     {currentMove.moveNumber}.{currentMove.turn === 'black' ? '..' : ''} {currentMove.san}
                   </span>
                   <span
-                    className={`text-[9px] px-1.5 py-0.2 rounded font-black ${
+                    className={`text-[9px] px-1.5 py-0.2 rounded-[2px] font-black ${
                       getBadgeMeta(currentMove.classification).bgColor
                     }`}
                   >
@@ -346,14 +346,14 @@ export const GameReviewPage = ({ onNavigate }) => {
           </div>
 
           {/* Board Navigation & Scrubber Toolbar */}
-          <div className="w-full max-w-[560px] flex flex-col gap-2 p-3 rounded-2xl bg-slate-900/90 border border-white/[0.08] backdrop-blur-md">
+          <div className="w-full max-w-[560px] flex flex-col gap-2 p-3 rounded-[5px] bg-[#121316] border border-[#24262E] backdrop-blur-md">
             {/* Playback Button Group */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={firstMove}
                   disabled={currentMoveIndex === -1}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-300 hover:text-white transition-all"
+                  className="p-2 rounded-[5px] bg-[#18191E] hover:bg-[#22242B] disabled:opacity-30 text-zinc-300 hover:text-white transition-all border border-[#262830]"
                   title="First Move"
                 >
                   <ChevronsLeft className="w-4 h-4" />
@@ -361,17 +361,17 @@ export const GameReviewPage = ({ onNavigate }) => {
                 <button
                   onClick={prevMove}
                   disabled={currentMoveIndex === -1}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-300 hover:text-white transition-all"
+                  className="p-2 rounded-[5px] bg-[#18191E] hover:bg-[#22242B] disabled:opacity-30 text-zinc-300 hover:text-white transition-all border border-[#262830]"
                   title="Previous Move"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={toggleAutoPlay}
-                  className={`px-3 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all ${
+                  className={`px-3 py-2 rounded-[5px] text-xs font-black flex items-center gap-1.5 transition-all ${
                     isAutoPlaying
-                      ? 'bg-amber-400 text-black shadow-glow-amber'
-                      : 'bg-cyan-brand/20 hover:bg-cyan-brand/30 text-cyan-brand border border-cyan-brand/30'
+                      ? 'bg-[#E5A93C] text-black shadow-[0_0_12px_rgba(229,169,60,0.3)]'
+                      : 'bg-[#E5A93C]/15 hover:bg-[#E5A93C]/25 text-[#E5A93C] border border-[#E5A93C]/30'
                   }`}
                   title="Auto Play"
                 >
@@ -381,7 +381,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                 <button
                   onClick={nextMove}
                   disabled={!activeGame?.moves || currentMoveIndex >= activeGame.moves.length - 1}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-300 hover:text-white transition-all"
+                  className="p-2 rounded-[5px] bg-[#18191E] hover:bg-[#22242B] disabled:opacity-30 text-zinc-300 hover:text-white transition-all border border-[#262830]"
                   title="Next Move"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -389,7 +389,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                 <button
                   onClick={lastMove}
                   disabled={!activeGame?.moves || currentMoveIndex >= activeGame.moves.length - 1}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-30 text-slate-300 hover:text-white transition-all"
+                  className="p-2 rounded-[5px] bg-[#18191E] hover:bg-[#22242B] disabled:opacity-30 text-zinc-300 hover:text-white transition-all border border-[#262830]"
                   title="Last Move"
                 >
                   <ChevronsRight className="w-4 h-4" />
@@ -399,7 +399,7 @@ export const GameReviewPage = ({ onNavigate }) => {
               {/* Quick Jump to Mistake / Blunder */}
               <button
                 onClick={jumpToNextMistake}
-                className="px-3 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-black flex items-center gap-1.5 transition-all shadow-sm"
+                className="px-3 py-2 rounded-[5px] bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 text-xs font-black flex items-center gap-1.5 transition-all"
                 title="Jump directly to next inaccuracy, mistake, or blunder"
               >
                 <Zap className="w-3.5 h-3.5 text-rose-400" />
@@ -410,8 +410,8 @@ export const GameReviewPage = ({ onNavigate }) => {
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setIsFlipped((prev) => !prev)}
-                  className={`p-2 rounded-xl text-slate-300 hover:text-white transition-all ${
-                    isFlipped ? 'bg-cyan-brand/20 text-cyan-brand border border-cyan-brand/30' : 'bg-white/5 hover:bg-white/10'
+                  className={`p-2 rounded-[5px] transition-all border ${
+                    isFlipped ? 'bg-[#E5A93C]/20 text-[#E5A93C] border-[#E5A93C]/35' : 'bg-[#18191E] hover:bg-[#22242B] text-zinc-300 hover:text-white border-[#262830]'
                   }`}
                   title="Flip Board"
                 >
@@ -419,7 +419,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                 </button>
                 <button
                   onClick={() => setSoundEnabled((prev) => !prev)}
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all"
+                  className="p-2 rounded-[5px] bg-[#18191E] hover:bg-[#22242B] text-zinc-300 hover:text-white transition-all border border-[#262830]"
                   title="Toggle Sound"
                 >
                   {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -430,7 +430,7 @@ export const GameReviewPage = ({ onNavigate }) => {
             {/* Move Slider Scrubber */}
             {activeGame?.moves && activeGame.moves.length > 0 && (
               <div className="flex items-center gap-3 pt-1">
-                <span className="text-[10px] font-mono text-slate-400 font-bold min-w-[32px]">
+                <span className="text-[10px] font-mono text-zinc-400 font-bold min-w-[32px]">
                   {currentMoveIndex + 1}/{activeGame.moves.length}
                 </span>
                 <input
@@ -439,7 +439,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                   max={activeGame.moves.length - 1}
                   value={currentMoveIndex}
                   onChange={(e) => goToMove(parseInt(e.target.value, 10))}
-                  className="flex-1 accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+                  className="flex-1 accent-[#E5A93C] h-1.5 bg-[#1C1E24] rounded-[3px] cursor-pointer"
                 />
               </div>
             )}
@@ -449,19 +449,14 @@ export const GameReviewPage = ({ onNavigate }) => {
         {/* RIGHT COLUMN: Coach Orion Advice & Move Explorer (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
           {/* Coach Orion Speech Card */}
-          <GlassCard className="p-5 border-cyan-brand/30 bg-gradient-to-br from-slate-900/95 via-slate-900/90 to-cyan-950/20 relative overflow-hidden shadow-2xl">
-            {/* Background Glow */}
-            <div className="absolute -top-12 -right-12 w-36 h-36 bg-cyan-brand/10 rounded-full blur-3xl pointer-events-none" />
-
+          <GlassCard className="p-5 border-[#262830] bg-[#101114] relative overflow-hidden shadow-2xl rounded-[5px]">
             <div className="flex items-start gap-3.5 relative z-10">
               {/* Coach Avatar */}
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-sky-400 to-indigo-500 p-[2px] shadow-glow-cyan">
-                  <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                    <Bot className="w-6 h-6 text-cyan-brand" />
-                  </div>
+                <div className="w-12 h-12 rounded-[5px] border border-[#E5A93C]/40 overflow-hidden shadow-[0_0_12px_rgba(229,169,60,0.15)] bg-[#18191E]">
+                  <img src="/coach_orion.jpg" alt="Coach Orion" className="w-full h-full object-cover" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-slate-950" />
+                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-[3px] bg-emerald-500 border-2 border-[#101114]" />
               </div>
 
               {/* Speech & Title */}
@@ -470,7 +465,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                   <div>
                     <h3 className="text-sm font-black text-white flex items-center gap-1.5">
                       <span>Coach Orion</span>
-                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-cyan-brand/10 text-cyan-300 border border-cyan-brand/20">
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-[4px] bg-[#E5A93C]/10 text-[#E5A93C] border border-[#E5A93C]/20">
                         AI Grandmaster
                       </span>
                     </h3>
@@ -478,7 +473,7 @@ export const GameReviewPage = ({ onNavigate }) => {
 
                   {currentMove && (
                     <span
-                      className={`text-xs px-2.5 py-0.5 rounded-full font-black flex items-center gap-1 shadow-sm ${
+                      className={`text-xs px-2.5 py-0.5 rounded-[5px] font-black flex items-center gap-1 shadow-sm ${
                         getBadgeMeta(currentMove.classification).bgColor
                       }`}
                     >
@@ -488,7 +483,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                   )}
                 </div>
 
-                <p className="text-xs text-slate-300 font-medium leading-relaxed mt-2.5">
+                <p className="text-xs text-zinc-300 font-medium leading-relaxed mt-2.5">
                   {currentMove
                     ? currentMove.coach?.why_weak || currentMove.coach?.summary || 'Good move keeping dynamic initiative.'
                     : 'Select a move or press Play to explore move evaluations, blunders, and Coach Orion advice.'}
@@ -498,25 +493,25 @@ export const GameReviewPage = ({ onNavigate }) => {
 
             {/* Move Comparison: Played vs Better Move */}
             {currentMove && (
-              <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/[0.08] relative z-10">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-[#262830] relative z-10">
+                <div className="p-3 rounded-[5px] bg-[#16171B] border border-[#262830]">
+                  <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">
                     Move Played
                   </div>
                   <div className="text-base font-black text-white font-mono mt-0.5 flex items-center gap-1.5">
                     <span>{currentMove.san}</span>
-                    <span className="text-xs text-slate-400 font-normal">
+                    <span className="text-xs text-zinc-400 font-normal">
                       ({currentMove.accuracy}%)
                     </span>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-cyan-brand/10 border border-cyan-brand/20">
-                  <div className="text-[10px] uppercase font-bold text-cyan-300 tracking-wider flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-cyan-brand" />
+                <div className="p-3 rounded-[5px] bg-[#E5A93C]/10 border border-[#E5A93C]/25">
+                  <div className="text-[10px] uppercase font-bold text-[#E5A93C] tracking-wider flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-[#E5A93C]" />
                     <span>Engine Suggestion</span>
                   </div>
-                  <div className="text-base font-black text-cyan-300 font-mono mt-0.5">
+                  <div className="text-base font-black text-[#E5A93C] font-mono mt-0.5">
                     {currentMove.bestMoveSan || currentMove.san}
                   </div>
                 </div>
@@ -525,17 +520,17 @@ export const GameReviewPage = ({ onNavigate }) => {
 
             {/* Tactical & Positional Concept Tags */}
             {currentMove?.coach && (
-              <div className="space-y-2 mt-3.5 pt-3 border-t border-white/[0.06] relative z-10">
+              <div className="space-y-2 mt-3.5 pt-3 border-t border-[#262830] relative z-10">
                 {currentMove.coach.tactical_ideas?.length > 0 && (
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1">
                       <Zap className="w-3 h-3 text-amber-400" />
                       <span>Tactics:</span>
                     </span>
                     {currentMove.coach.tactical_ideas.map((tag, i) => (
                       <span
                         key={i}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-400/10 border border-amber-400/20 text-amber-300"
+                        className="text-[10px] font-bold px-2 py-0.5 rounded-[4px] bg-amber-400/10 border border-amber-400/20 text-amber-300"
                       >
                         {tag}
                       </span>
@@ -545,14 +540,14 @@ export const GameReviewPage = ({ onNavigate }) => {
 
                 {currentMove.coach.positional_ideas?.length > 0 && (
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Layers className="w-3 h-3 text-cyan-brand" />
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider flex items-center gap-1">
+                      <Layers className="w-3 h-3 text-[#E5A93C]" />
                       <span>Strategy:</span>
                     </span>
                     {currentMove.coach.positional_ideas.map((tag, i) => (
                       <span
                         key={i}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-cyan-brand/10 border border-cyan-brand/20 text-cyan-300"
+                        className="text-[10px] font-bold px-2 py-0.5 rounded-[4px] bg-[#E5A93C]/10 border border-[#E5A93C]/20 text-[#E5A93C]"
                       >
                         {tag}
                       </span>
@@ -566,7 +561,7 @@ export const GameReviewPage = ({ onNavigate }) => {
           {/* Game Stats & Move Classification Chips */}
           <div className="grid grid-cols-5 gap-1.5">
             {[
-              { type: 'brilliant', label: 'Brilliant', symbol: '!!', color: 'text-cyan-300 border-cyan-500/30 bg-cyan-500/10' },
+              { type: 'brilliant', label: 'Brilliant', symbol: '!!', color: 'text-[#E5A93C] border-[#E5A93C]/30 bg-[#E5A93C]/10' },
               { type: 'best', label: 'Best', symbol: '★', color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' },
               { type: 'inaccuracy', label: 'Inaccuracy', symbol: '?!', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' },
               { type: 'mistake', label: 'Mistake', symbol: '?', color: 'text-orange-400 border-orange-500/30 bg-orange-500/10' },
@@ -577,10 +572,10 @@ export const GameReviewPage = ({ onNavigate }) => {
                 <button
                   key={cls.type}
                   onClick={() => setFilterType((prev) => (prev === cls.type ? 'all' : cls.type))}
-                  className={`p-2 rounded-xl border text-center transition-all ${
+                  className={`p-2 rounded-[5px] border text-center transition-all ${
                     filterType === cls.type
-                      ? 'ring-2 ring-cyan-brand bg-white/10'
-                      : 'hover:bg-white/5'
+                      ? 'ring-1 ring-[#E5A93C] bg-[#16171B]'
+                      : 'hover:bg-[#16171B]'
                   } ${cls.color}`}
                 >
                   <div className="text-xs font-black">{cls.symbol}</div>
@@ -592,17 +587,17 @@ export const GameReviewPage = ({ onNavigate }) => {
           </div>
 
           {/* Move Explorer & Notation Table */}
-          <div className="rounded-2xl bg-slate-900/90 border border-white/[0.08] backdrop-blur-md overflow-hidden flex flex-col h-[280px]">
-            <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.08] bg-slate-950/40">
+          <div className="rounded-[5px] bg-[#101114] border border-[#262830] backdrop-blur-md overflow-hidden flex flex-col h-[280px]">
+            <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#262830] bg-[#141519]">
               <span className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
-                <FileText className="w-3.5 h-3.5 text-cyan-brand" />
+                <FileText className="w-3.5 h-3.5 text-[#E5A93C]" />
                 <span>Move Explorer</span>
               </span>
               <div className="flex items-center gap-1">
                 {filterType !== 'all' && (
                   <button
                     onClick={() => setFilterType('all')}
-                    className="text-[10px] text-cyan-brand font-bold hover:underline"
+                    className="text-[10px] text-[#E5A93C] font-bold hover:underline"
                   >
                     Reset Filter
                   </button>
@@ -611,7 +606,7 @@ export const GameReviewPage = ({ onNavigate }) => {
             </div>
 
             {/* Scrollable Notation List */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-1 divide-y divide-white/[0.04]">
+            <div className="flex-1 overflow-y-auto p-3 space-y-1 divide-y divide-[#262830]/40">
               {activeGame?.moves && (
                 <div className="grid grid-cols-2 gap-2">
                   {Array.from({ length: Math.ceil(activeGame.moves.length / 2) }).map((_, moveRowIdx) => {
@@ -626,20 +621,20 @@ export const GameReviewPage = ({ onNavigate }) => {
                         {whiteMove && (
                           <div
                             onClick={() => goToMove(whiteIdx)}
-                            className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-pointer text-xs font-mono transition-all ${
+                            className={`flex items-center justify-between px-2.5 py-1.5 rounded-[4px] cursor-pointer text-xs font-mono transition-all ${
                               currentMoveIndex === whiteIdx
-                                ? 'bg-cyan-brand/20 border border-cyan-brand/40 text-cyan-300 font-bold shadow-sm'
-                                : 'hover:bg-white/5 text-slate-300'
+                                ? 'bg-[#E5A93C]/15 border border-[#E5A93C]/35 text-[#E5A93C] font-bold shadow-sm'
+                                : 'hover:bg-[#18191E] text-zinc-300'
                             }`}
                           >
                             <div className="flex items-center gap-1.5">
-                              <span className="text-slate-500 text-[11px] font-bold">
+                              <span className="text-zinc-500 text-[11px] font-bold">
                                 {whiteMove.moveNumber}.
                               </span>
                               <span>{whiteMove.san}</span>
                             </div>
                             <span
-                              className={`text-[9px] px-1 py-0.2 rounded font-black ${
+                              className={`text-[9px] px-1 py-0.2 rounded-[3px] font-black ${
                                 getBadgeMeta(whiteMove.classification).bgColor
                               }`}
                             >
@@ -652,20 +647,20 @@ export const GameReviewPage = ({ onNavigate }) => {
                         {blackMove ? (
                           <div
                             onClick={() => goToMove(blackIdx)}
-                            className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-pointer text-xs font-mono transition-all ${
+                            className={`flex items-center justify-between px-2.5 py-1.5 rounded-[4px] cursor-pointer text-xs font-mono transition-all ${
                               currentMoveIndex === blackIdx
-                                ? 'bg-cyan-brand/20 border border-cyan-brand/40 text-cyan-300 font-bold shadow-sm'
-                                : 'hover:bg-white/5 text-slate-300'
+                                ? 'bg-[#E5A93C]/15 border border-[#E5A93C]/35 text-[#E5A93C] font-bold shadow-sm'
+                                : 'hover:bg-[#18191E] text-zinc-300'
                             }`}
                           >
                             <div className="flex items-center gap-1.5">
-                              <span className="text-slate-500 text-[11px] font-bold">
+                              <span className="text-zinc-500 text-[11px] font-bold">
                                 {blackMove.moveNumber}...
                               </span>
                               <span>{blackMove.san}</span>
                             </div>
                             <span
-                              className={`text-[9px] px-1 py-0.2 rounded font-black ${
+                              className={`text-[9px] px-1 py-0.2 rounded-[3px] font-black ${
                                 getBadgeMeta(blackMove.classification).bgColor
                               }`}
                             >
@@ -673,7 +668,7 @@ export const GameReviewPage = ({ onNavigate }) => {
                             </span>
                           </div>
                         ) : (
-                          <div className="text-slate-700 font-mono text-xs px-2.5 py-1.5">—</div>
+                          <div className="text-zinc-700 font-mono text-xs px-2.5 py-1.5">—</div>
                         )}
                       </React.Fragment>
                     );
@@ -687,45 +682,45 @@ export const GameReviewPage = ({ onNavigate }) => {
 
       {/* MODAL: Import / Sample Games Modal */}
       {showImportModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full max-w-2xl bg-slate-900 border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-2xl bg-[#0D0E11] border border-[#262830] rounded-[5px] p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#262830]">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-cyan-brand/20 text-cyan-brand flex items-center justify-center border border-cyan-brand/30">
+                <div className="w-9 h-9 rounded-[5px] bg-[#E5A93C]/15 text-[#E5A93C] flex items-center justify-center border border-[#E5A93C]/30">
                   <Upload className="w-5 h-5" />
                 </div>
                 <h3 className="text-lg font-black text-white">Import Game for Review</h3>
               </div>
               <button
                 onClick={() => setShowImportModal(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10"
+                className="p-1.5 rounded-[4px] text-zinc-400 hover:text-white hover:bg-[#18191E]"
               >
                 ✕
               </button>
             </div>
 
             {/* Tab selector */}
-            <div className="flex rounded-xl bg-slate-950 p-1 border border-white/10">
+            <div className="flex rounded-[5px] bg-[#141519] p-1 border border-[#262830]">
               <button
                 onClick={() => setImportTab('samples')}
-                className={`flex-1 py-2 rounded-lg text-xs font-black transition-all ${
-                  importTab === 'samples' ? 'bg-cyan-brand text-black shadow-glow-cyan' : 'text-slate-400 hover:text-white'
+                className={`flex-1 py-2 rounded-[4px] text-xs font-black transition-all ${
+                  importTab === 'samples' ? 'bg-[#E5A93C] text-black shadow-sm' : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 Instructive Classics
               </button>
               <button
                 onClick={() => setImportTab('paste')}
-                className={`flex-1 py-2 rounded-lg text-xs font-black transition-all ${
-                  importTab === 'paste' ? 'bg-cyan-brand text-black shadow-glow-cyan' : 'text-slate-400 hover:text-white'
+                className={`flex-1 py-2 rounded-[4px] text-xs font-black transition-all ${
+                  importTab === 'paste' ? 'bg-[#E5A93C] text-black shadow-sm' : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 Paste PGN Text
               </button>
               <button
                 onClick={() => setImportTab('file')}
-                className={`flex-1 py-2 rounded-lg text-xs font-black transition-all ${
-                  importTab === 'file' ? 'bg-cyan-brand text-black shadow-glow-cyan' : 'text-slate-400 hover:text-white'
+                className={`flex-1 py-2 rounded-[4px] text-xs font-black transition-all ${
+                  importTab === 'file' ? 'bg-[#E5A93C] text-black shadow-sm' : 'text-zinc-400 hover:text-white'
                 }`}
               >
                 Upload .PGN File
@@ -742,26 +737,26 @@ export const GameReviewPage = ({ onNavigate }) => {
                       loadSampleGame(sample.id);
                       setShowImportModal(false);
                     }}
-                    className="p-4 rounded-2xl bg-white/5 hover:bg-cyan-brand/10 border border-white/10 hover:border-cyan-brand/40 cursor-pointer transition-all flex flex-col justify-between group"
+                    className="p-4 rounded-[5px] bg-[#141519] hover:bg-[#18191E] border border-[#262830] hover:border-[#E5A93C]/40 cursor-pointer transition-all flex flex-col justify-between group"
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase text-cyan-brand tracking-wider">
+                        <span className="text-[10px] font-black uppercase text-[#E5A93C] tracking-wider">
                           {sample.eco} • {sample.opening}
                         </span>
-                        <span className="text-[10px] text-slate-400 font-mono">{sample.result}</span>
+                        <span className="text-[10px] text-zinc-400 font-mono">{sample.result}</span>
                       </div>
-                      <h4 className="text-sm font-black text-white group-hover:text-cyan-300 transition-colors mt-1">
+                      <h4 className="text-sm font-black text-white group-hover:text-[#E5A93C] transition-colors mt-1">
                         {sample.title}
                       </h4>
-                      <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
+                      <p className="text-xs text-zinc-400 line-clamp-2 mt-1 leading-relaxed">
                         {sample.description}
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-white/[0.06] text-[11px] font-bold text-slate-400">
+                    <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-[#262830] text-[11px] font-bold text-zinc-400">
                       <span>{sample.date.split('.')[0]}</span>
-                      <span className="text-cyan-brand group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                      <span className="text-[#E5A93C] group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
                         Review Game <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
@@ -780,12 +775,12 @@ Example:
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O d3...`}
                   value={pastedPgn}
                   onChange={(e) => setPastedPgn(e.target.value)}
-                  className="w-full p-3.5 rounded-2xl bg-slate-950 border border-white/10 text-white font-mono text-xs focus:outline-none focus:border-cyan-brand/50 resize-none leading-relaxed placeholder-slate-600"
+                  className="w-full p-3.5 rounded-[5px] bg-[#141519] border border-[#262830] text-white font-mono text-xs focus:outline-none focus:border-[#E5A93C]/50 resize-none leading-relaxed placeholder-zinc-600"
                 />
                 <button
                   onClick={handlePastedPgnSubmit}
                   disabled={!pastedPgn.trim() || isAnalyzing}
-                  className="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-brand to-sky-400 hover:from-cyan-400 hover:to-sky-300 text-black font-black text-sm flex items-center justify-center gap-2 shadow-glow-cyan transition-all disabled:opacity-50"
+                  className="w-full py-3 rounded-[5px] bg-[#E5A93C] hover:bg-[#d4972e] text-black font-black text-sm flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50"
                 >
                   {isAnalyzing ? (
                     <span>Analyzing moves with Coach Orion...</span>
@@ -801,7 +796,7 @@ Example:
 
             {/* Tab: File Upload */}
             {importTab === 'file' && (
-              <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-white/15 rounded-2xl hover:border-cyan-brand/50 transition-all text-center space-y-3 bg-slate-950/40">
+              <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-[#262830] rounded-[5px] hover:border-[#E5A93C]/50 transition-all text-center space-y-3 bg-[#141519]">
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -809,18 +804,18 @@ Example:
                   onChange={handleFileUpload}
                   className="hidden"
                 />
-                <div className="w-12 h-12 rounded-2xl bg-cyan-brand/10 text-cyan-brand flex items-center justify-center border border-cyan-brand/20">
+                <div className="w-12 h-12 rounded-[5px] bg-[#E5A93C]/10 text-[#E5A93C] flex items-center justify-center border border-[#E5A93C]/25">
                   <Upload className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-sm font-black text-white">Upload .pgn file</h4>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-zinc-400 mt-1">
                     Drop your exported game file here or browse your system
                   </p>
                 </div>
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-all"
+                  className="px-4 py-2 rounded-[5px] bg-[#18191E] hover:bg-[#22242B] border border-[#262830] text-white font-bold text-xs transition-all"
                 >
                   Browse Files
                 </button>
@@ -832,15 +827,15 @@ Example:
 
       {/* MODAL: Opening Recognition & Repertoire details */}
       {showOpeningModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="w-full max-w-lg bg-slate-900 border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-lg bg-[#0D0E11] border border-[#262830] rounded-[5px] p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#262830]">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-400 flex items-center justify-center border border-amber-400/30">
+                <div className="w-9 h-9 rounded-[5px] bg-[#E5A93C]/15 text-[#E5A93C] flex items-center justify-center border border-[#E5A93C]/30">
                   <BookOpen className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-black uppercase text-amber-400 tracking-wider">
+                  <span className="text-[10px] font-black uppercase text-[#E5A93C] tracking-wider">
                     Opening Recognition
                   </span>
                   <h3 className="text-base font-black text-white">
@@ -850,21 +845,21 @@ Example:
               </div>
               <button
                 onClick={() => setShowOpeningModal(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10"
+                className="p-1.5 rounded-[4px] text-zinc-400 hover:text-white hover:bg-[#18191E]"
               >
                 ✕
               </button>
             </div>
 
             <div className="space-y-3.5">
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-white/5">
-                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <div className="p-3.5 rounded-[5px] bg-[#141519] border border-[#262830]">
+                <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">
                   ECO Code & Identification
                 </div>
-                <div className="text-lg font-black text-cyan-brand font-mono mt-0.5">
+                <div className="text-lg font-black text-[#E5A93C] font-mono mt-0.5">
                   {activeGame?.opening?.eco || 'A00'}
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed mt-2">
+                <p className="text-xs text-zinc-300 leading-relaxed mt-2">
                   {activeGame?.opening?.description ||
                     'A rich classical opening structure with strong central confrontation and dynamic counter-play.'}
                 </p>
@@ -872,21 +867,21 @@ Example:
 
               {/* Win-rate metrics */}
               <div className="grid grid-cols-3 gap-2.5">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
-                  <div className="text-[10px] uppercase font-bold text-slate-400">White Win</div>
+                <div className="p-3 rounded-[5px] bg-[#141519] border border-[#262830] text-center">
+                  <div className="text-[10px] uppercase font-bold text-zinc-400">White Win</div>
                   <div className="text-base font-black text-white mt-0.5">
                     {activeGame?.opening?.whiteWinRate || 38}%
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
-                  <div className="text-[10px] uppercase font-bold text-slate-400">Draw</div>
-                  <div className="text-base font-black text-slate-300 mt-0.5">
+                <div className="p-3 rounded-[5px] bg-[#141519] border border-[#262830] text-center">
+                  <div className="text-[10px] uppercase font-bold text-zinc-400">Draw</div>
+                  <div className="text-base font-black text-zinc-300 mt-0.5">
                     {activeGame?.opening?.drawRate || 34}%
                   </div>
                 </div>
-                <div className="p-3 rounded-xl bg-white/5 border border-white/5 text-center">
-                  <div className="text-[10px] uppercase font-bold text-slate-400">Black Win</div>
-                  <div className="text-base font-black text-sky-400 mt-0.5">
+                <div className="p-3 rounded-[5px] bg-[#141519] border border-[#262830] text-center">
+                  <div className="text-[10px] uppercase font-bold text-zinc-400">Black Win</div>
+                  <div className="text-base font-black text-zinc-300 mt-0.5">
                     {activeGame?.opening?.blackWinRate || 28}%
                   </div>
                 </div>
@@ -894,15 +889,15 @@ Example:
 
               {/* Key Concepts */}
               {activeGame?.opening?.keyConcepts && (
-                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-2">
-                  <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <div className="p-3.5 rounded-[5px] bg-[#141519] border border-[#262830] space-y-2">
+                  <div className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">
                     Key Tactical & Strategic Goals
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {activeGame.opening.keyConcepts.map((c, i) => (
                       <span
                         key={i}
-                        className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-cyan-brand/10 border border-cyan-brand/20 text-cyan-300"
+                        className="text-xs font-semibold px-2.5 py-1 rounded-[4px] bg-[#E5A93C]/10 border border-[#E5A93C]/20 text-[#E5A93C]"
                       >
                         {c}
                       </span>
@@ -914,7 +909,7 @@ Example:
 
             <button
               onClick={() => setShowOpeningModal(false)}
-              className="w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-xs transition-all"
+              className="w-full py-2.5 rounded-[5px] bg-[#18191E] hover:bg-[#22242B] border border-[#262830] text-white font-black text-xs transition-all"
             >
               Close
             </button>
@@ -924,3 +919,5 @@ Example:
     </div>
   );
 };
+
+export default GameReviewPage;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
@@ -40,7 +41,7 @@ export const AppNavigator = () => {
       theme={{
         dark: true,
         colors: {
-          primary: colors.cyan || '#00E5FF',
+          primary: colors.gold || '#E5A93C',
           background: colors.background,
           card: colors.surface,
           text: colors.text,

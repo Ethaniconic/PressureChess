@@ -266,15 +266,15 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 12,
-    backgroundColor: 'rgba(0, 229, 255, 0.1)',
+    borderRadius: 4,
+    backgroundColor: '#1C190E',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.3)',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
   },
   statsButtonText: {
     fontSize: 12,
     fontWeight: '800',
-    color: colors.cyan,
+    color: colors.gold,
   },
   scrollContent: {
     padding: 16,
@@ -287,11 +287,12 @@ const styles = StyleSheet.create({
   },
   statBox: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: '#121212',
     padding: 10,
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#333333',
+    borderColor: '#242424',
   },
   statLabelRow: {
     flexDirection: 'row',
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 10,
-    color: '#94A3B8',
+    color: '#8E8E93',
     fontWeight: '700',
   },
   statValue: {
@@ -318,8 +319,10 @@ const styles = StyleSheet.create({
   sectionIconBox: {
     width: 32,
     height: 32,
-    borderRadius: 10,
-    backgroundColor: 'rgba(0, 229, 255, 0.15)',
+    borderRadius: 4,
+    backgroundColor: '#1C190E',
+    borderWidth: 1,
+    borderColor: 'rgba(229, 169, 60, 0.3)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -330,7 +333,7 @@ const styles = StyleSheet.create({
   },
   sectionSubtitle: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: '#8E8E93',
   },
   modesGrid: {
     flexDirection: 'row',
@@ -339,11 +342,12 @@ const styles = StyleSheet.create({
   },
   modeCard: {
     width: '48%',
-    backgroundColor: colors.surface,
-    borderRadius: 16,
+    backgroundColor: '#121212',
+    borderRadius: 5,
     padding: 14,
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.2)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     justifyContent: 'space-between',
   },
   modeTopRow: {
@@ -358,13 +362,15 @@ const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 3,
+    backgroundColor: '#1C190E',
+    borderWidth: 1,
+    borderColor: 'rgba(229, 169, 60, 0.3)',
   },
   badgeText: {
     fontSize: 9,
     fontWeight: '800',
-    color: colors.cyan,
+    color: colors.gold,
   },
   modeTitle: {
     fontSize: 13,
@@ -384,18 +390,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.06)',
+    borderTopColor: '#242424',
   },
   modeDuration: {
     fontSize: 11,
     fontWeight: '800',
-    color: colors.cyan,
+    color: colors.gold,
   },
   playIconBox: {
     width: 22,
     height: 22,
-    borderRadius: 6,
-    backgroundColor: colors.cyan,
+    borderRadius: 3,
+    backgroundColor: colors.gold,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -403,11 +409,12 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   champCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
+    backgroundColor: '#121212',
+    borderRadius: 5,
     padding: 14,
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
   },
   champHeader: {
     flexDirection: 'row',
@@ -418,7 +425,7 @@ const styles = StyleSheet.create({
   champYear: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#F59E0B',
+    color: colors.gold,
   },
   champRating: {
     fontSize: 11,
@@ -434,7 +441,7 @@ const styles = StyleSheet.create({
   champSubtitle: {
     fontSize: 11,
     fontWeight: '600',
-    color: colors.cyan,
+    color: colors.gold,
     marginBottom: 4,
   },
   champGoal: {
@@ -449,7 +456,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.06)',
+    borderTopColor: '#242424',
   },
   champPlayer: {
     fontSize: 11,
@@ -464,7 +471,7 @@ const styles = StyleSheet.create({
   replayButtonText: {
     fontSize: 12,
     fontWeight: '800',
-    color: colors.cyan,
+    color: colors.gold,
   },
   categoriesGrid: {
     flexDirection: 'row',
@@ -473,11 +480,12 @@ const styles = StyleSheet.create({
   },
   catCard: {
     width: '31%',
-    backgroundColor: colors.surface,
-    borderRadius: 14,
+    backgroundColor: '#121212',
+    borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#333333',
+    borderColor: '#242424',
   },
   catIcon: {
     fontSize: 18,

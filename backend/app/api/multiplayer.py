@@ -511,62 +511,95 @@ def get_leaderboards(
     """
     Returns ranked leaderboard of players filtered by timeframe and mode.
     """
-    # Sample realistic global leaderboards
-    BASE_LEADERBOARD = [
-        {"rank": 1, "id": "u-101", "username": "Vishy_Lightning", "country": "IN", "avatar": "👑", "rating": 2810, "wins": 1420, "losses": 310, "draws": 420, "win_rate": 66.0},
-        {"rank": 2, "id": "u-102", "username": "Magnus_Ice", "country": "NO", "avatar": "⚡", "rating": 2795, "wins": 1380, "losses": 290, "draws": 480, "win_rate": 64.2},
-        {"rank": 3, "id": "u-103", "username": "Hikaru_Speed", "country": "US", "avatar": "🔥", "rating": 2780, "wins": 1650, "losses": 410, "draws": 380, "win_rate": 67.6},
-        {"rank": 4, "id": "u-104", "username": "Alireza_Tactics", "country": "FR", "avatar": "🎯", "rating": 2745, "wins": 980, "losses": 260, "draws": 310, "win_rate": 63.2},
-        {"rank": 5, "id": "u-105", "username": "Pragg_Prodigy", "country": "IN", "avatar": "🛡️", "rating": 2730, "wins": 890, "losses": 220, "draws": 290, "win_rate": 63.6},
-        {"rank": 6, "id": "u-106", "username": "Gukesh_King", "country": "IN", "avatar": "⚔️", "rating": 2725, "wins": 840, "losses": 210, "draws": 300, "win_rate": 62.2},
-        {"rank": 7, "id": "u-107", "username": "Nordic_Crusher", "country": "SE", "avatar": "❄️", "rating": 2690, "wins": 720, "losses": 240, "draws": 250, "win_rate": 59.5},
-        {"rank": 8, "id": "u-108", "username": "Berlin_Wall99", "country": "DE", "avatar": "🏰", "rating": 2660, "wins": 650, "losses": 230, "draws": 280, "win_rate": 56.0},
-        {"rank": 9, "id": "u-109", "username": "PressureMaster", "country": "US", "avatar": "⚡", "rating": 2610, "wins": 540, "losses": 190, "draws": 210, "win_rate": 57.4},
-        {"rank": 10, "id": "u-110", "username": "Samba_Gambit", "country": "BR", "avatar": "🌴", "rating": 2580, "wins": 490, "losses": 180, "draws": 190, "win_rate": 57.0}
-    ]
+    supabase = get_supabase_client()
+    if supabase:
+        try:
+            rating_col = "elo_rating"
+            if mode in ("bullet", "blitz", "rapid", "classical"):
+                rating_col = f"{mode}_rating"
 
-    # Adjust ratings based on mode
-    factor = 1.0
-    if mode == "bullet":
-        factor = 1.05
-    elif mode == "blitz":
-        factor = 1.0
-    elif mode == "rapid":
-        factor = 0.98
-    elif mode == "classical":
-        factor = 0.95
+            res = supabase.table("profiles").select(
+                "id, username, full_name, avatar_url, country, elo_rating, bullet_rating, blitz_rating, rapid_rating, classical_rating, wins, losses, draws, daily_streak"
+            ).order(rating_col, desc=True).limit(50).execute()
 
-    leaderboard = []
-    for entry in BASE_LEADERBOARD:
-        entry_copy = dict(entry)
-        entry_copy["rating"] = int(entry["rating"] * factor)
-        leaderboard.append(entry_copy)
+            if res.data is not None and len(res.data) > 0:
+                leaderboard = []
+                for idx, p in enumerate(res.data):
+                    wins = p.get("wins") or 0
+                    losses = p.get("losses") or 0
+                    draws = p.get("draws") or 0
+                    total = wins + losses + draws
+                    win_rate = round((wins / max(1, total)) * 100, 1) if total > 0 else 0.0
+                    rating_val = p.get(rating_col) or p.get("elo_rating") or 1200
+                    leaderboard.append({
+                        "rank": idx + 1,
+                        "id": p.get("id"),
+                        "username": p.get("username") or p.get("full_name") or f"Tactician_{str(p.get('id', ''))[:4]}",
+                        "country": p.get("country") or "US",
+                        "avatar": p.get("avatar_url") or "♟️",
+                        "rating": rating_val,
+                        "wins": wins,
+                        "losses": losses,
+                        "draws": draws,
+                        "win_rate": win_rate,
+                        "streak": p.get("daily_streak") or 1
+                    })
+                return {
+                    "timeframe": timeframe,
+                    "mode": mode,
+                    "total_players": len(leaderboard),
+                    "leaderboard": leaderboard
+                }
+        except Exception as e:
+            logger.warning(f"Error querying live Supabase leaderboard: {e}")
 
     return {
         "timeframe": timeframe,
         "mode": mode,
-        "total_players": 14280,
-        "leaderboard": leaderboard
+        "total_players": 0,
+        "leaderboard": []
     }
 
 @router.get("/profile/{user_id}")
 def get_multiplayer_profile(user_id: str):
     """
     Returns full multiplayer statistics: ratings by mode (Bullet, Blitz, Rapid, Classical),
-    wins, losses, draws, win rates, country, and recent matches.
+    wins, losses, draws, win rates, country, and recent matches from Supabase.
     """
     supabase = get_supabase_client()
     profile = None
+    recent_matches = []
     if supabase and user_id != "guest":
         try:
             res = supabase.table("profiles").select("*").eq("id", user_id).execute()
             if res.data:
                 profile = res.data[0]
+            
+            # Fetch recent games
+            games_res = supabase.table("games").select("*").eq("user_id", user_id).order("created_at", desc=True).limit(10).execute()
+            if games_res.data:
+                for g in games_res.data:
+                    recent_matches.append({
+                        "id": g.get("id"),
+                        "mode": g.get("time_control", "blitz"),
+                        "time_control": g.get("time_control", "3+0"),
+                        "opponent": g.get("opponent_name", "Opponent"),
+                        "opponent_rating": 1200,
+                        "opponent_country": "US",
+                        "result": g.get("result", "*"),
+                        "rating_delta": 0,
+                        "date": str(g.get("created_at", ""))[:10]
+                    })
         except Exception as e:
             logger.warning(f"Error fetching profile: {e}")
 
     country = profile.get("country", "US") if profile else "US"
-    overall_elo = profile.get("elo_rating", 1340) if profile else 1340
+    overall_elo = profile.get("elo_rating", 1200) if profile else 1200
+    wins = profile.get("wins", 0) if profile else 0
+    losses = profile.get("losses", 0) if profile else 0
+    draws = profile.get("draws", 0) if profile else 0
+    total_games = wins + losses + draws
+    win_rate_pct = round((wins / max(1, total_games)) * 100, 1) if total_games > 0 else 0.0
 
     return {
         "user_id": user_id,
@@ -574,52 +607,18 @@ def get_multiplayer_profile(user_id: str):
         "avatar_url": profile.get("avatar_url", "") if profile else "",
         "country": country,
         "ratings": {
-            "bullet": profile.get("bullet_rating", overall_elo - 40) if profile else 1300,
-            "blitz": profile.get("blitz_rating", overall_elo) if profile else 1340,
-            "rapid": profile.get("rapid_rating", overall_elo + 60) if profile else 1400,
-            "classical": profile.get("classical_rating", overall_elo + 100) if profile else 1440,
+            "bullet": profile.get("bullet_rating", overall_elo) if profile else 1200,
+            "blitz": profile.get("blitz_rating", overall_elo) if profile else 1200,
+            "rapid": profile.get("rapid_rating", overall_elo) if profile else 1200,
+            "classical": profile.get("classical_rating", overall_elo) if profile else 1200,
             "overall": overall_elo
         },
         "stats": {
-            "wins": profile.get("wins", 28) if profile else 28,
-            "losses": profile.get("losses", 12) if profile else 12,
-            "draws": profile.get("draws", 6) if profile else 6,
-            "total_games": 46,
-            "win_rate_pct": 60.9
+            "wins": wins,
+            "losses": losses,
+            "draws": draws,
+            "total_games": total_games,
+            "win_rate_pct": win_rate_pct
         },
-        "recent_matches": [
-            {
-                "id": "m-01",
-                "mode": "blitz",
-                "time_control": "3+0",
-                "opponent": "Hikaru_Fan99",
-                "opponent_rating": 1380,
-                "opponent_country": "US",
-                "result": "1-0",
-                "rating_delta": 16,
-                "date": "Today"
-            },
-            {
-                "id": "m-02",
-                "mode": "bullet",
-                "time_control": "1+0",
-                "opponent": "Nordic_Crusher",
-                "opponent_rating": 1420,
-                "opponent_country": "SE",
-                "result": "0-1",
-                "rating_delta": -14,
-                "date": "Yesterday"
-            },
-            {
-                "id": "m-03",
-                "mode": "rapid",
-                "time_control": "10+0",
-                "opponent": "Berlin_Knight",
-                "opponent_rating": 1310,
-                "opponent_country": "DE",
-                "result": "1-0",
-                "rating_delta": 15,
-                "date": "2 days ago"
-            }
-        ]
+        "recent_matches": recent_matches
     }

@@ -8,6 +8,7 @@ import {
   ScrollView 
 } from 'react-native';
 import { useBeta } from '../context/BetaContext';
+import { colors } from '../theme/colors';
 import { 
   Sparkles, 
   CheckCircle2, 
@@ -53,7 +54,7 @@ export const BetaWelcomeModal = ({ navigation }) => {
             {/* Header Badge */}
             <View style={styles.header}>
               <View style={styles.sparkleIcon}>
-                <Sparkles size={28} color="#00E5FF" />
+                <Sparkles size={28} color={colors.gold} />
               </View>
               <View style={styles.badgeRow}>
                 <Text style={styles.betaTag}>PUBLIC BETA v0.5.0</Text>
@@ -135,7 +136,7 @@ export const BetaWelcomeModal = ({ navigation }) => {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(10, 16, 30, 0.82)',
+    backgroundColor: 'rgba(0, 0, 0, 0.88)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20
@@ -143,15 +144,15 @@ const styles = StyleSheet.create({
   modalBox: {
     width: '100%',
     maxHeight: '90%',
-    backgroundColor: colors.surface,
-    borderRadius: 28,
+    backgroundColor: '#0E0E0E',
+    borderRadius: 5, // Small 4-5px round
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.14)',
-    borderTopColor: 'rgba(255, 255, 255, 0.45)', // Top specular reflection
+    borderColor: '#242424',
+    borderTopColor: '#3D3D3D', // High contrast platinum rim
     padding: 22,
     shadowColor: '#000',
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
+    shadowOpacity: 0.8,
+    shadowRadius: 16,
     elevation: 10,
     position: 'relative',
     overflow: 'hidden',
@@ -162,11 +163,11 @@ const styles = StyleSheet.create({
     right: 16,
     zIndex: 10,
     padding: 8,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 4, // 4-5px round
+    backgroundColor: '#161616',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.3)',
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#333333',
+    borderColor: '#222222',
   },
   header: {
     alignItems: 'center',
@@ -174,17 +175,17 @@ const styles = StyleSheet.create({
     marginBottom: 16
   },
   sparkleIcon: {
-    width: 58,
-    height: 58,
-    borderRadius: 22,
-    backgroundColor: 'rgba(0, 229, 255, 0.2)',
+    width: 54,
+    height: 54,
+    borderRadius: 5, // 4-5px round
+    backgroundColor: '#1A160C',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.5)',
-    borderColor: 'rgba(0, 229, 255, 0.45)',
+    borderTopColor: '#E5A93C',
+    borderColor: 'rgba(229, 169, 60, 0.45)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
-    shadowColor: colors.cyan,
+    shadowColor: colors.gold,
     shadowOpacity: 0.35,
     shadowRadius: 10,
     elevation: 4,
@@ -195,51 +196,51 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   betaTag: {
-    color: '#00E5FF',
-    backgroundColor: 'rgba(0, 229, 255, 0.2)',
+    color: '#E5A93C',
+    backgroundColor: '#1A160C',
     fontSize: 10,
     fontWeight: '900',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: 4, // 4-5px round
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.4)',
-    borderColor: 'rgba(0, 229, 255, 0.4)',
+    borderTopColor: '#E5A93C',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
   },
   freeTag: {
-    color: '#10B981',
-    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    color: '#22C55E',
+    backgroundColor: '#0F1A12',
     fontSize: 10,
     fontWeight: '900',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: 4, // 4-5px round
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.4)',
-    borderColor: 'rgba(16, 185, 129, 0.4)',
+    borderTopColor: '#22C55E',
+    borderColor: 'rgba(34, 197, 94, 0.4)',
   },
   modalTitle: {
-    color: colors.text,
+    color: '#FFFFFF',
     fontSize: 21,
     fontWeight: '900',
     textAlign: 'center',
     marginBottom: 6,
   },
   modalSub: {
-    color: colors.textSecondary,
+    color: '#A1A1AA',
     fontSize: 12.5,
     textAlign: 'center',
     lineHeight: 18,
     paddingHorizontal: 8,
   },
   pillarsBox: {
-    backgroundColor: colors.surfaceLight,
-    borderRadius: 20,
+    backgroundColor: '#141414',
+    borderRadius: 5, // 4-5px round
     padding: 14,
     gap: 12,
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.25)',
-    borderColor: colors.border,
+    borderTopColor: '#2A2A2A',
+    borderColor: '#1E1E1E',
     marginBottom: 14
   },
   pillarItem: {
@@ -248,42 +249,43 @@ const styles = StyleSheet.create({
     gap: 12
   },
   pillarIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
+    width: 34,
+    height: 34,
+    borderRadius: 4, // 4-5px round
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.3)',
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#333333',
+    borderColor: '#202020',
+    backgroundColor: '#181818',
   },
   pillarTitle: {
-    color: '#FFF',
+    color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '800'
   },
   pillarSub: {
-    color: colors.textSecondary,
+    color: '#8E8E93',
     fontSize: 11,
     lineHeight: 15,
   },
   founderPerk: {
-    backgroundColor: 'rgba(0, 229, 255, 0.12)',
+    backgroundColor: '#18150D',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.4)',
-    borderColor: 'rgba(0, 229, 255, 0.3)',
-    borderRadius: 18,
+    borderTopColor: '#E5A93C',
+    borderColor: 'rgba(229, 169, 60, 0.35)',
+    borderRadius: 5, // 4-5px round
     padding: 14,
     marginBottom: 16
   },
   founderPerkTitle: {
-    color: '#00E5FF',
+    color: '#E5A93C',
     fontSize: 13,
     fontWeight: '900',
     marginBottom: 3
   },
   founderPerkSub: {
-    color: colors.textSecondary,
+    color: '#D4D4D8',
     fontSize: 11.5,
     lineHeight: 16
   },
@@ -292,17 +294,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#00E5FF',
+    backgroundColor: '#E5A93C',
     paddingVertical: 14,
-    borderRadius: 18,
+    borderRadius: 5, // 4-5px round
     marginBottom: 8,
-    shadowColor: colors.cyan,
-    shadowOpacity: 0.35,
+    shadowColor: colors.gold,
+    shadowOpacity: 0.4,
     shadowRadius: 10,
     elevation: 6,
   },
   claimBtnText: {
-    color: '#000',
+    color: '#080808',
     fontSize: 14,
     fontWeight: '900'
   },
@@ -311,7 +313,7 @@ const styles = StyleSheet.create({
     paddingVertical: 11
   },
   feedbackBtnText: {
-    color: colors.textSecondary,
+    color: '#8E8E93',
     fontSize: 12,
     fontWeight: '700'
   }

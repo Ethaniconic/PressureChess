@@ -73,34 +73,8 @@ export const SIMULATED_OPPONENTS = [
 ];
 
 export const MOCK_LEADERBOARDS = {
-  global: [
-    { rank: 1, username: 'Magnus_Clone', country: 'NO', rating: 2845, wins: 412, losses: 38, draws: 90, tier: 'Grandmaster' },
-    { rank: 2, username: 'Pragg_Storm', country: 'IN', rating: 2790, wins: 389, losses: 44, draws: 82, tier: 'Grandmaster' },
-    { rank: 3, username: 'Nodirbek_Speed', country: 'UZ', rating: 2760, wins: 360, losses: 52, draws: 75, tier: 'Grandmaster' },
-    { rank: 4, username: 'Hikaru_Stream', country: 'US', rating: 2755, wins: 540, losses: 80, draws: 110, tier: 'Grandmaster' },
-    { rank: 5, username: 'Alireza_Flair', country: 'FR', rating: 2740, wins: 310, losses: 49, draws: 65, tier: 'Grandmaster' },
-    { rank: 6, username: 'Duda_Tactics', country: 'PL', rating: 2680, wins: 290, losses: 61, draws: 70, tier: 'International Master' },
-    { rank: 7, username: 'Keymer_Precision', country: 'DE', rating: 2650, wins: 275, losses: 58, draws: 62, tier: 'International Master' },
-    { rank: 8, username: 'PressureKing', country: 'UK', rating: 2590, wins: 240, losses: 65, draws: 45, tier: 'Candidate Master' },
-    { rank: 9, username: 'Samurai_Check', country: 'JP', rating: 2540, wins: 220, losses: 70, draws: 50, tier: 'Candidate Master' },
-    { rank: 10, username: 'Rio_Gambit', country: 'BR', rating: 2490, wins: 205, losses: 75, draws: 40, tier: 'Expert' }
-  ],
-  weekly: [
-    { rank: 1, username: 'Pragg_Storm', country: 'IN', rating: 2790, pointsGained: 68, wins: 24, losses: 2, draws: 4 },
-    { rank: 2, username: 'Magnus_Clone', country: 'NO', rating: 2845, pointsGained: 52, wins: 18, losses: 1, draws: 3 },
-    { rank: 3, username: 'Hikaru_Stream', country: 'US', rating: 2755, pointsGained: 46, wins: 32, losses: 6, draws: 5 },
-    { rank: 4, username: 'PressureKing', country: 'UK', rating: 2590, pointsGained: 38, wins: 15, losses: 3, draws: 2 },
-    { rank: 5, username: 'Tactician', country: 'US', rating: 1340, pointsGained: 32, wins: 12, losses: 4, draws: 2, isCurrentUser: true }
-  ],
-  daily: [
-    { rank: 1, username: 'Hikaru_Stream', country: 'US', rating: 2755, pointsGained: 24, wins: 8, losses: 1, draws: 0 },
-    { rank: 2, username: 'Tactician', country: 'US', rating: 1340, pointsGained: 16, wins: 5, losses: 1, draws: 0, isCurrentUser: true },
-    { rank: 3, username: 'Tashkent_Tactics', country: 'UZ', rating: 1490, pointsGained: 14, wins: 4, losses: 0, draws: 1 }
-  ],
-  friends: [
-    { rank: 1, username: 'Tactician (You)', country: 'US', rating: 1340, wins: 28, losses: 12, draws: 4, isCurrentUser: true },
-    { rank: 2, username: 'ChessFriend_Dan', country: 'US', rating: 1315, wins: 22, losses: 18, draws: 5 },
-    { rank: 3, username: 'Grandma_Gambit', country: 'CA', rating: 1280, wins: 19, losses: 14, draws: 2 },
-    { rank: 4, username: 'RookRookie', country: 'UK', rating: 1190, wins: 14, losses: 25, draws: 3 }
-  ]
+  global: [],
+  weekly: [],
+  daily: [],
+  friends: []
 };

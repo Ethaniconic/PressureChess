@@ -402,16 +402,16 @@ export const GameReviewScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#070B14'
+    backgroundColor: '#080808'
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'between',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.06)'
+    borderBottomColor: '#242424'
   },
   headerLeft: {
     flexDirection: 'row',
@@ -422,8 +422,10 @@ const styles = StyleSheet.create({
   iconBtn: {
     width: 36,
     height: 36,
-    borderRadius: 10,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 4,
+    backgroundColor: '#141414',
+    borderWidth: 1,
+    borderColor: '#242424',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -435,7 +437,7 @@ const styles = StyleSheet.create({
   headerBadgeText: {
     fontSize: 9,
     fontWeight: '900',
-    color: '#00E5FF',
+    color: colors.gold,
     letterSpacing: 1
   },
   headerTitle: {
@@ -453,15 +455,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#00E5FF',
+    backgroundColor: colors.gold,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 10
+    borderRadius: 4
   },
   importBtnText: {
     fontSize: 12,
     fontWeight: '900',
-    color: '#070B14'
+    color: '#080808'
   },
   content: {
     flex: 1
@@ -474,12 +476,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#0F172A',
+    backgroundColor: '#121212',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 14,
+    borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)'
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   playerBlock: {
     flexDirection: 'row',
@@ -494,7 +497,7 @@ const styles = StyleSheet.create({
   playerDot: {
     width: 10,
     height: 10,
-    borderRadius: 5
+    borderRadius: 3
   },
   playerName: {
     fontSize: 12,
@@ -505,18 +508,20 @@ const styles = StyleSheet.create({
   accBadge: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#00E5FF'
+    color: colors.gold
   },
   accBadgeBlack: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#38BDF8'
+    color: '#E2E8F0'
   },
   resultPill: {
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    backgroundColor: '#181818',
+    borderWidth: 1,
+    borderColor: '#262626',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6
+    borderRadius: 3
   },
   resultText: {
     fontSize: 10,
@@ -528,16 +533,16 @@ const styles = StyleSheet.create({
   },
   evalTrack: {
     height: 8,
-    backgroundColor: '#0F172A',
-    borderRadius: 4,
+    backgroundColor: '#141414',
+    borderRadius: 2,
     overflow: 'hidden',
     position: 'relative',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)'
+    borderColor: '#242424'
   },
   evalFill: {
     height: '100%',
-    backgroundColor: '#00E5FF'
+    backgroundColor: colors.gold
   },
   evalCenterMark: {
     position: 'absolute',
@@ -555,13 +560,13 @@ const styles = StyleSheet.create({
   evalLabel: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#64748B',
+    color: '#8E8E93',
     textTransform: 'uppercase'
   },
   evalScore: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#00E5FF'
+    color: colors.gold
   },
   boardContainer: {
     alignItems: 'center',
@@ -571,12 +576,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 8,
     left: 12,
-    backgroundColor: 'rgba(7, 11, 20, 0.85)',
+    backgroundColor: 'rgba(10, 10, 10, 0.92)',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 8,
+    borderRadius: 4,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
+    borderColor: '#2A2A2A',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6
@@ -589,18 +594,19 @@ const styles = StyleSheet.create({
   moveBadgeSmall: {
     paddingHorizontal: 5,
     paddingVertical: 1,
-    borderRadius: 4
+    borderRadius: 2
   },
   moveBadgeSymbol: {
     fontSize: 9,
     fontWeight: '900'
   },
   scrubberCard: {
-    backgroundColor: '#0F172A',
-    borderRadius: 16,
+    backgroundColor: '#121212',
+    borderRadius: 5,
     padding: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.08)'
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   scrubberRow: {
     flexDirection: 'row',
@@ -610,8 +616,10 @@ const styles = StyleSheet.create({
   navBtn: {
     width: 36,
     height: 36,
-    borderRadius: 10,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 4,
+    backgroundColor: '#181818',
+    borderWidth: 1,
+    borderColor: '#262626',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -625,15 +633,15 @@ const styles = StyleSheet.create({
   playBtn: {
     width: 40,
     height: 40,
-    borderRadius: 12,
-    backgroundColor: 'rgba(0, 229, 255, 0.15)',
+    borderRadius: 4,
+    backgroundColor: '#1C190E',
     borderWidth: 1,
-    borderColor: '#00E5FF',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
     alignItems: 'center',
     justifyContent: 'center'
   },
   playBtnActive: {
-    backgroundColor: '#00E5FF'
+    backgroundColor: colors.gold
   },
   jumpBtn: {
     flexDirection: 'row',
@@ -644,7 +652,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(239, 68, 68, 0.3)',
     paddingHorizontal: 10,
     paddingVertical: 7,
-    borderRadius: 10
+    borderRadius: 4
   },
   jumpBtnText: {
     fontSize: 10,
@@ -654,18 +662,24 @@ const styles = StyleSheet.create({
   flipBtn: {
     width: 36,
     height: 36,
-    borderRadius: 10,
-    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 4,
+    backgroundColor: '#181818',
+    borderWidth: 1,
+    borderColor: '#262626',
     alignItems: 'center',
     justifyContent: 'center'
   },
   flipBtnActive: {
-    borderColor: '#00E5FF',
+    borderColor: colors.gold,
     borderWidth: 1
   },
   coachCard: {
     padding: 14,
-    borderColor: 'rgba(0, 229, 255, 0.25)',
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     gap: 12
   },
   coachTop: {
@@ -675,10 +689,10 @@ const styles = StyleSheet.create({
   coachAvatar: {
     width: 40,
     height: 40,
-    borderRadius: 14,
-    backgroundColor: 'rgba(0, 229, 255, 0.12)',
+    borderRadius: 4,
+    backgroundColor: '#181818',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.3)',
+    borderColor: '#282828',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -698,7 +712,7 @@ const styles = StyleSheet.create({
   classPill: {
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 6
+    borderRadius: 3
   },
   classPillText: {
     fontSize: 10,
@@ -716,26 +730,26 @@ const styles = StyleSheet.create({
   },
   compareTile: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: '#161616',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 4,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)'
+    borderColor: '#262626'
   },
   engineTile: {
-    backgroundColor: 'rgba(0, 229, 255, 0.08)',
-    borderColor: 'rgba(0, 229, 255, 0.25)'
+    backgroundColor: '#1C190E',
+    borderColor: 'rgba(229, 169, 60, 0.35)'
   },
   compareLabel: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#94A3B8',
+    color: '#8E8E93',
     textTransform: 'uppercase'
   },
   compareLabelEngine: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#00E5FF',
+    color: colors.gold,
     textTransform: 'uppercase'
   },
   compareMove: {
@@ -747,7 +761,7 @@ const styles = StyleSheet.create({
   compareMoveEngine: {
     fontSize: 14,
     fontWeight: '900',
-    color: '#00E5FF',
+    color: colors.gold,
     marginTop: 2
   },
   tagRow: {
@@ -756,21 +770,25 @@ const styles = StyleSheet.create({
     gap: 6
   },
   tagPill: {
-    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    backgroundColor: '#1C190E',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.25)',
+    borderColor: 'rgba(229, 169, 60, 0.3)',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6
+    borderRadius: 3
   },
   tagText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FBBF24'
+    color: colors.gold
   },
   openingCard: {
     padding: 12,
-    borderColor: 'rgba(245, 158, 11, 0.2)'
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   openingRow: {
     flexDirection: 'row',
@@ -790,11 +808,12 @@ const styles = StyleSheet.create({
     padding: 16
   },
   modalContent: {
-    backgroundColor: '#0F172A',
-    borderRadius: 20,
+    backgroundColor: '#121212',
+    borderRadius: 5,
     padding: 18,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     maxHeight: '80%'
   },
   modalHeader: {
@@ -814,8 +833,8 @@ const styles = StyleSheet.create({
   },
   modalTabs: {
     flexDirection: 'row',
-    backgroundColor: '#070B14',
-    borderRadius: 10,
+    backgroundColor: '#080808',
+    borderRadius: 4,
     padding: 3,
     marginBottom: 12
   },
@@ -823,34 +842,34 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 8,
     alignItems: 'center',
-    borderRadius: 8
+    borderRadius: 3
   },
   modalTabActive: {
-    backgroundColor: '#00E5FF'
+    backgroundColor: colors.gold
   },
   modalTabText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#94A3B8'
+    color: '#8E8E93'
   },
   modalTabTextActive: {
-    color: '#070B14'
+    color: '#080808'
   },
   samplesList: {
     maxHeight: 320
   },
   sampleItem: {
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: '#161616',
     padding: 12,
-    borderRadius: 12,
+    borderRadius: 4,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)'
+    borderColor: '#262626'
   },
   sampleEco: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#00E5FF'
+    color: colors.gold
   },
   sampleTitle: {
     fontSize: 13,
@@ -860,15 +879,15 @@ const styles = StyleSheet.create({
   },
   sampleDesc: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: '#8E8E93',
     marginTop: 2
   },
   pasteContainer: {
     gap: 10
   },
   pasteInput: {
-    backgroundColor: '#070B14',
-    borderRadius: 12,
+    backgroundColor: '#080808',
+    borderRadius: 4,
     padding: 12,
     color: '#FFFFFF',
     fontFamily: 'Courier',
@@ -876,17 +895,17 @@ const styles = StyleSheet.create({
     height: 140,
     textAlignVertical: 'top',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)'
+    borderColor: '#242424'
   },
   submitPgnBtn: {
-    backgroundColor: '#00E5FF',
+    backgroundColor: colors.gold,
     paddingVertical: 12,
-    borderRadius: 12,
+    borderRadius: 4,
     alignItems: 'center'
   },
   submitPgnText: {
     fontSize: 13,
     fontWeight: '900',
-    color: '#070B14'
+    color: '#080808'
   }
 });

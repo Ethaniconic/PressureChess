@@ -3,11 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Chess } from 'chess.js';
 import { supabase, isSupabaseConfigured } from '../services/supabase';
 import { useAuth } from './AuthContext';
-import { MULTIPLAYER_MODES, MOCK_LEADERBOARDS, SIMULATED_OPPONENTS, COUNTRIES } from '../data/multiplayerData';
+import { MULTIPLAYER_MODES, SIMULATED_OPPONENTS, COUNTRIES } from '../data/multiplayerData';
 
 const MultiplayerContext = createContext({});
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:8000';
 
 export const MultiplayerProvider = ({ children }) => {
   const { user } = useAuth();
@@ -38,16 +38,16 @@ export const MultiplayerProvider = ({ children }) => {
   // Profile & Ratings
   const [userCountry, setUserCountry] = useState('US');
   const [userRatings, setUserRatings] = useState({
-    bullet: 1300,
-    blitz: 1340,
-    rapid: 1400,
-    classical: 1440,
-    overall: 1340
+    bullet: 1200,
+    blitz: 1200,
+    rapid: 1200,
+    classical: 1200,
+    overall: 1200
   });
   const [userStats, setUserStats] = useState({
-    wins: 28,
-    losses: 12,
-    draws: 4
+    wins: 0,
+    losses: 0,
+    draws: 0
   });
   const [matchHistory, setMatchHistory] = useState([]);
 
@@ -56,27 +56,93 @@ export const MultiplayerProvider = ({ children }) => {
   const simulatedBotTimerRef = useRef(null);
   const searchTimeoutRef = useRef(null);
 
-  // Load saved state from AsyncStorage
+  // Load saved state from AsyncStorage & sync with Supabase
   useEffect(() => {
+    let isMounted = true;
+
     const loadSaved = async () => {
       try {
         const savedCountry = await AsyncStorage.getItem('pc_country');
-        if (savedCountry) setUserCountry(savedCountry);
+        if (savedCountry && isMounted) setUserCountry(savedCountry);
 
         const savedRatings = await AsyncStorage.getItem('pc_ratings');
-        if (savedRatings) setUserRatings(JSON.parse(savedRatings));
+        if (savedRatings && isMounted) setUserRatings(JSON.parse(savedRatings));
 
         const savedStats = await AsyncStorage.getItem('pc_stats');
-        if (savedStats) setUserStats(JSON.parse(savedStats));
+        if (savedStats && isMounted) setUserStats(JSON.parse(savedStats));
 
         const savedHistory = await AsyncStorage.getItem('pc_history');
-        if (savedHistory) setMatchHistory(JSON.parse(savedHistory));
+        if (savedHistory && isMounted) setMatchHistory(JSON.parse(savedHistory));
+
+        // Sync with live Supabase profile if logged in
+        if (isSupabaseConfigured && supabase && userId && userId !== 'guest') {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .maybeSingle();
+
+          if (!error && data && isMounted) {
+            if (data.country) setUserCountry(data.country);
+            const liveRatings = {
+              bullet: data.bullet_rating || 1200,
+              blitz: data.blitz_rating || 1200,
+              rapid: data.rapid_rating || 1200,
+              classical: data.classical_rating || 1200,
+              overall: data.elo_rating || 1200
+            };
+            const liveStats = {
+              wins: data.wins || 0,
+              losses: data.losses || 0,
+              draws: data.draws || 0
+            };
+            setUserRatings(liveRatings);
+            setUserStats(liveStats);
+            await AsyncStorage.setItem('pc_ratings', JSON.stringify(liveRatings));
+            await AsyncStorage.setItem('pc_stats', JSON.stringify(liveStats));
+          }
+        }
       } catch (e) {
         console.log('Error loading saved multiplayer state:', e);
       }
     };
     loadSaved();
-  }, []);
+
+    // Subscribe to realtime profile updates
+    let profileSub = null;
+    if (isSupabaseConfigured && supabase && userId && userId !== 'guest') {
+      profileSub = supabase
+        .channel(`mobile_profile:${userId}`)
+        .on('postgres_changes', {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'profiles',
+          filter: `id=eq.${userId}`
+        }, (payload) => {
+          const updated = payload.new;
+          if (updated && isMounted) {
+            setUserRatings({
+              bullet: updated.bullet_rating || 1200,
+              blitz: updated.blitz_rating || 1200,
+              rapid: updated.rapid_rating || 1200,
+              classical: updated.classical_rating || 1200,
+              overall: updated.elo_rating || 1200
+            });
+            setUserStats({
+              wins: updated.wins || 0,
+              losses: updated.losses || 0,
+              draws: updated.draws || 0
+            });
+          }
+        })
+        .subscribe();
+    }
+
+    return () => {
+      isMounted = false;
+      if (profileSub) profileSub.unsubscribe();
+    };
+  }, [userId]);
 
   const updateProfileCountry = async (code) => {
     if (COUNTRIES[code]) {
@@ -242,6 +308,38 @@ export const MultiplayerProvider = ({ children }) => {
       await AsyncStorage.setItem('pc_ratings', JSON.stringify(newRatings));
       await AsyncStorage.setItem('pc_stats', JSON.stringify(newStats));
       await AsyncStorage.setItem('pc_history', JSON.stringify(updatedHistory));
+
+      // Persist to Supabase live database
+      if (isSupabaseConfigured && supabase && userId && userId !== 'guest') {
+        supabase
+          .from('profiles')
+          .update({
+            [`${selectedMode}_rating`]: newRating,
+            elo_rating: newRatings.overall,
+            wins: newStats.wins,
+            losses: newStats.losses,
+            draws: newStats.draws
+          })
+          .eq('id', userId)
+          .then(() => {})
+          .catch(err => console.warn('Supabase profile stats update error:', err));
+
+        supabase
+          .from('games')
+          .insert({
+            user_id: userId,
+            game_type: 'offline',
+            opponent_name: opponent?.name || 'Online Opponent',
+            result: outcome.result === 'win' ? '1-0' : outcome.result === 'loss' ? '0-1' : '1/2-1/2',
+            pgn: pgnString,
+            final_fen: fen,
+            moves_count: moves.length,
+            player_color: playerColor,
+            time_control: selectedTimeControl
+          })
+          .then(() => {})
+          .catch(err => console.warn('Supabase game insert error:', err));
+      }
     } catch (e) {}
   };
 
@@ -497,8 +595,45 @@ export const MultiplayerProvider = ({ children }) => {
     startQuickMatch(selectedMode, selectedTimeControl);
   };
 
-  const getLeaderboard = (timeframe = 'global') => {
-    return MOCK_LEADERBOARDS[timeframe] || MOCK_LEADERBOARDS.global;
+  const getLeaderboard = async (timeframe = 'global', mode = 'all') => {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const ratingCol = (mode && mode !== 'all') ? `${mode}_rating` : 'elo_rating';
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, username, full_name, avatar_url, country, elo_rating, bullet_rating, blitz_rating, rapid_rating, classical_rating, wins, losses, draws, daily_streak')
+          .order(ratingCol, { ascending: false })
+          .limit(50);
+
+        if (!error && Array.isArray(data) && data.length > 0) {
+          return data.map((p, idx) => {
+            const wins = p.wins || 0;
+            const losses = p.losses || 0;
+            const draws = p.draws || 0;
+            const total = wins + losses + draws;
+            const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
+            const rating = p[ratingCol] || p.elo_rating || 1200;
+            return {
+              rank: idx + 1,
+              id: p.id,
+              username: p.username || p.full_name || `Tactician_${p.id.slice(0, 4)}`,
+              country: p.country || 'US',
+              avatar: p.avatar_url || '♟️',
+              rating,
+              wins,
+              losses,
+              draws,
+              winRate,
+              streak: p.daily_streak || 1,
+              tier: rating >= 2000 ? 'Grandmaster' : rating >= 1600 ? 'Master' : 'Tactician'
+            };
+          });
+        }
+      } catch (e) {
+        console.warn('Direct Supabase leaderboard fetch error:', e);
+      }
+    }
+    return [];
   };
 
   return (

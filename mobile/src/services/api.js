@@ -1,5 +1,16 @@
 const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://10.0.2.2:8000'; // 10.0.2.2 for Android emulator
 
+function handleNetworkError(tag, err) {
+  const msg = err?.message || String(err);
+  const isOffline = msg.includes('ConnectException') || 
+                    msg.includes('Network request failed') || 
+                    msg.includes('Failed to connect') ||
+                    msg.includes('ECONNREFUSED');
+  if (!isOffline) {
+    console.warn(`${tag}:`, err);
+  }
+}
+
 export async function saveGameToBackend(gameData) {
   try {
     const res = await fetch(`${API_URL}/api/games/save`, {
@@ -9,7 +20,7 @@ export async function saveGameToBackend(gameData) {
     });
     return await res.json();
   } catch (err) {
-    console.warn('Backend offline or unreachable, game saved locally:', err);
+    handleNetworkError('saveGameToBackend', err);
     return null;
   }
 }
@@ -20,7 +31,7 @@ export async function fetchGameHistory(userId) {
     const res = await fetch(url);
     return await res.json();
   } catch (err) {
-    console.warn('Error fetching game history:', err);
+    handleNetworkError('fetchGameHistory', err);
     return [];
   }
 }
@@ -30,7 +41,7 @@ export async function fetchUserProfile(userId) {
     const res = await fetch(`${API_URL}/api/users/${userId}/profile`);
     return await res.json();
   } catch (err) {
-    console.warn('Error fetching user profile:', err);
+    handleNetworkError('fetchUserProfile', err);
     return null;
   }
 }
@@ -41,7 +52,7 @@ export async function fetchAcademyProgress(userId) {
     const res = await fetch(url);
     return await res.json();
   } catch (err) {
-    console.warn('Error fetching academy progress:', err);
+    handleNetworkError('fetchAcademyProgress', err);
     return null;
   }
 }

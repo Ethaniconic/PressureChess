@@ -8,70 +8,69 @@
 
 body {
   background: 
-    radial-gradient(circle at 50% -10%, rgba(0, 229, 255, 0.18) 0%, transparent 45%),
-    radial-gradient(circle at 90% 40%, rgba(99, 102, 241, 0.14) 0%, transparent 40%),
-    radial-gradient(circle at 10% 70%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 50% 110%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-    #121829;
-  color: #F8FAFC;
+    radial-gradient(circle at 50% -10%, rgba(229, 169, 60, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 35%),
+    #080808; /* Pure Royal Black */
+  color: #FFFFFF;
   min-height: 100vh;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar (Sharp Royal Minimal) */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #121829;
+  background: #080808;
 }
 ::-webkit-scrollbar-thumb {
-  background: #233152;
-  border-radius: 9999px;
+  background: #242424;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0284C7;
+  background: #3D3D3D;
 }
 
-/* iOS Bubble Glassmorphism */
+/* Royal Black Glassmorphism with 4-5px Corners */
 .glass-panel {
-  background: rgba(26, 36, 62, 0.82);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top-color: rgba(255, 255, 255, 0.32);
+  background: #111111;
+  border: 1px solid #242424;
+  border-top-color: #383838;
+  border-radius: 4px; /* 4-5px small round */
 }
 
 .glass-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0) 100%), rgba(26, 36, 62, 0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-top-color: rgba(255, 255, 255, 0.38); /* Specular top light reflection */
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.05);
-  border-radius: 1.5rem;
+  background: #121212;
+  border: 1px solid #222222;
+  border-top-color: #383838; /* Sharp platinum specular rim */
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.8);
+  border-radius: 5px; /* 4-5px small round */
   overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(0, 229, 255, 0.4);
-  border-top-color: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 16px 40px -6px rgba(0, 229, 255, 0.18), 0 10px 25px -4px rgba(0, 0, 0, 0.4);
+  border-color: #E5A93C;
+  border-top-color: #F5C86C;
+  box-shadow: 0 6px 24px -2px rgba(229, 169, 60, 0.2), 0 4px 12px -2px rgba(0, 0, 0, 0.9);
+  transform: translateY(-1.5px);
 }
 
-/* iOS Bubble reflection highlight overlay */
+/* Light reflection highlight overlay */
 .bubble-sheen {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 42%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 60%, transparent 100%);
-  border-top-left-radius: inherit;
-  border-top-right-radius: inherit;
+  height: 25%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   pointer-events: none;
 }
+
+
 
 
 /* Chess Board Themes */

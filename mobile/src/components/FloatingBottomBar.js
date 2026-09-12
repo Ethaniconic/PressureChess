@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import { colors } from '../theme/colors';
 import { 
   Home, 
@@ -12,9 +12,14 @@ import {
 
 export const FloatingBottomBar = () => {
   const navigation = useNavigation();
-  const route = useRoute();
-
-  const currentRouteName = route.name;
+  const currentRouteName = useNavigationState((state) => {
+    if (!state || !state.routes || state.routes.length === 0) return 'Home';
+    let r = state.routes[state.index ?? 0];
+    while (r && r.state && r.state.routes) {
+      r = r.state.routes[r.state.index ?? 0];
+    }
+    return r ? r.name : 'Home';
+  });
 
   const tabs = [
     { name: 'Home', label: 'Home', icon: Home, route: 'Home' },
@@ -46,7 +51,7 @@ export const FloatingBottomBar = () => {
               <View style={[styles.iconContainer, isActive && styles.activeIconContainer]}>
                 <Icon 
                   size={19} 
-                  color={isActive ? '#00E5FF' : colors.textSecondary} 
+                  color={isActive ? '#E5A93C' : colors.textSecondary} 
                   strokeWidth={isActive ? 2.5 : 2}
                 />
               </View>
@@ -64,31 +69,31 @@ export const FloatingBottomBar = () => {
 const styles = StyleSheet.create({
   outerContainer: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 8,
     left: 0,
     right: 0,
     alignItems: 'center',
     zIndex: 99,
   },
   bubbleDock: {
-    width: '94%',
-    maxWidth: 420,
-    height: 60,
-    backgroundColor: 'rgba(32, 35, 45, 0.94)',
-    borderRadius: 16, // Clean, minimal rounded corners
+    width: '96%',
+    maxWidth: 440,
+    height: 56,
+    backgroundColor: '#0F0F0F',
+    borderRadius: 5, // Small 4-5px round
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    paddingHorizontal: 6,
+    paddingHorizontal: 4,
     borderWidth: 1,
-    borderColor: 'rgba(255, 245, 235, 0.12)',
-    borderTopColor: 'rgba(255, 255, 255, 0.35)', // Subtle specular top light rim
-    // Smooth ambient shadow
+    borderColor: '#242424',
+    borderTopColor: '#383838', // High contrast platinum rim
+    // Sharp royal shadow
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.30,
-    shadowRadius: 14,
-    elevation: 8,
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 10,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -97,27 +102,27 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: '38%',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    height: '25%',
+    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
   tabItem: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 5,
-    borderRadius: 12,
+    paddingVertical: 4,
+    borderRadius: 4,
   },
   activeTabBubble: {
-    backgroundColor: 'rgba(45, 212, 191, 0.12)',
+    backgroundColor: '#1C1A14',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.25)',
-    borderColor: 'rgba(45, 212, 191, 0.30)',
+    borderTopColor: '#E5A93C',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
   },
   iconContainer: {
-    width: 26,
-    height: 26,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 2,
@@ -128,11 +133,11 @@ const styles = StyleSheet.create({
   tabLabel: {
     fontSize: 10,
     fontWeight: '700',
-    color: colors.textMuted,
+    color: '#8E8E93',
     letterSpacing: 0.2,
   },
   activeTabLabel: {
-    color: colors.cyan,
+    color: '#E5A93C',
     fontWeight: '900',
   },
 });

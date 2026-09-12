@@ -5,17 +5,17 @@ export const GlassCard = ({ children, className = '', glow = false, onClick }) =
     <div
       onClick={onClick}
       className={`
-        relative rounded-3xl bg-[#1a243e]/80 backdrop-blur-2xl border border-white/[0.12]
-        border-t-white/35 overflow-hidden shadow-xl shadow-black/25
-        transition-all duration-300
-        ${glow ? 'shadow-glow-cyan border-cyan-400/40 border-t-white/60' : 'hover:border-white/25 hover:border-t-white/50'}
+        relative rounded-[5px] bg-[#101114]/90 backdrop-blur-xl border border-[#24262D]
+        border-t-white/20 overflow-hidden shadow-lg shadow-black/60
+        transition-all duration-200 ease-out
+        ${glow ? 'shadow-[0_0_16px_rgba(229,169,60,0.22)] border-[#E5A93C]/60 border-t-[#F5C768]' : 'hover:border-[#383B45] hover:border-t-white/35'}
         ${onClick ? 'cursor-pointer hover:-translate-y-0.5 active:scale-[0.99]' : ''}
         ${className}
       `}
     >
-      {/* iOS Specular Top Reflection / Light Sheen */}
+      {/* Subtle Specular Top Reflection / Light Sheen */}
       <div 
-        className="pointer-events-none absolute top-0 left-0 right-0 h-[40%] bg-gradient-to-b from-white/[0.09] via-white/[0.02] to-transparent rounded-t-3xl" 
+        className="pointer-events-none absolute top-0 left-0 right-0 h-[30%] bg-gradient-to-b from-white/[0.04] via-transparent to-transparent rounded-t-[5px]" 
       />
 
       {/* Content */}
@@ -25,4 +25,5 @@ export const GlassCard = ({ children, className = '', glow = false, onClick }) =
     </div>
   );
 };
+
 

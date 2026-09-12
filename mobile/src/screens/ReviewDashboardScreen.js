@@ -40,7 +40,7 @@ export const ReviewDashboardScreen = ({ navigation }) => {
         </TouchableOpacity>
         <View style={styles.headerTitleBlock}>
           <View style={styles.badgeRow}>
-            <Bot size={11} color="#00E5FF" />
+            <Bot size={11} color={colors.gold} />
             <Text style={styles.badgeText}>COACH ORION ANALYTICS</Text>
           </View>
           <Text style={styles.headerTitle}>Review Dashboard</Text>
@@ -60,7 +60,7 @@ export const ReviewDashboardScreen = ({ navigation }) => {
           <GlassCard style={styles.kpiCard}>
             <View style={styles.kpiHeader}>
               <Text style={styles.kpiLabel}>Accuracy</Text>
-              <TrendingUp size={14} color="#00E5FF" />
+              <TrendingUp size={14} color={colors.gold} />
             </View>
             <Text style={styles.kpiValue}>{dashboardStats.overallAccuracy}%</Text>
             <Text style={styles.kpiSub}>Engine score</Text>
@@ -247,10 +247,11 @@ const styles = StyleSheet.create({
   kpiGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10
+    justifyContent: 'space-between',
+    rowGap: 10
   },
   kpiCard: {
-    width: '48%',
+    width: '48.5%',
     padding: 12,
     gap: 4
   },
@@ -299,11 +300,12 @@ const styles = StyleSheet.create({
     marginTop: 4
   },
   weaknessItem: {
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: '#121212',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     gap: 4
   },
   weaknessTop: {
@@ -345,16 +347,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: '#121212',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)'
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   repertoireEco: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#00E5FF'
+    color: colors.gold
   },
   repertoireName: {
     fontSize: 12,

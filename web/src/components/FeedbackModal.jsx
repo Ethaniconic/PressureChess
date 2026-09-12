@@ -25,7 +25,7 @@ export const FeedbackModal = () => {
 
   const [feedbackType, setFeedbackType] = useState(feedbackInitialType || 'feature');
   const [rating, setRating] = useState(feedbackInitialRating || 5);
-  const [category, setCategory] = useState(feedbackInitialCategory || 'General');
+  const [category] = useState(feedbackInitialCategory || 'General');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -34,11 +34,11 @@ export const FeedbackModal = () => {
 
   const FEEDBACK_TYPES = [
     { id: 'bug', label: 'Bug Report', icon: Bug, color: 'text-rose-400' },
-    { id: 'feature', label: 'Feature Idea', icon: Lightbulb, color: 'text-amber-400' },
-    { id: 'lesson_rating', label: 'Academy Lesson', icon: GraduationCap, color: 'text-cyan-400' },
-    { id: 'puzzle_rating', label: 'Tactics Rush', icon: Zap, color: 'text-orange-400' },
+    { id: 'feature', label: 'Feature Idea', icon: Lightbulb, color: 'text-[#E5A93C]' },
+    { id: 'lesson_rating', label: 'Academy Lesson', icon: GraduationCap, color: 'text-amber-300' },
+    { id: 'puzzle_rating', label: 'Tactics Rush', icon: Zap, color: 'text-[#E5A93C]' },
     { id: 'multiplayer_rating', label: 'Multiplayer', icon: Swords, color: 'text-emerald-400' },
-    { id: 'general', label: 'General', icon: MessageSquare, color: 'text-sky-400' }
+    { id: 'general', label: 'General', icon: MessageSquare, color: 'text-slate-300' }
   ];
 
   const handleSubmit = async (e) => {
@@ -63,20 +63,20 @@ export const FeedbackModal = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg p-6 rounded-3xl bg-dark-900 border border-white/15 shadow-2xl shadow-cyan-950/40 text-left">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="relative w-full max-w-lg p-6 rounded-[5px] bg-[#0D0E11] border border-[#272932] border-t-white/20 shadow-2xl shadow-black/90 text-left">
         
         {/* Close Button */}
         <button
           onClick={closeFeedback}
-          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+          className="absolute top-4 right-4 p-2 rounded-[4px] text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         {isSubmitted ? (
           <div className="py-10 text-center space-y-3 animate-in zoom-in-95 duration-200">
-            <div className="w-14 h-14 mx-auto rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+            <div className="w-14 h-14 mx-auto rounded-[5px] bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-black text-white">Thank You, Founding Player!</h3>
@@ -107,10 +107,10 @@ export const FeedbackModal = () => {
                     type="button"
                     key={t.id}
                     onClick={() => setFeedbackType(t.id)}
-                    className={`p-2 rounded-xl border text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all ${
+                    className={`p-2 rounded-[4px] border text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all ${
                       isSelected
-                        ? 'bg-cyan-500/20 border-cyan-400 text-white shadow-sm'
-                        : 'bg-white/[0.02] border-white/10 text-slate-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-[#E5A93C]/20 border-[#E5A93C]/60 text-white shadow-sm'
+                        : 'bg-[#121317] border-[#252830] text-slate-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
                     <Icon className={`w-3.5 h-3.5 ${t.color}`} />
@@ -121,7 +121,7 @@ export const FeedbackModal = () => {
             </div>
 
             {/* 5-Star Rating */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-dark-800/80 border border-white/5">
+            <div className="flex items-center justify-between p-3 rounded-[5px] bg-[#121317] border border-[#252830]">
               <span className="text-xs font-semibold text-slate-300">How would you rate this?</span>
               <div className="flex gap-1.5">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -134,8 +134,8 @@ export const FeedbackModal = () => {
                     <Star
                       className={`w-5 h-5 ${
                         star <= rating
-                          ? 'fill-amber-400 text-amber-400'
-                          : 'text-slate-600 hover:text-slate-400'
+                          ? 'fill-[#E5A93C] text-[#E5A93C]'
+                          : 'text-slate-700 hover:text-slate-500'
                       }`}
                     />
                   </button>
@@ -154,7 +154,7 @@ export const FeedbackModal = () => {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="What happened? What could we improve or add next?"
-                className="w-full p-3 rounded-2xl bg-dark-800/90 border border-white/10 focus:border-cyan-400 text-xs text-white placeholder:text-slate-500 outline-none resize-none"
+                className="w-full p-3 rounded-[5px] bg-[#121317] border border-[#252830] focus:border-[#E5A93C]/60 text-xs text-white placeholder:text-slate-500 outline-none resize-none"
               />
             </div>
 
@@ -163,7 +163,7 @@ export const FeedbackModal = () => {
               <button
                 type="button"
                 onClick={closeFeedback}
-                className="px-4 py-2.5 rounded-xl bg-white/5 text-slate-300 hover:text-white text-xs font-bold transition-colors"
+                className="px-4 py-2.5 rounded-[5px] bg-white/5 text-slate-300 hover:text-white text-xs font-bold transition-colors border border-[#262830]"
               >
                 Cancel
               </button>
@@ -171,7 +171,7 @@ export const FeedbackModal = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || !message.trim()}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-glow-cyan disabled:opacity-50 transition-all"
+                className="px-5 py-2.5 rounded-[5px] bg-[#E5A93C] hover:bg-[#F3BA54] text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_12px_rgba(229,169,60,0.3)] disabled:opacity-50 transition-all"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{isSubmitting ? 'Sending...' : 'Send Feedback'}</span>

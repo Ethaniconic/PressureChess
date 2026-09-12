@@ -708,7 +708,7 @@ export const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#070B14',
+    backgroundColor: '#080808',
   },
   content: {
     padding: 16,
@@ -719,10 +719,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    backgroundColor: '#1C190E',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)',
-    borderRadius: 16,
+    borderColor: 'rgba(229, 169, 60, 0.35)',
+    borderRadius: 5,
     padding: 12,
   },
   guestTitle: {
@@ -735,21 +735,23 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
   },
   guestBtn: {
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.gold,
     paddingHorizontal: 10,
     paddingVertical: 6,
-    borderRadius: 10,
+    borderRadius: 4,
   },
   guestBtnText: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#000',
+    color: '#080808',
   },
   profileCard: {
     padding: 20,
-    borderRadius: 20,
-    backgroundColor: '#0F172A',
-    borderWidth: 1.5
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   avatarRow: {
     flexDirection: 'row',
@@ -760,9 +762,10 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: 60,
     height: 60,
-    borderRadius: 18,
-    backgroundColor: '#1E293B',
-    borderWidth: 2,
+    borderRadius: 5,
+    backgroundColor: '#181818',
+    borderWidth: 1,
+    borderColor: '#2E2E2E',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -773,8 +776,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -4,
     right: -4,
-    backgroundColor: '#0F172A',
-    borderRadius: 10,
+    backgroundColor: '#121212',
+    borderRadius: 3,
     padding: 2
   },
   usernameRow: {
@@ -797,13 +800,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(0, 229, 255, 0.15)',
+    backgroundColor: '#1C190E',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 6
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(229, 169, 60, 0.4)'
   },
   founderBadgeText: {
-    color: '#00E5FF',
+    color: colors.gold,
     fontSize: 9,
     fontWeight: '900',
     letterSpacing: 0.5
@@ -811,8 +816,10 @@ const styles = StyleSheet.create({
   countryBtn: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)'
+    borderRadius: 4,
+    backgroundColor: '#1C1C1C',
+    borderWidth: 1,
+    borderColor: '#2C2C2C'
   },
   countryBtnText: {
     fontSize: 11,
@@ -826,11 +833,11 @@ const styles = StyleSheet.create({
   },
   bioContainer: {
     marginTop: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.03)',
-    borderRadius: 12,
+    backgroundColor: '#181818',
+    borderRadius: 5,
     padding: 10,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.06)'
+    borderColor: '#262626'
   },
   bioDisplayRow: {
     flexDirection: 'row',
@@ -851,19 +858,21 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 12,
     minHeight: 40,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderRadius: 8,
-    padding: 8
+    backgroundColor: '#111111',
+    borderRadius: 4,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#2C2C2C'
   },
   saveBioBtn: {
     alignSelf: 'flex-end',
-    backgroundColor: '#00E5FF',
+    backgroundColor: colors.gold,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 8
+    borderRadius: 4
   },
   saveBioBtnText: {
-    color: '#000',
+    color: '#080808',
     fontSize: 11,
     fontWeight: '900'
   },
@@ -874,13 +883,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderRadius: 10,
-    backgroundColor: 'rgba(0, 229, 255, 0.08)',
+    borderRadius: 4,
+    backgroundColor: '#181818',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.2)'
+    borderColor: '#262626'
   },
   openingLabel: {
-    color: '#00E5FF',
+    color: colors.gold,
     fontSize: 10,
     fontWeight: '900'
   },
@@ -896,7 +905,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)'
+    borderTopColor: '#242424'
   },
   badgeItem: {
     alignItems: 'center'
@@ -910,21 +919,24 @@ const styles = StyleSheet.create({
   badgeLabel: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#64748B',
+    color: '#8E8E93',
     marginTop: 2
   },
   sectionTitle: {
     fontSize: 10,
     fontWeight: '900',
-    color: '#64748B',
+    color: '#8E8E93',
     letterSpacing: 1.5,
     marginTop: 4,
     marginBottom: -6
   },
   settingsGroupCard: {
     padding: 12,
-    borderRadius: 16,
-    backgroundColor: '#0F172A'
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   settingsRow: {
     flexDirection: 'row',
@@ -935,8 +947,10 @@ const styles = StyleSheet.create({
   settingsIconBox: {
     width: 36,
     height: 36,
-    borderRadius: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 4,
+    backgroundColor: '#181818',
+    borderWidth: 1,
+    borderColor: '#262626',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -952,7 +966,7 @@ const styles = StyleSheet.create({
   },
   settingsDivider: {
     height: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: '#242424',
     marginVertical: 4
   },
   notifRow: {
@@ -963,10 +977,11 @@ const styles = StyleSheet.create({
   },
   cacheCard: {
     padding: 14,
-    borderRadius: 16,
-    backgroundColor: 'rgba(16, 185, 129, 0.05)',
+    borderRadius: 5,
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.2)'
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   cacheHeader: {
     flexDirection: 'row',
@@ -977,7 +992,7 @@ const styles = StyleSheet.create({
   cacheIconBox: {
     width: 36,
     height: 36,
-    borderRadius: 10,
+    borderRadius: 4,
     backgroundColor: 'rgba(16, 185, 129, 0.15)',
     alignItems: 'center',
     justifyContent: 'center'
@@ -1003,7 +1018,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(16, 185, 129, 0.1)',
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 8
+    borderRadius: 4
   },
   cachePillText: {
     color: '#A7F3D0',
@@ -1020,12 +1035,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: '#F59E0B',
+    backgroundColor: colors.gold,
     paddingVertical: 12,
-    borderRadius: 12
+    borderRadius: 5
   },
   feedbackBtnPrimaryText: {
-    color: '#000',
+    color: '#080808',
     fontSize: 12,
     fontWeight: '900'
   },
@@ -1035,14 +1050,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: 'rgba(0, 229, 255, 0.1)',
+    backgroundColor: '#181818',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.3)',
+    borderColor: '#262626',
     paddingVertical: 12,
-    borderRadius: 12
+    borderRadius: 5
   },
   changelogBtnSecondaryText: {
-    color: '#00E5FF',
+    color: colors.gold,
     fontSize: 12,
     fontWeight: '900'
   },
@@ -1054,9 +1069,11 @@ const styles = StyleSheet.create({
   modeRatingCard: {
     flex: 1,
     minWidth: '45%',
-    backgroundColor: '#0F172A',
-    borderRadius: 16,
+    backgroundColor: '#121212',
+    borderRadius: 5,
     borderWidth: 1,
+    borderTopColor: '#333333',
+    borderColor: '#242424',
     padding: 12,
     alignItems: 'center'
   },
@@ -1083,8 +1100,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: '#0F172A'
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#333333',
+    borderColor: '#242424'
   },
   miniVal: {
     fontSize: 18,
@@ -1098,8 +1118,11 @@ const styles = StyleSheet.create({
   },
   historyCard: {
     padding: 16,
-    borderRadius: 20,
-    backgroundColor: '#0F172A',
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   historyHeader: {
     marginBottom: 12
@@ -1112,18 +1135,20 @@ const styles = StyleSheet.create({
   },
   subTabsRow: {
     flexDirection: 'row',
-    backgroundColor: '#1E293B',
-    borderRadius: 10,
-    padding: 2
+    backgroundColor: '#181818',
+    borderRadius: 4,
+    padding: 2,
+    borderWidth: 1,
+    borderColor: '#242424'
   },
   subTab: {
     flex: 1,
     paddingVertical: 6,
     alignItems: 'center',
-    borderRadius: 8
+    borderRadius: 3
   },
   subTabActive: {
-    backgroundColor: '#00E5FF'
+    backgroundColor: colors.gold
   },
   subTabText: {
     fontSize: 11,
@@ -1131,7 +1156,7 @@ const styles = StyleSheet.create({
     color: '#94A3B8'
   },
   subTabTextActive: {
-    color: '#000'
+    color: '#080808'
   },
   noGamesText: {
     fontSize: 12,
@@ -1140,14 +1165,14 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   enterLobbyBtn: {
-    backgroundColor: '#00E5FF',
+    backgroundColor: colors.gold,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 10,
+    borderRadius: 4,
     marginTop: 8
   },
   enterLobbyBtnText: {
-    color: '#000',
+    color: '#080808',
     fontSize: 11,
     fontWeight: '900'
   },
@@ -1157,7 +1182,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.05)'
+    borderBottomColor: '#202020'
   },
   oppNameText: {
     fontSize: 13,
@@ -1176,7 +1201,7 @@ const styles = StyleSheet.create({
   resultPill: {
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6
+    borderRadius: 3
   },
   winPill: {
     backgroundColor: 'rgba(16, 185, 129, 0.15)'
@@ -1195,13 +1220,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: 'rgba(0, 229, 255, 0.15)',
+    backgroundColor: '#1C190E',
+    borderWidth: 1,
+    borderColor: 'rgba(229, 169, 60, 0.3)',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6
+    borderRadius: 3
   },
   coachReviewBtnText: {
-    color: '#00E5FF',
+    color: colors.gold,
     fontSize: 9,
     fontWeight: '800'
   },
@@ -1211,7 +1238,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     paddingVertical: 14,
-    borderRadius: 14,
+    borderRadius: 5,
     backgroundColor: 'rgba(239, 68, 68, 0.1)',
     borderWidth: 1,
     borderColor: 'rgba(239, 68, 68, 0.3)'
@@ -1223,17 +1250,18 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.85)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20
   },
   countryModalCard: {
     width: '100%',
-    backgroundColor: '#0F172A',
-    borderRadius: 20,
+    backgroundColor: '#121212',
+    borderRadius: 5,
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.3)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     padding: 16
   },
   modalTitle: {
@@ -1249,10 +1277,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 10,
     paddingHorizontal: 12,
-    borderRadius: 10
+    borderRadius: 4
   },
   countryRowSelected: {
-    backgroundColor: 'rgba(0, 229, 255, 0.1)'
+    backgroundColor: '#1C190E',
+    borderWidth: 1,
+    borderColor: 'rgba(229, 169, 60, 0.4)'
   },
   countryName: {
     fontSize: 13,
@@ -1262,8 +1292,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingVertical: 10,
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: 10
+    backgroundColor: '#181818',
+    borderWidth: 1,
+    borderColor: '#262626',
+    borderRadius: 5
   },
   closeModalBtnText: {
     color: '#FFF',
@@ -1280,17 +1312,17 @@ const styles = StyleSheet.create({
     width: '30%',
     alignItems: 'center',
     padding: 10,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 4,
+    backgroundColor: '#181818',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)'
+    borderColor: '#262626'
   },
   avatarPickCardSelected: {
-    borderColor: '#00E5FF',
-    backgroundColor: 'rgba(0, 229, 255, 0.15)'
+    borderColor: colors.gold,
+    backgroundColor: '#1C190E'
   },
   avatarPickName: {
-    color: '#94A3B8',
+    color: '#8E8E93',
     fontSize: 9,
     fontWeight: '700',
     marginTop: 4,
@@ -1302,17 +1334,17 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    borderRadius: 10
+    borderRadius: 4
   },
   frameIndicator: {
     width: 24,
     height: 24,
-    borderRadius: 8,
+    borderRadius: 3,
     borderWidth: 2,
-    backgroundColor: '#1E293B'
+    backgroundColor: '#181818'
   },
   frameBadgeText: {
-    color: '#94A3B8',
+    color: '#8E8E93',
     fontSize: 10,
     marginTop: 1
   }

@@ -64,10 +64,10 @@ export const HomeScreen = ({ navigation }) => {
         
         {/* Top Brand Header */}
         <View style={styles.header}>
-          <View>
+          <View style={styles.headerLeft}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Text style={styles.brandTitle}>
-                PRESSURE<Text style={{ color: colors.cyan }}>CHESS</Text>
+              <Text style={styles.brandTitle} numberOfLines={1}>
+                PRESSURE<Text style={{ color: colors.gold }}>CHESS</Text>
               </Text>
               <TouchableOpacity 
                 style={styles.betaBadge}
@@ -76,7 +76,7 @@ export const HomeScreen = ({ navigation }) => {
                 <Text style={styles.betaBadgeText}>BETA</Text>
               </TouchableOpacity>
             </View>
-            <Text style={styles.welcomeText}>
+            <Text style={styles.welcomeText} numberOfLines={1}>
               Welcome back, {user?.username || 'Player'}
             </Text>
           </View>
@@ -85,23 +85,26 @@ export const HomeScreen = ({ navigation }) => {
             <TouchableOpacity 
               style={styles.feedbackBadge}
               onPress={() => navigation.navigate('Feedback')}
+              accessibilityLabel="Feedback"
             >
-              <MessageSquarePlus size={15} color="#F59E0B" />
+              <MessageSquarePlus size={14} color="#E5A93C" />
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.streakBadge}
               onPress={() => navigation.navigate('Progress')}
+              accessibilityLabel="Daily Streak"
             >
-              <Flame size={16} color="#F97316" />
+              <Flame size={14} color="#F97316" />
               <Text style={styles.streakText}>{user?.daily_streak || 1}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.starBadge}
               onPress={() => navigation.navigate('Progress')}
+              accessibilityLabel="Progress & Stats"
             >
-              <Star size={15} color={colors.gold} />
+              <Star size={14} color={colors.gold} fill={colors.gold} />
               <Text style={styles.starText}>{totalStars}</Text>
             </TouchableOpacity>
           </View>
@@ -301,27 +304,27 @@ export const HomeScreen = ({ navigation }) => {
           <View style={styles.grid2Col}>
             {/* 1. Multiplayer Live */}
             <TouchableOpacity
-              style={[styles.gridBubbleBtn, { borderColor: 'rgba(0, 229, 255, 0.35)' }]}
+              style={[styles.gridBubbleBtn, { borderColor: 'rgba(229, 169, 60, 0.35)' }]}
               activeOpacity={0.8}
               onPress={() => navigation.navigate('MultiplayerLobby')}
             >
               <View style={styles.bubbleGlossSheen} pointerEvents="none" />
-              <View style={[styles.bubbleIconCircle, { backgroundColor: 'rgba(0, 229, 255, 0.2)' }]}>
-                <Swords size={20} color="#00E5FF" />
+              <View style={[styles.bubbleIconCircle, { backgroundColor: 'rgba(229, 169, 60, 0.15)' }]}>
+                <Swords size={20} color={colors.gold} />
               </View>
-              <Text style={[styles.gridBtnTitle, { color: '#00E5FF' }]}>Multiplayer</Text>
+              <Text style={[styles.gridBtnTitle, { color: colors.gold }]}>Multiplayer</Text>
               <Text style={styles.gridBtnSub}>Ranked Live Arena</Text>
             </TouchableOpacity>
 
             {/* 2. AI Game Review */}
             <TouchableOpacity
-              style={[styles.gridBubbleBtn, { borderColor: 'rgba(0, 229, 255, 0.3)' }]}
+              style={[styles.gridBubbleBtn, { borderColor: 'rgba(229, 169, 60, 0.25)' }]}
               activeOpacity={0.8}
               onPress={() => navigation.navigate('GameReview')}
             >
               <View style={styles.bubbleGlossSheen} pointerEvents="none" />
-              <View style={[styles.bubbleIconCircle, { backgroundColor: 'rgba(0, 229, 255, 0.16)' }]}>
-                <Bot size={20} color="#00E5FF" />
+              <View style={[styles.bubbleIconCircle, { backgroundColor: 'rgba(229, 169, 60, 0.15)' }]}>
+                <Bot size={20} color={colors.gold} />
               </View>
               <Text style={styles.gridBtnTitle}>AI Review</Text>
               <Text style={styles.gridBtnSub}>Coach Orion Breakdown</Text>
@@ -343,13 +346,13 @@ export const HomeScreen = ({ navigation }) => {
 
             {/* 4. Academy Curriculum */}
             <TouchableOpacity
-              style={[styles.gridBubbleBtn, { borderColor: 'rgba(0, 229, 255, 0.25)' }]}
+              style={[styles.gridBubbleBtn, { borderColor: 'rgba(229, 169, 60, 0.25)' }]}
               activeOpacity={0.8}
               onPress={() => navigation.navigate('AcademyCourses')}
             >
               <View style={styles.bubbleGlossSheen} pointerEvents="none" />
-              <View style={[styles.bubbleIconCircle, { backgroundColor: 'rgba(0, 229, 255, 0.16)' }]}>
-                <GraduationCap size={20} color={colors.cyan} />
+              <View style={[styles.bubbleIconCircle, { backgroundColor: 'rgba(229, 169, 60, 0.15)' }]}>
+                <GraduationCap size={20} color={colors.gold} />
               </View>
               <Text style={styles.gridBtnTitle}>Academy</Text>
               <Text style={styles.gridBtnSub}>17 Interactive Units</Text>
@@ -433,83 +436,92 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 4,
+    gap: 8,
+    width: '100%',
+  },
+  headerLeft: {
+    flex: 1,
+    flexShrink: 1,
+    minWidth: 0,
   },
   brandTitle: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: '900',
     color: colors.text,
-    letterSpacing: -0.5,
+    letterSpacing: -0.3,
   },
   welcomeText: {
-    fontSize: 12,
+    fontSize: 11.5,
     color: colors.textSecondary,
-    marginTop: 2,
+    marginTop: 1,
     fontWeight: '600',
   },
   headerRightBadges: {
     flexDirection: 'row',
-    gap: 8,
+    alignItems: 'center',
+    gap: 5,
+    flexShrink: 0,
   },
   betaBadge: {
-    backgroundColor: 'rgba(0, 229, 255, 0.18)',
+    backgroundColor: '#1E190E',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.4)',
-    borderColor: 'rgba(0, 229, 255, 0.5)',
-    paddingHorizontal: 7,
-    paddingVertical: 3,
-    borderRadius: 8,
+    borderTopColor: '#E5A93C',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4, // 4-5px round
   },
   betaBadgeText: {
-    color: '#00E5FF',
+    color: '#E5A93C',
     fontSize: 9,
     fontWeight: '900',
     letterSpacing: 0.5,
   },
   feedbackBadge: {
-    padding: 8,
-    borderRadius: 14,
-    backgroundColor: 'rgba(245, 158, 11, 0.18)',
+    padding: 6,
+    borderRadius: 5, // 4-5px round
+    backgroundColor: '#161616',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.35)',
-    borderColor: 'rgba(245, 158, 11, 0.35)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
   },
   streakBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(249, 115, 22, 0.18)',
+    gap: 3,
+    backgroundColor: '#1A140E',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.35)',
+    borderTopColor: '#F97316',
     borderColor: 'rgba(249, 115, 22, 0.35)',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    borderRadius: 5, // 4-5px round
   },
   streakText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '800',
     color: '#F97316',
   },
   starBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: 'rgba(245, 158, 11, 0.18)',
+    gap: 3,
+    backgroundColor: '#1A170A',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.35)',
-    borderColor: 'rgba(245, 158, 11, 0.35)',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
+    borderTopColor: '#E5A93C',
+    borderColor: 'rgba(229, 169, 60, 0.35)',
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    borderRadius: 5, // 4-5px round
   },
   starText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '800',
     color: colors.gold,
   },
   heroCard: {
     padding: 16,
-    borderRadius: 14,
+    borderRadius: 5, // 4-5px round
   },
   heroHeader: {
     flexDirection: 'row',
@@ -518,18 +530,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   academyTag: {
-    backgroundColor: 'rgba(45, 212, 191, 0.18)',
+    backgroundColor: '#1C190D',
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 6,
+    borderRadius: 4, // 4-5px round
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.35)',
-    borderColor: 'rgba(45, 212, 191, 0.35)',
+    borderTopColor: '#E5A93C',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
   },
   academyTagText: {
     fontSize: 10,
     fontWeight: '900',
-    color: colors.cyan,
+    color: colors.gold,
   },
   eloText: {
     fontSize: 11,
@@ -557,13 +569,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: colors.surfaceLight,
+    backgroundColor: '#141414',
     paddingHorizontal: 9,
     paddingVertical: 5,
-    borderRadius: 8, // minimal rounded corners
+    borderRadius: 4, // 4-5px round
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.20)',
-    borderColor: colors.border,
+    borderTopColor: '#333333',
+    borderColor: '#222222',
   },
   tierChipIcon: {
     fontSize: 12,
@@ -577,7 +589,7 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#222222',
   },
   heroProgressLabels: {
     flexDirection: 'row',
@@ -592,44 +604,44 @@ const styles = StyleSheet.create({
   heroProgressVal: {
     fontSize: 11,
     fontWeight: '800',
-    color: colors.cyan,
+    color: colors.gold,
   },
   heroProgressBarTrack: {
     height: 6,
-    backgroundColor: 'rgba(0, 0, 0, 0.30)',
-    borderRadius: 4,
+    backgroundColor: '#111111',
+    borderRadius: 3,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
+    borderColor: '#242424',
   },
   heroProgressBarFill: {
     height: '100%',
-    backgroundColor: colors.cyan,
-    borderRadius: 4,
+    backgroundColor: colors.gold,
+    borderRadius: 3,
   },
   resumeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: colors.cyan,
+    backgroundColor: colors.gold,
     paddingVertical: 12,
-    borderRadius: 10, // clean minimal corners
-    shadowColor: colors.cyan,
+    borderRadius: 5, // 4-5px round
+    shadowColor: colors.gold,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.35,
     shadowRadius: 6,
     elevation: 4,
   },
   resumeBtnText: {
     fontSize: 12,
     fontWeight: '900',
-    color: '#0F172A',
+    color: '#080808', // Pure royal black text
     letterSpacing: 0.5,
   },
   coachCard: {
     padding: 16,
-    borderRadius: 14,
+    borderRadius: 5, // 4-5px round
   },
   coachHeader: {
     flexDirection: 'row',
@@ -639,13 +651,13 @@ const styles = StyleSheet.create({
   coachAvatar: {
     width: 36,
     height: 36,
-    borderRadius: 10,
-    backgroundColor: colors.cyan,
+    borderRadius: 4, // 4-5px round
+    backgroundColor: colors.gold,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: colors.cyan,
+    shadowColor: colors.gold,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.4,
     shadowRadius: 4,
   },
   coachTitleRow: {
@@ -659,30 +671,30 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   aiPill: {
-    backgroundColor: 'rgba(45, 212, 191, 0.18)',
+    backgroundColor: '#1E190E',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 6,
+    borderRadius: 4, // 4-5px round
     borderWidth: 1,
-    borderColor: 'rgba(45, 212, 191, 0.35)',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
   },
   aiPillText: {
     fontSize: 9,
     fontWeight: '900',
-    color: colors.cyan,
+    color: colors.gold,
   },
   coachSub: {
     fontSize: 11,
     color: colors.textSecondary,
   },
   coachBubble: {
-    backgroundColor: colors.surfaceLight,
+    backgroundColor: '#141414',
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 4, // 4-5px round
     marginBottom: 12,
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.20)',
-    borderColor: colors.border,
+    borderTopColor: '#303030',
+    borderColor: '#202020',
   },
   coachBubbleText: {
     fontSize: 12,
@@ -696,16 +708,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#222222',
   },
   coachActionText: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.cyan,
+    color: colors.gold,
   },
   drillCard: {
     padding: 16,
-    borderRadius: 14,
+    borderRadius: 5, // 4-5px round
   },
   cardHeader: {
     flexDirection: 'row',
@@ -715,10 +727,11 @@ const styles = StyleSheet.create({
   },
   cardIconBox: {
     padding: 8,
-    borderRadius: 10,
+    borderRadius: 4, // 4-5px round
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.25)',
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
+    backgroundColor: '#181818',
   },
   cardTitle: {
     fontSize: 11,
@@ -745,12 +758,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#222222',
   },
   actionText: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.cyan,
+    color: colors.gold,
   },
   launchpadContainer: {
     marginTop: 4,
@@ -771,45 +784,46 @@ const styles = StyleSheet.create({
   grid2Col: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    justifyContent: 'space-between',
+    rowGap: 10,
   },
   gridBubbleBtn: {
-    width: '48%',
-    flexGrow: 1,
-    backgroundColor: colors.cardBubble,
+    width: '48.5%',
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.30)', // subtle light reflection
-    borderColor: 'rgba(255, 245, 235, 0.12)',
-    borderRadius: 12, // clean minimal corners
+    borderTopColor: '#383838',
+    borderColor: '#242424',
+    borderRadius: 5, // Small 4-5px round
     padding: 13,
     position: 'relative',
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.20,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowOpacity: 0.6,
+    shadowRadius: 5,
+    elevation: 4,
   },
   bubbleGlossSheen: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: '35%',
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    height: '25%',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
   bubbleIconCircle: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+    width: 34,
+    height: 34,
+    borderRadius: 4, // 4-5px round
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
     borderWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.25)',
-    borderColor: 'rgba(255, 255, 255, 0.08)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
+    backgroundColor: '#181818',
   },
   gridBtnTitle: {
     fontSize: 13.5,
@@ -819,7 +833,7 @@ const styles = StyleSheet.create({
   },
   gridBtnSub: {
     fontSize: 11,
-    color: colors.textSecondary,
+    color: colors.textMuted,
     fontWeight: '500',
     lineHeight: 14,
   }

@@ -6,8 +6,7 @@ import {
   ScrollView, 
   TouchableOpacity, 
   TextInput, 
-  Alert,
-  ActivityIndicator
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMultiplayer } from '../context/MultiplayerContext';
@@ -18,13 +17,9 @@ import {
   ChevronLeft, 
   Swords, 
   Trophy, 
-  Zap, 
-  Copy, 
-  Check, 
   Users, 
-  ShieldCheck,
-  Clock,
-  ArrowRight
+  Clock, 
+  ArrowRight 
 } from 'lucide-react-native';
 
 export const MultiplayerLobbyScreen = ({ navigation }) => {
@@ -34,18 +29,14 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
     setSelectedMode,
     selectedTimeControl,
     setSelectedTimeControl,
-    matchmakingState,
     startQuickMatch,
-    cancelMatchmaking,
     createPrivateRoom,
     joinPrivateRoom,
-    roomCode,
     userCountry,
     userRatings
   } = useMultiplayer();
 
   const [inputCode, setInputCode] = useState('');
-  const [copied, setCopied] = useState(false);
 
   const activeModeConfig = MULTIPLAYER_MODES[selectedMode] || MULTIPLAYER_MODES.blitz;
   const currentCountry = COUNTRIES[userCountry] || COUNTRIES['US'];
@@ -56,7 +47,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
   };
 
   const handleCreateRoom = () => {
-    const code = createPrivateRoom(selectedMode, selectedTimeControl);
+    createPrivateRoom(selectedMode, selectedTimeControl);
     navigation.navigate('MultiplayerGame');
   };
 
@@ -90,7 +81,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
           style={styles.leaderboardIconBtn}
           onPress={() => navigation.navigate('Leaderboard')}
         >
-          <Trophy size={20} color="#F59E0B" />
+          <Trophy size={20} color={colors.gold} />
         </TouchableOpacity>
       </View>
 
@@ -106,7 +97,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
             <View>
               <Text style={styles.usernameText}>{user?.username || 'Tactician'}</Text>
               <Text style={styles.userModeRating}>
-                {activeModeConfig.name} Rating: <Text style={{ color: colors.cyan, fontWeight: 'bold' }}>{userRatings[selectedMode] || 1340}</Text>
+                {activeModeConfig.name} Rating: <Text style={{ color: colors.gold, fontWeight: 'bold' }}>{userRatings[selectedMode] || 1340}</Text>
               </Text>
             </View>
           </View>
@@ -115,7 +106,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
             style={styles.leaderboardChip}
             onPress={() => navigation.navigate('Leaderboard')}
           >
-            <Trophy size={14} color="#F59E0B" />
+            <Trophy size={14} color={colors.gold} />
             <Text style={styles.leaderboardChipText}>Top 100</Text>
           </TouchableOpacity>
         </View>
@@ -130,7 +121,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
                 key={mode.id}
                 style={[
                   styles.modeTab,
-                  isSelected && { borderColor: mode.accentColor, backgroundColor: `${mode.accentColor}18` }
+                  isSelected && styles.modeTabSelected
                 ]}
                 onPress={() => {
                   setSelectedMode(mode.id);
@@ -138,10 +129,10 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
                 }}
               >
                 <Text style={styles.modeIcon}>{mode.icon}</Text>
-                <Text style={[styles.modeName, isSelected && { color: mode.accentColor, fontWeight: 'bold' }]}>
+                <Text style={[styles.modeName, isSelected && { color: colors.gold, fontWeight: 'bold' }]}>
                   {mode.name}
                 </Text>
-                <Text style={styles.modeRatingBadge}>
+                <Text style={[styles.modeRatingBadge, isSelected && { color: colors.goldLight }]}>
                   {userRatings[mode.id] || 1300}
                 </Text>
               </TouchableOpacity>
@@ -164,8 +155,8 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
                 onPress={() => setSelectedTimeControl(tc.id)}
               >
                 <View style={styles.timeCardHeader}>
-                  <Clock size={16} color={isSelected ? colors.cyan : '#94A3B8'} />
-                  <Text style={[styles.timeTag, isSelected && { color: colors.cyan, borderColor: colors.cyan }]}>
+                  <Clock size={16} color={isSelected ? colors.gold : '#94A3B8'} />
+                  <Text style={[styles.timeTag, isSelected && { color: colors.gold, borderColor: colors.gold }]}>
                     {tc.tag}
                   </Text>
                 </View>
@@ -191,7 +182,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
             style={styles.primaryLaunchBtn}
             onPress={handleStartSearch}
           >
-            <Swords size={20} color="#000" />
+            <Swords size={20} color="#080808" />
             <Text style={styles.primaryLaunchBtnText}>FIND OPPONENT ({selectedTimeControl})</Text>
           </TouchableOpacity>
         </View>
@@ -199,7 +190,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
         {/* Private Room / Challenge Friend */}
         <View style={styles.privateRoomCard}>
           <View style={styles.privateHeader}>
-            <Users size={18} color="#00E5FF" />
+            <Users size={18} color={colors.gold} />
             <Text style={styles.privateTitle}>Play with a Friend</Text>
           </View>
 
@@ -230,7 +221,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
               onPress={handleJoinByCode}
             >
               <Text style={styles.joinBtnText}>Join</Text>
-              <ArrowRight size={16} color="#FFF" />
+              <ArrowRight size={16} color="#080808" />
             </TouchableOpacity>
           </View>
         </View>
@@ -243,7 +234,7 @@ export const MultiplayerLobbyScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#070B14'
+    backgroundColor: '#080808'
   },
   header: {
     flexDirection: 'row',
@@ -252,12 +243,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255, 255, 255, 0.08)'
+    borderBottomColor: '#242424'
   },
   backBtn: {
     padding: 8,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)'
+    borderRadius: 5,
+    backgroundColor: '#141414',
+    borderWidth: 1,
+    borderColor: '#242424'
   },
   titleContainer: {
     alignItems: 'center'
@@ -269,17 +262,17 @@ const styles = StyleSheet.create({
     letterSpacing: 1
   },
   subtitle: {
-    color: '#00E5FF',
+    color: colors.gold,
     fontSize: 10,
     fontWeight: 'bold',
     marginTop: 1
   },
   leaderboardIconBtn: {
     padding: 8,
-    borderRadius: 12,
-    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    borderRadius: 5,
+    backgroundColor: '#141414',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.3)'
+    borderColor: '#242424'
   },
   scrollContent: {
     padding: 16,
@@ -290,10 +283,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 14,
-    borderRadius: 18,
-    backgroundColor: '#0F172A',
+    borderRadius: 5,
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.2)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     marginBottom: 20
   },
   userLeft: {
@@ -303,21 +297,23 @@ const styles = StyleSheet.create({
   },
   avatarPill: {
     position: 'relative',
-    width: 44,
-    height: 44,
-    borderRadius: 14,
-    backgroundColor: '#1E293B',
+    width: 42,
+    height: 42,
+    borderRadius: 4,
+    backgroundColor: '#181818',
+    borderWidth: 1,
+    borderColor: '#2A2A2A',
     alignItems: 'center',
     justifyContent: 'center'
   },
   avatarEmoji: {
-    fontSize: 22
+    fontSize: 20
   },
   flagBadge: {
     position: 'absolute',
     bottom: -4,
     right: -4,
-    fontSize: 14
+    fontSize: 13
   },
   usernameText: {
     color: '#FFF',
@@ -335,18 +331,18 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 12,
-    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+    borderRadius: 4,
+    backgroundColor: '#1C190E',
     borderWidth: 1,
-    borderColor: 'rgba(245, 158, 11, 0.4)'
+    borderColor: 'rgba(229, 169, 60, 0.4)'
   },
   leaderboardChipText: {
-    color: '#F59E0B',
+    color: colors.gold,
     fontSize: 11,
     fontWeight: 'bold'
   },
   sectionHeading: {
-    color: '#64748B',
+    color: '#8E8E93',
     fontSize: 11,
     fontWeight: '900',
     letterSpacing: 1,
@@ -363,10 +359,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 6,
-    borderRadius: 16,
-    backgroundColor: '#0F172A',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.08)'
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#333333',
+    borderColor: '#242424'
+  },
+  modeTabSelected: {
+    backgroundColor: '#1C190E',
+    borderColor: 'rgba(229, 169, 60, 0.5)',
+    borderTopColor: colors.gold
   },
   modeIcon: {
     fontSize: 20,
@@ -378,7 +380,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   modeRatingBadge: {
-    color: '#64748B',
+    color: '#8E8E93',
     fontSize: 10,
     fontFamily: 'monospace',
     marginTop: 2
@@ -392,14 +394,16 @@ const styles = StyleSheet.create({
   timeCard: {
     width: '48%',
     padding: 14,
-    borderRadius: 16,
-    backgroundColor: '#0F172A',
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.08)'
+    borderRadius: 5,
+    backgroundColor: '#121212',
+    borderWidth: 1,
+    borderTopColor: '#333333',
+    borderColor: '#242424'
   },
   timeCardSelected: {
-    borderColor: '#00E5FF',
-    backgroundColor: 'rgba(0, 229, 255, 0.08)'
+    borderColor: 'rgba(229, 169, 60, 0.6)',
+    borderTopColor: colors.gold,
+    backgroundColor: '#1A170F'
   },
   timeCardHeader: {
     flexDirection: 'row',
@@ -408,15 +412,15 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   timeTag: {
-    color: '#64748B',
+    color: '#8E8E93',
     fontSize: 9,
     fontWeight: 'bold',
     textTransform: 'uppercase',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 6,
+    borderRadius: 3,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)'
+    borderColor: '#303030'
   },
   timeDuration: {
     color: '#CBD5E1',
@@ -424,16 +428,17 @@ const styles = StyleSheet.create({
     fontWeight: '900'
   },
   timeControlDesc: {
-    color: '#64748B',
+    color: '#8E8E93',
     fontSize: 11,
     marginTop: 3
   },
   actionCard: {
     padding: 16,
-    borderRadius: 20,
-    backgroundColor: '#0F172A',
+    borderRadius: 5,
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.3)',
+    borderTopColor: '#383838',
+    borderColor: '#242424',
     marginBottom: 20
   },
   actionCardInfo: {
@@ -455,27 +460,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#00E5FF',
+    backgroundColor: colors.gold,
     paddingVertical: 14,
-    borderRadius: 14,
-    shadowColor: '#00E5FF',
+    borderRadius: 5,
+    shadowColor: colors.gold,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 4
   },
   primaryLaunchBtnText: {
-    color: '#000',
+    color: '#080808',
     fontSize: 13,
     fontWeight: '900',
     letterSpacing: 0.5
   },
   privateRoomCard: {
     padding: 16,
-    borderRadius: 20,
-    backgroundColor: '#0F172A',
+    borderRadius: 5,
+    backgroundColor: '#121212',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.08)'
+    borderTopColor: '#383838',
+    borderColor: '#242424'
   },
   privateHeader: {
     flexDirection: 'row',
@@ -498,15 +504,16 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   createRoomBtn: {
-    backgroundColor: 'rgba(0, 229, 255, 0.15)',
+    backgroundColor: '#1A170F',
     borderWidth: 1,
-    borderColor: 'rgba(0, 229, 255, 0.4)',
+    borderColor: 'rgba(229, 169, 60, 0.4)',
+    borderTopColor: colors.gold,
     paddingVertical: 12,
-    borderRadius: 12,
+    borderRadius: 5,
     alignItems: 'center'
   },
   createRoomBtnText: {
-    color: '#00E5FF',
+    color: colors.gold,
     fontSize: 12,
     fontWeight: 'bold'
   },
@@ -516,10 +523,10 @@ const styles = StyleSheet.create({
   },
   codeInput: {
     flex: 1,
-    backgroundColor: '#1E293B',
+    backgroundColor: '#181818',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 12,
+    borderColor: '#2A2A2A',
+    borderRadius: 5,
     paddingHorizontal: 12,
     paddingVertical: 10,
     color: '#FFF',
@@ -531,13 +538,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#2563EB',
+    backgroundColor: colors.gold,
     paddingHorizontal: 16,
-    borderRadius: 12,
+    borderRadius: 5,
     justifyContent: 'center'
   },
   joinBtnText: {
-    color: '#FFF',
+    color: '#080808',
     fontSize: 12,
     fontWeight: 'bold'
   }

@@ -11,19 +11,7 @@ router = APIRouter(prefix="/api/games", tags=["Games"])
 logger = logging.getLogger(__name__)
 
 # In-memory storage fallback
-MOCK_GAMES: List[dict] = [
-    {
-        "id": "game-sample-1",
-        "user_id": "mock-user-123",
-        "game_type": "offline",
-        "opponent_name": "Player 2",
-        "result": "1-0",
-        "pgn": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. O-O Nf6 5. d3 d6 6. c3 a6 7. Bg5 h6 8. Bh4 g5 9. Bg3 Ba7",
-        "final_fen": "r1bqk2r/bpp2p2/p1np1n1p/4p1p1/2B1P3/2PP1NBP/PP3PP1/RN1Q1RK1 b kq - 1 9",
-        "moves_count": 18,
-        "created_at": datetime.utcnow()
-    }
-]
+MOCK_GAMES: List[dict] = []
 
 @router.post("/save", response_model=GameResponse)
 def save_game(payload: GameSaveRequest):

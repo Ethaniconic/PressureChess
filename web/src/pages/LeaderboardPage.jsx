@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useMultiplayer } from '../context/MultiplayerContext';
 import { useBeta } from '../context/BetaContext';
+import { supabase, isSupabaseConfigured } from '../services/supabase';
 import { GlassCard } from '../components/GlassCard';
 import { COUNTRIES } from '../data/multiplayerData';
-import { MULTI_METRIC_LEADERBOARDS } from '../data/betaData';
 import {
   Trophy,
   Crown,
   Medal,
-  Flame,
   Search,
   ChevronLeft,
-  Filter,
   Sparkles,
-  ArrowUpRight,
-  TrendingUp,
-  Globe,
-  Users,
-  Zap,
-  Award,
-  Calendar,
-  ShieldCheck,
-  Star
+  RefreshCw
 } from 'lucide-react';
 
 export const LeaderboardPage = ({ onNavigate }) => {
@@ -38,42 +28,118 @@ export const LeaderboardPage = ({ onNavigate }) => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    let isMounted = true;
+  const loadData = async (isMounted = true) => {
     setIsLoading(true);
-
-    const loadData = async () => {
-      try {
-        if (rankingCategory === 'multiplayer') {
-          const data = await getLeaderboard(timeframe, mode);
-          const list = Array.isArray(data) ? data : [];
-          let filtered = list;
-          if (mode !== 'all') {
-            filtered = list.filter(p => !p.mode || p.mode === mode);
-          }
-          if (isMounted) {
-            setLeaderboard(filtered);
-            setIsLoading(false);
-          }
-        } else {
-          const data = MULTI_METRIC_LEADERBOARDS[rankingCategory] || [];
-          if (isMounted) {
-            setLeaderboard(Array.isArray(data) ? data : []);
-            setIsLoading(false);
-          }
+    try {
+      if (rankingCategory === 'multiplayer') {
+        const data = await getLeaderboard(timeframe, mode);
+        const list = Array.isArray(data) ? data : [];
+        let filtered = list;
+        if (mode !== 'all') {
+          filtered = list.filter(p => !p.mode || p.mode === mode);
         }
-      } catch (err) {
         if (isMounted) {
+          setLeaderboard(filtered);
+          setIsLoading(false);
+        }
+      } else if (rankingCategory === 'beta_founders') {
+        if (isSupabaseConfigured && supabase) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('id, username, country, avatar_url, supporter_title, is_founding_player, created_at')
+            .eq('is_founding_player', true)
+            .order('created_at', { ascending: true })
+            .limit(50);
+          if (isMounted) {
+            setLeaderboard((data || []).map((p, i) => ({
+              rank: i + 1,
+              id: p.id,
+              username: p.username || `Founder_${p.id.slice(0, 4)}`,
+              country: p.country || 'US',
+              avatar: p.avatar_url || '✨',
+              score: `Founder #${String(i + 1).padStart(3, '0')}`,
+              tag: p.supporter_title || 'Founding Beta Player'
+            })));
+            setIsLoading(false);
+          }
+        } else if (isMounted) {
+          setLeaderboard([]);
+          setIsLoading(false);
+        }
+      } else if (rankingCategory === 'puzzle_streak') {
+        if (isSupabaseConfigured && supabase) {
+          const { data } = await supabase
+            .from('user_puzzle_stats')
+            .select('user_id, highest_streak, current_streak, puzzle_rating')
+            .order('highest_streak', { ascending: false })
+            .limit(50);
+          if (isMounted) {
+            setLeaderboard((data || []).map((p, i) => ({
+              rank: i + 1,
+              id: p.user_id,
+              username: `Tactician_${p.user_id.slice(0, 4)}`,
+              country: 'US',
+              avatar: '⚡',
+              score: `${p.highest_streak || 0} Streak`,
+              tag: `Rating ${p.puzzle_rating || 1200}`
+            })));
+            setIsLoading(false);
+          }
+        } else if (isMounted) {
+          setLeaderboard([]);
+          setIsLoading(false);
+        }
+      } else {
+        // weekly_xp or monthly_xp
+        if (isSupabaseConfigured && supabase) {
+          const { data } = await supabase
+            .from('profiles')
+            .select('id, username, country, avatar_url, daily_streak, elo_rating')
+            .order('elo_rating', { ascending: false })
+            .limit(50);
+          if (isMounted) {
+            setLeaderboard((data || []).map((p, i) => ({
+              rank: i + 1,
+              id: p.id,
+              username: p.username || `Player_${p.id.slice(0, 4)}`,
+              country: p.country || 'US',
+              avatar: p.avatar_url || '♟️',
+              score: `${(p.elo_rating || 1200) * 3} XP`,
+              tag: `${p.daily_streak || 1}d Streak`
+            })));
+            setIsLoading(false);
+          }
+        } else if (isMounted) {
           setLeaderboard([]);
           setIsLoading(false);
         }
       }
-    };
+    } catch (err) {
+      if (isMounted) {
+        setLeaderboard([]);
+        setIsLoading(false);
+      }
+    }
+  };
 
-    loadData();
+  useEffect(() => {
+    let isMounted = true;
+    loadData(isMounted);
+
+    // Supabase Realtime live sync
+    let subscription = null;
+    if (isSupabaseConfigured && supabase) {
+      subscription = supabase
+        .channel('leaderboard_realtime_feed')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => {
+          if (isMounted) loadData(isMounted);
+        })
+        .subscribe();
+    }
 
     return () => {
       isMounted = false;
+      if (subscription) subscription.unsubscribe();
     };
   }, [rankingCategory, timeframe, mode]);
 
@@ -83,7 +149,6 @@ export const LeaderboardPage = ({ onNavigate }) => {
   );
 
   const topThree = filteredList.slice(0, 3);
-  const restList = filteredList.slice(3);
 
   const getCountryFlag = (countryCode) => {
     if (!countryCode) return '🌐';
@@ -104,22 +169,22 @@ export const LeaderboardPage = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fadeIn">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
       
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#24262E]">
         <div className="flex items-center gap-3">
           <button
             onClick={() => onNavigate?.('multiplayer')}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all"
+            className="p-2 rounded-[5px] bg-[#141518] hover:bg-[#1A1C22] text-slate-300 hover:text-white border border-[#24262E] transition-all"
             title="Lobby"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-amber-400">
+            <div className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#E5A93C]">
               <Trophy className="w-3.5 h-3.5" />
-              <span>Hall of Grandmasters • Beta Standings</span>
+              <span>Hall of Grandmasters • Standings</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white mt-0.5">Competitive Leaderboards</h1>
           </div>
@@ -128,7 +193,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => onNavigate?.('multiplayer')}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-brand to-sky-400 hover:from-cyan-400 hover:to-sky-300 text-black font-black text-xs flex items-center gap-2 shadow-glow-cyan transition-all"
+            className="px-5 py-2.5 rounded-[5px] bg-[#E5A93C] hover:bg-[#F3BA54] text-black font-black text-xs flex items-center gap-2 shadow-[0_0_12px_rgba(229,169,60,0.3)] transition-all"
           >
             <Sparkles className="w-4 h-4" />
             <span>Play Ranked Match</span>
@@ -137,16 +202,16 @@ export const LeaderboardPage = ({ onNavigate }) => {
       </div>
 
       {/* Metric Categories Switcher */}
-      <div className="flex rounded-2xl bg-dark-900/90 p-1.5 border border-white/10 overflow-x-auto gap-1">
+      <div className="flex rounded-[5px] bg-[#101114] p-1.5 border border-[#24262E] overflow-x-auto gap-1">
         {METRIC_TABS.map((tab) => {
           const isSelected = rankingCategory === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setRankingCategory(tab.id)}
-              className={`flex-1 min-w-[130px] py-2 px-3 rounded-xl text-xs font-black transition-all flex flex-col items-center justify-center ${
+              className={`flex-1 min-w-[130px] py-2 px-3 rounded-[4px] text-xs font-black transition-all flex flex-col items-center justify-center ${
                 isSelected
-                  ? 'bg-gradient-to-r from-cyan-500 to-sky-500 text-black shadow-glow-cyan'
+                  ? 'bg-[#E5A93C] text-black shadow-[0_0_12px_rgba(229,169,60,0.25)]'
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -163,7 +228,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
       {rankingCategory === 'multiplayer' && (
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Timeframe Switcher */}
-          <div className="flex rounded-2xl bg-slate-900 p-1 border border-white/10 max-w-md">
+          <div className="flex rounded-[5px] bg-[#121316] p-1 border border-[#24262E] max-w-md">
             {[
               { id: 'global', label: 'Global' },
               { id: 'weekly', label: 'Weekly' },
@@ -173,9 +238,9 @@ export const LeaderboardPage = ({ onNavigate }) => {
               <button
                 key={tab.id}
                 onClick={() => setTimeframe(tab.id)}
-                className={`flex-1 py-2 px-3 rounded-xl text-xs font-black transition-all ${
+                className={`flex-1 py-2 px-3 rounded-[4px] text-xs font-black transition-all ${
                   timeframe === tab.id
-                    ? 'bg-amber-400 text-black shadow-glow-gold'
+                    ? 'bg-[#E5A93C] text-black shadow-sm'
                     : 'text-slate-400 hover:text-white'
                 }`}
               >
@@ -196,10 +261,10 @@ export const LeaderboardPage = ({ onNavigate }) => {
               <button
                 key={m.id}
                 onClick={() => setMode(m.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                className={`px-3 py-1.5 rounded-[4px] text-xs font-bold border transition-all ${
                   mode === m.id
-                    ? 'bg-cyan-brand/20 border-cyan-brand text-cyan-300 shadow-glow-cyan/40'
-                    : 'bg-white/5 border-white/10 text-slate-400 hover:text-white'
+                    ? 'bg-[#E5A93C]/20 border-[#E5A93C] text-[#F5C768]'
+                    : 'bg-[#141518] border-[#262830] text-slate-400 hover:text-white'
                 }`}
               >
                 {m.label}
@@ -217,7 +282,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
           placeholder="Search by player username..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-900 border border-white/10 text-white text-xs placeholder-slate-500 focus:outline-none focus:border-cyan-brand/50"
+          className="w-full pl-10 pr-4 py-2.5 rounded-[5px] bg-[#121316] border border-[#24262E] text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#E5A93C]/60"
         />
       </div>
 
@@ -225,8 +290,8 @@ export const LeaderboardPage = ({ onNavigate }) => {
       {topThree.length >= 3 && !searchQuery && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
           {/* Silver #2 */}
-          <GlassCard className="p-5 border-slate-300/30 bg-gradient-to-b from-slate-300/10 via-slate-900 to-slate-900 text-center space-y-2 order-2 md:order-1 relative overflow-hidden">
-            <div className="w-10 h-10 rounded-2xl bg-slate-400/20 text-slate-200 border border-slate-300/40 flex items-center justify-center mx-auto text-base font-black">
+          <GlassCard className="p-5 border-[#282B34] text-center space-y-2 order-2 md:order-1 relative overflow-hidden">
+            <div className="w-10 h-10 rounded-[4px] bg-[#1E2026] text-slate-200 border border-slate-400/40 flex items-center justify-center mx-auto text-base font-black">
               🥈 2
             </div>
             <div>
@@ -248,8 +313,8 @@ export const LeaderboardPage = ({ onNavigate }) => {
           </GlassCard>
 
           {/* Gold #1 (Highest elevation) */}
-          <GlassCard className="p-6 border-amber-400/50 bg-gradient-to-b from-amber-400/15 via-slate-900 to-slate-900 text-center space-y-2.5 order-1 md:order-2 shadow-2xl shadow-amber-500/10 relative overflow-hidden scale-[1.03]">
-            <div className="w-12 h-12 rounded-2xl bg-amber-400/20 text-amber-300 border border-amber-400/50 flex items-center justify-center mx-auto text-xl font-black shadow-glow-gold">
+          <GlassCard className="p-6 border-[#E5A93C]/50 text-center space-y-2.5 order-1 md:order-2 shadow-2xl relative overflow-hidden scale-[1.02]">
+            <div className="w-12 h-12 rounded-[4px] bg-[#221708] text-[#E5A93C] border border-[#E5A93C]/60 flex items-center justify-center mx-auto text-xl font-black shadow-[0_0_12px_rgba(229,169,60,0.3)]">
               👑 1
             </div>
             <div>
@@ -257,7 +322,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
                 <span className="text-lg">{getCountryFlag(topThree[0].country)}</span>
                 <h3 className="text-base font-black text-white">{topThree[0].username}</h3>
               </div>
-              <div className="text-3xl font-black font-mono text-amber-400 mt-1">
+              <div className="text-3xl font-black font-mono text-[#E5A93C] mt-1">
                 {topThree[0].rating || topThree[0].score}{' '}
                 {topThree[0].rating && <span className="text-xs text-slate-400 font-normal">Elo</span>}
               </div>
@@ -271,8 +336,8 @@ export const LeaderboardPage = ({ onNavigate }) => {
           </GlassCard>
 
           {/* Bronze #3 */}
-          <GlassCard className="p-5 border-amber-700/30 bg-gradient-to-b from-amber-700/10 via-slate-900 to-slate-900 text-center space-y-2 order-3 relative overflow-hidden">
-            <div className="w-10 h-10 rounded-2xl bg-amber-700/20 text-amber-400 border border-amber-700/40 flex items-center justify-center mx-auto text-base font-black">
+          <GlassCard className="p-5 border-[#282B34] text-center space-y-2 order-3 relative overflow-hidden">
+            <div className="w-10 h-10 rounded-[4px] bg-[#1E160D] text-amber-400 border border-amber-700/40 flex items-center justify-center mx-auto text-base font-black">
               🥉 3
             </div>
             <div>
@@ -297,12 +362,12 @@ export const LeaderboardPage = ({ onNavigate }) => {
 
       {/* Full Leaderboard Table */}
       <GlassCard className="p-6">
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-white/[0.08]">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#24262E]">
           <h3 className="font-bold text-white text-base flex items-center gap-2">
-            <Trophy className="w-4 h-4 text-amber-400" />
+            <Trophy className="w-4 h-4 text-[#E5A93C]" />
             Rankings ({filteredList.length} Players)
           </h3>
-          <span className="text-xs text-slate-400">Official Beta Calculations</span>
+          <span className="text-xs text-slate-400">Official Calculations</span>
         </div>
 
         {filteredList.length === 0 ? (
@@ -314,7 +379,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="text-slate-400 border-b border-white/5 pb-2">
+                <tr className="text-slate-400 border-b border-[#24262E] pb-2">
                   <th className="py-2.5 font-medium w-16">Rank</th>
                   <th className="py-2.5 font-medium">Player</th>
                   <th className="py-2.5 font-medium text-right">
@@ -330,23 +395,22 @@ export const LeaderboardPage = ({ onNavigate }) => {
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-[#1D1F26]">
                 {filteredList.map((player, idx) => {
                   const rank = player.rank || idx + 1;
-                  const isTopThree = rank <= 3;
                   const isMe = player.isCurrentUser;
 
                   return (
                     <tr
                       key={player.id || idx}
                       className={`hover:bg-white/[0.02] transition-colors ${
-                        isMe ? 'bg-cyan-500/10 font-bold border-l-2 border-cyan-400' : ''
+                        isMe ? 'bg-[#E5A93C]/10 font-bold border-l-2 border-[#E5A93C]' : ''
                       }`}
                     >
                       {/* Rank */}
                       <td className="py-3 font-mono font-bold">
                         {rank === 1 ? (
-                          <span className="text-amber-400 flex items-center gap-1 font-black">
+                          <span className="text-[#E5A93C] flex items-center gap-1 font-black">
                             <Crown className="w-3.5 h-3.5" /> 1
                           </span>
                         ) : rank === 2 ? (
@@ -370,7 +434,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
                             <div className="font-bold text-white flex items-center gap-1.5">
                               {player.username}
                               {isMe && (
-                                <span className="text-[10px] px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-normal">
+                                <span className="text-[10px] px-1.5 py-0.2 rounded-[2px] bg-[#E5A93C]/20 text-[#E5A93C] font-normal">
                                   You
                                 </span>
                               )}
@@ -391,7 +455,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
                       {rankingCategory === 'multiplayer' ? (
                         <>
                           <td className="py-3 text-right">
-                            <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[11px] text-slate-300">
+                            <span className="px-2 py-0.5 rounded-[3px] bg-white/5 border border-white/10 font-mono text-[11px] text-slate-300">
                               {player.winRate || (player.wins ? Math.round((player.wins / (player.wins + (player.losses || 0) + (player.draws || 0))) * 100) : 60)}%
                             </span>
                           </td>
@@ -401,7 +465,7 @@ export const LeaderboardPage = ({ onNavigate }) => {
                         </>
                       ) : (
                         <td className="py-3 text-right text-slate-300">
-                          <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-400/20 text-[10px] text-cyan-300 font-bold">
+                          <span className="px-2 py-0.5 rounded-[3px] bg-[#E5A93C]/10 border border-[#E5A93C]/20 text-[10px] text-[#E5A93C] font-bold">
                             {player.tag}
                           </span>
                         </td>

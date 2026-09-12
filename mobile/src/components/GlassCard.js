@@ -28,41 +28,41 @@ export const GlassCard = ({ children, style, onPress, glow = false, variant = 'b
 const styles = StyleSheet.create({
   cardBase: {
     position: 'relative',
-    borderRadius: 14, // Minimal, clean rounded corners
+    borderRadius: 5, // Small 4-5px round as explicitly requested
     padding: 16,
     overflow: 'hidden',
   },
   bubbleCard: {
-    backgroundColor: colors.cardBubble,
+    backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: 'rgba(255, 245, 235, 0.11)',
-    borderTopColor: 'rgba(255, 255, 255, 0.28)', // Subtle warm specular reflection rim
-    borderBottomColor: 'rgba(0, 0, 0, 0.20)',
-    // Smooth depth shadow
+    borderColor: '#242424', // High contrast royal border
+    borderTopColor: '#383838', // Sharp platinum specular rim
+    borderBottomColor: '#121212',
+    // High contrast shadow
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.22,
-    shadowRadius: 10,
-    elevation: 4,
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 5,
   },
   topLightSheen: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: '35%',
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    borderTopLeftRadius: 14,
-    borderTopRightRadius: 14,
+    height: '25%',
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
   glow: {
-    borderColor: 'rgba(45, 212, 191, 0.40)',
-    borderTopColor: 'rgba(255, 255, 255, 0.45)',
-    shadowColor: colors.cyan,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 6,
+    borderColor: colors.gold,
+    borderTopColor: '#FFEAA7',
+    shadowColor: colors.gold,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.45,
+    shadowRadius: 10,
+    elevation: 8,
   }
 });
 
