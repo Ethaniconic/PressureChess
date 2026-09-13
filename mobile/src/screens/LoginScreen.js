@@ -89,6 +89,20 @@ export const LoginScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
 
+          <View style={styles.dividerContainer}>
+            <View style={styles.divider} />
+            <Text style={styles.dividerText}>OR QUICK SIGN IN</Text>
+            <View style={styles.divider} />
+          </View>
+
+          <TouchableOpacity
+            style={styles.googleBtn}
+            onPress={() => {}} // Placeholder for Google Auth
+          >
+            <Text style={styles.googleIcon}>G</Text>
+            <Text style={styles.googleText}>Continue with Google</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.guestBtn}
             onPress={handleGuest}
@@ -179,49 +193,86 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   loginBtn: {
+    backgroundColor: colors.gold,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 14,
+    borderRadius: 8,
     gap: 8,
-    backgroundColor: colors.gold,
-    paddingVertical: 14,
-    borderRadius: 14,
-    marginTop: 4,
+    marginTop: 8,
   },
   loginText: {
-    fontSize: 13,
-    fontWeight: '900',
     color: '#000',
-    letterSpacing: 0.5,
+    fontWeight: '900',
+    fontSize: 14,
+    letterSpacing: 1,
   },
-  guestBtn: {
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 4,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  dividerText: {
+    color: colors.textMuted,
+    fontSize: 10,
+    fontWeight: '700',
+    marginHorizontal: 10,
+    letterSpacing: 1,
+  },
+  googleBtn: {
+    backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 14,
+    borderRadius: 8,
     gap: 8,
-    backgroundColor: colors.surfaceLight,
+    marginBottom: 4,
+  },
+  googleIcon: {
+    color: '#4285F4',
+    fontWeight: '900',
+    fontSize: 16,
+  },
+  googleText: {
+    color: '#000',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  guestBtn: {
+    backgroundColor: colors.surfaceHover,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 14,
+    borderRadius: 8,
+    gap: 8,
     borderWidth: 1,
-    borderColor: colors.border,
-    paddingVertical: 12,
-    borderRadius: 14,
+    borderColor: 'rgba(255,255,255,0.1)',
   },
   guestText: {
-    fontSize: 12,
-    fontWeight: '700',
     color: colors.text,
+    fontWeight: '700',
+    fontSize: 14,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 24,
+    marginTop: 32,
   },
   footerText: {
-    fontSize: 12,
     color: colors.textMuted,
+    fontSize: 12,
   },
   signupLink: {
-    fontSize: 12,
-    fontWeight: '700',
     color: colors.gold,
-  }
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
 });

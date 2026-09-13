@@ -75,10 +75,10 @@ def solve_puzzle(payload: SolvePuzzleRequest):
     and updates stats in Supabase if user is authenticated.
     """
     puzzle = next((p for p in ALL_PUZZLES if p["id"] == payload.puzzle_id), None)
-    puzzle_rating = puzzle["rating"] if puzzle else 1200
+    puzzle_rating = puzzle["rating"] if puzzle else 400
 
     # Default baseline stats
-    current_rating = 1200
+    current_rating = 400
     current_streak = 0
     highest_streak = 0
     total_attempted = 0
@@ -92,7 +92,7 @@ def solve_puzzle(payload: SolvePuzzleRequest):
             res = supabase.table("user_puzzle_stats").select("*").eq("user_id", payload.user_id).execute()
             if res.data and len(res.data) > 0:
                 stat = res.data[0]
-                current_rating = stat.get("puzzle_rating", 1200)
+                current_rating = stat.get("puzzle_rating", 400)
                 current_streak = stat.get("current_streak", 0)
                 highest_streak = stat.get("highest_streak", 0)
                 total_attempted = stat.get("puzzles_attempted", 0)
@@ -191,8 +191,8 @@ def get_user_stats(user_id: Optional[str] = None):
                 avg_time = round(float(stat.get("total_time_spent_seconds", 0)) / max(1, total_attempted), 1)
 
                 return {
-                    "puzzle_rating": stat.get("puzzle_rating", 1200),
-                    "highest_rating": stat.get("highest_rating", 1200),
+                    "puzzle_rating": stat.get("puzzle_rating", 400),
+                    "highest_rating": stat.get("highest_rating", 400),
                     "current_streak": stat.get("current_streak", 0),
                     "highest_streak": stat.get("highest_streak", 0),
                     "puzzles_attempted": total_attempted,
@@ -205,8 +205,8 @@ def get_user_stats(user_id: Optional[str] = None):
 
     # Fallback guest statistics
     return {
-        "puzzle_rating": 1200,
-        "highest_rating": 1200,
+        "puzzle_rating": 400,
+        "highest_rating": 400,
         "current_streak": 0,
         "highest_streak": 0,
         "puzzles_attempted": 0,

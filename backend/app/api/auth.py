@@ -99,7 +99,7 @@ def get_current_user(authorization: Optional[str] = Header(None)):
             "id": "guest",
             "username": "Guest Tactician",
             "is_guest": True,
-            "elo_rating": 1200
+            "elo_rating": 400
         }
     
     token = authorization.replace("Bearer ", "")

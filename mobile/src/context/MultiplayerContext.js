@@ -38,11 +38,11 @@ export const MultiplayerProvider = ({ children }) => {
   // Profile & Ratings
   const [userCountry, setUserCountry] = useState('US');
   const [userRatings, setUserRatings] = useState({
-    bullet: 1200,
-    blitz: 1200,
-    rapid: 1200,
-    classical: 1200,
-    overall: 1200
+    bullet: 400,
+    blitz: 400,
+    rapid: 400,
+    classical: 400,
+    overall: 400
   });
   const [userStats, setUserStats] = useState({
     wins: 0,
@@ -84,11 +84,11 @@ export const MultiplayerProvider = ({ children }) => {
           if (!error && data && isMounted) {
             if (data.country) setUserCountry(data.country);
             const liveRatings = {
-              bullet: data.bullet_rating || 1200,
-              blitz: data.blitz_rating || 1200,
-              rapid: data.rapid_rating || 1200,
-              classical: data.classical_rating || 1200,
-              overall: data.elo_rating || 1200
+              bullet: data.bullet_rating || 400,
+              blitz: data.blitz_rating || 400,
+              rapid: data.rapid_rating || 400,
+              classical: data.classical_rating || 400,
+              overall: data.elo_rating || 400
             };
             const liveStats = {
               wins: data.wins || 0,
@@ -121,11 +121,11 @@ export const MultiplayerProvider = ({ children }) => {
           const updated = payload.new;
           if (updated && isMounted) {
             setUserRatings({
-              bullet: updated.bullet_rating || 1200,
-              blitz: updated.blitz_rating || 1200,
-              rapid: updated.rapid_rating || 1200,
-              classical: updated.classical_rating || 1200,
-              overall: updated.elo_rating || 1200
+              bullet: updated.bullet_rating || 400,
+              blitz: updated.blitz_rating || 400,
+              rapid: updated.rapid_rating || 400,
+              classical: updated.classical_rating || 400,
+              overall: updated.elo_rating || 400
             });
             setUserStats({
               wins: updated.wins || 0,
@@ -255,8 +255,8 @@ export const MultiplayerProvider = ({ children }) => {
     const isLoss = outcome.result === 'loss';
     const isDraw = outcome.result === 'draw';
 
-    const currentModeRating = userRatings[selectedMode] || 1200;
-    const oppRating = opponent?.rating || 1200;
+    const currentModeRating = userRatings[selectedMode] || 400;
+    const oppRating = opponent?.rating || 400;
 
     let score = isWin ? 1.0 : (isDraw ? 0.5 : 0.0);
     const delta = calculateEloChange(currentModeRating, oppRating, score);
@@ -266,7 +266,7 @@ export const MultiplayerProvider = ({ children }) => {
       ...userRatings,
       [selectedMode]: newRating,
       overall: Math.round(
-        ((userRatings.bullet || 1200) + (userRatings.blitz || 1200) + (userRatings.rapid || 1200) + (userRatings.classical || 1200)) / 4
+        ((userRatings.bullet || 400) + (userRatings.blitz || 400) + (userRatings.rapid || 400) + (userRatings.classical || 400)) / 4
       )
     };
 
@@ -355,7 +355,8 @@ export const MultiplayerProvider = ({ children }) => {
   };
 
   // Initialize a live game with Supabase channel move synchronization
-  const initializeLiveGame = (gameData, myColor, oppData) => {
+  const initializeLiveGame = async (gameData, color, oppData) => {
+    const myColor = color;
     setActiveGame(gameData);
     setOpponent(oppData);
     setPlayerColor(myColor);
@@ -370,61 +371,79 @@ export const MultiplayerProvider = ({ children }) => {
     setRatingChange(0);
     setDrawOfferedBy(null);
 
-    // Clean up previous channel
-    if (channelRef.current && supabase) {
-      supabase.removeChannel(channelRef.current);
-    }
+    return new Promise((resolve) => {
+      // Clean up previous channel
+      if (channelRef.current && supabase) {
+        supabase.removeChannel(channelRef.current);
+      }
 
-    if (isSupabaseConfigured && supabase) {
-      const channelName = gameData.room_code ? `room_${gameData.room_code}` : `game_${gameData.id}`;
-      const gameChannel = supabase.channel(channelName);
+      if (isSupabaseConfigured && supabase) {
+        const gameChannel = supabase.channel(`game:${gameData.id}`, {
+          config: { broadcast: { ack: true } }
+        });
 
-      gameChannel
-        .on('broadcast', { event: 'move' }, ({ payload }) => {
-          if (!payload) return;
-          try {
-            const chess = new Chess();
-            for (const m of [...(gameData.moves || []), payload.san]) {
-              chess.move(m);
-            }
-            setFen(payload.fen);
-            setMoves(prev => [...prev, payload.san]);
-            setCurrentTurn(payload.turn);
-            setWhiteTime(payload.whiteTime);
-            setBlackTime(payload.blackTime);
-
-            if (chess.isGameOver()) {
-              if (chess.isCheckmate()) {
-                finishGame({
-                  result: 'loss',
-                  reason: `Checkmate! ${oppData.username} wins`,
-                  winner: myColor === 'white' ? 'black' : 'white'
-                });
-              } else {
-                finishGame({ result: 'draw', reason: 'Draw' });
+        gameChannel
+          .on('broadcast', { event: 'move' }, ({ payload }) => {
+            if (!payload) return;
+            try {
+              const chess = new Chess();
+              for (const m of [...(gameData.moves || []), payload.san]) {
+                chess.move(m);
               }
-            }
-          } catch (err) {
-            console.warn('Error applying opponent move:', err);
-          }
-        })
-        .on('broadcast', { event: 'draw_offer' }, () => {
-          setDrawOfferedBy(myColor === 'white' ? 'black' : 'white');
-        })
-        .on('broadcast', { event: 'draw_accept' }, () => {
-          finishGame({ result: 'draw', reason: 'Draw agreed mutually' });
-        })
-        .on('broadcast', { event: 'resign' }, () => {
-          finishGame({
-            result: 'win',
-            reason: `${oppData.username} resigned`,
-            winner: myColor
-          });
-        })
-        .subscribe();
+              setFen(payload.fen);
+              setMoves(prev => [...prev, payload.san]);
+              setCurrentTurn(payload.turn);
+              setWhiteTime(payload.whiteTime);
+              setBlackTime(payload.blackTime);
 
-      channelRef.current = gameChannel;
-    }
+              if (chess.isGameOver()) {
+                if (chess.isCheckmate()) {
+                  finishGame({
+                    result: 'loss',
+                    reason: `Checkmate! ${oppData.username} wins`,
+                    winner: myColor === 'white' ? 'black' : 'white'
+                  });
+                } else {
+                  finishGame({ result: 'draw', reason: 'Draw' });
+                }
+              }
+            } catch (err) {
+              console.warn('Error applying opponent move:', err);
+            }
+          })
+          .on('broadcast', { event: 'draw_offer' }, () => {
+            setDrawOfferedBy(myColor === 'white' ? 'black' : 'white');
+          })
+          .on('broadcast', { event: 'draw_accept' }, () => {
+            finishGame({ result: 'draw', reason: 'Draw agreed mutually' });
+          })
+          .on('broadcast', { event: 'resign' }, () => {
+            finishGame({
+              result: 'win',
+              reason: `${oppData.username} resigned`,
+              winner: myColor
+            });
+          })
+          .on('broadcast', { event: 'opponent_joined' }, ({ payload }) => {
+            setOpponent({
+              username: payload.black_username,
+              country: payload.black_country,
+              rating: payload.black_rating,
+              avatar: '⚔️'
+            });
+            setMatchmakingState('in_game');
+          })
+          .subscribe((status) => {
+            if (status === 'SUBSCRIBED') {
+              resolve();
+            }
+          });
+
+        channelRef.current = gameChannel;
+      } else {
+        resolve();
+      }
+    });
   };
 
   // Start Quick Match via live Supabase matchmaking queue
@@ -437,7 +456,7 @@ export const MultiplayerProvider = ({ children }) => {
     setRatingChange(0);
     setDrawOfferedBy(null);
 
-    const myRating = userRatings[mode] || 1200;
+    const myRating = userRatings[mode] || 400;
 
     if (isSupabaseConfigured && supabase) {
       try {
@@ -476,8 +495,8 @@ export const MultiplayerProvider = ({ children }) => {
             black_player_id: blackPlayer.id || blackPlayer.user_id,
             white_username: whitePlayer.username,
             black_username: blackPlayer.username,
-            white_rating: whitePlayer.rating || 1200,
-            black_rating: blackPlayer.rating || 1200,
+            white_rating: whitePlayer.rating || 400,
+            black_rating: blackPlayer.rating || 400,
             white_country: whitePlayer.country || 'US',
             black_country: blackPlayer.country || 'US',
             status: 'active',
@@ -496,7 +515,7 @@ export const MultiplayerProvider = ({ children }) => {
 
           initializeLiveGame(newGame, amIWhite ? 'white' : 'black', {
             username: oppEntry.username,
-            rating: oppEntry.rating || 1200,
+            rating: oppEntry.rating || 400,
             country: oppEntry.country || 'US',
             avatar: '♟️'
           });
@@ -587,10 +606,9 @@ export const MultiplayerProvider = ({ children }) => {
     const [minStr, incStr] = timeControl.split('+');
     const totalSecs = parseInt(minStr || '3', 10) * 60;
     const incSecs = parseInt(incStr || '0', 10);
-    const myRating = userRatings[mode] || 1200;
+    const myRating = userRatings[mode] || 400;
 
-    const gameRow = {
-      id: `room_${code}`,
+    let gameRow = {
       room_code: code,
       mode,
       time_control: timeControl,
@@ -600,6 +618,9 @@ export const MultiplayerProvider = ({ children }) => {
       white_username: username,
       white_rating: myRating,
       white_country: userCountry,
+      black_username: 'Waiting for opponent...',
+      black_country: 'US',
+      black_rating: 400,
       status: 'waiting',
       current_turn: 'white',
       fen: new Chess().fen(),
@@ -608,29 +629,29 @@ export const MultiplayerProvider = ({ children }) => {
 
     if (isSupabaseConfigured && supabase) {
       try {
-        await supabase.from('multiplayer_games').insert(gameRow);
-
-        if (channelRef.current) supabase.removeChannel(channelRef.current);
-
-        const roomChannel = supabase
-          .channel(`room_${code}`)
-          .on('broadcast', { event: 'opponent_joined' }, ({ payload }) => {
-            if (payload) {
-              initializeLiveGame({ ...gameRow, status: 'active' }, 'white', {
-                username: payload.black_username,
-                rating: payload.black_rating || 1200,
-                country: payload.black_country || 'US',
-                avatar: '♟️'
-              });
-            }
-          })
-          .subscribe();
-
-        channelRef.current = roomChannel;
+        const { data, error } = await supabase
+          .from('multiplayer_games')
+          .insert(gameRow)
+          .select()
+          .single();
+        if (!error && data) {
+          gameRow = data;
+        }
       } catch (e) {
         console.warn('Error creating private room in Supabase:', e);
       }
     }
+    
+    if (!gameRow.id) {
+      gameRow.id = `room_${Date.now()}`;
+    }
+
+    await initializeLiveGame(gameRow, 'white', {
+      username: 'Waiting for friend...',
+      country: 'US',
+      rating: 400,
+      avatar: '⏳'
+    });
 
     return code;
   };
@@ -638,7 +659,7 @@ export const MultiplayerProvider = ({ children }) => {
   // Join Private Room Code
   const joinPrivateRoom = async (code) => {
     const cleanCode = code.trim().toUpperCase();
-    const myRating = userRatings[selectedMode] || 1200;
+    const myRating = userRatings[selectedMode] || 400;
 
     if (isSupabaseConfigured && supabase) {
       try {
@@ -650,7 +671,7 @@ export const MultiplayerProvider = ({ children }) => {
           .single();
 
         if (!error && roomData) {
-          await supabase
+          const { data: updatedGame } = await supabase
             .from('multiplayer_games')
             .update({
               black_player_id: userId,
@@ -659,12 +680,21 @@ export const MultiplayerProvider = ({ children }) => {
               black_country: userCountry,
               status: 'active'
             })
-            .eq('id', roomData.id);
+            .eq('id', roomData.id)
+            .select()
+            .single();
 
-          const roomChannel = supabase.channel(`room_${cleanCode}`);
-          roomChannel.subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
-              roomChannel.send({
+          if (updatedGame) {
+            setRoomCode(cleanCode);
+            await initializeLiveGame(updatedGame, 'black', {
+              username: updatedGame.white_username,
+              rating: updatedGame.white_rating,
+              country: updatedGame.white_country,
+              avatar: '👑'
+            });
+
+            if (channelRef.current) {
+              channelRef.current.send({
                 type: 'broadcast',
                 event: 'opponent_joined',
                 payload: {
@@ -674,15 +704,8 @@ export const MultiplayerProvider = ({ children }) => {
                 }
               });
             }
-          });
-
-          initializeLiveGame(roomData, 'black', {
-            username: roomData.white_username,
-            rating: roomData.white_rating || 1200,
-            country: roomData.white_country || 'US',
-            avatar: '👑'
-          });
-          return true;
+            return true;
+          }
         }
       } catch (e) {
         console.warn('Error joining private room in Supabase:', e);
@@ -833,7 +856,7 @@ export const MultiplayerProvider = ({ children }) => {
             const draws = p.draws || 0;
             const total = wins + losses + draws;
             const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
-            const rating = p[ratingCol] || p.elo_rating || 1200;
+            const rating = p[ratingCol] || p.elo_rating || 400;
             return {
               rank: idx + 1,
               id: p.id,

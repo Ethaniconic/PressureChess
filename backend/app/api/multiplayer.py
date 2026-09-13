@@ -65,8 +65,8 @@ def create_private_room(payload: CreateRoomRequest):
         "black_username": "Waiting for opponent...",
         "white_country": payload.country or "US",
         "black_country": "US",
-        "white_rating": payload.rating or 1200,
-        "black_rating": 1200,
+        "white_rating": payload.rating or 400,
+        "black_rating": 400,
         "white_time_remaining": float(init_secs),
         "black_time_remaining": float(init_secs),
         "current_turn": "white",
@@ -135,7 +135,7 @@ def join_private_room(payload: JoinRoomRequest):
     game["black_player_id"] = payload.user_id
     game["black_username"] = payload.username
     game["black_country"] = payload.country or "US"
-    game["black_rating"] = payload.rating or 1200
+    game["black_rating"] = payload.rating or 400
     game["status"] = "active"
     game["started_at"] = datetime.now(timezone.utc).isoformat()
 
@@ -208,8 +208,8 @@ def join_matchmaking_queue(payload: MatchmakingJoinRequest):
             "black_username": black_player["username"] if isinstance(black_player, dict) else black_player.username,
             "white_country": white_player.get("country", "US") if isinstance(white_player, dict) else getattr(white_player, "country", "US"),
             "black_country": black_player.get("country", "US") if isinstance(black_player, dict) else getattr(black_player, "country", "US"),
-            "white_rating": white_player.get("rating", 1200) if isinstance(white_player, dict) else getattr(white_player, "rating", 1200),
-            "black_rating": black_player.get("rating", 1200) if isinstance(black_player, dict) else getattr(black_player, "rating", 1200),
+            "white_rating": white_player.get("rating", 400) if isinstance(white_player, dict) else getattr(white_player, "rating", 400),
+            "black_rating": black_player.get("rating", 400) if isinstance(black_player, dict) else getattr(black_player, "rating", 400),
             "white_time_remaining": float(init_secs),
             "black_time_remaining": float(init_secs),
             "current_turn": "white",
@@ -530,7 +530,7 @@ def get_leaderboards(
                     draws = p.get("draws") or 0
                     total = wins + losses + draws
                     win_rate = round((wins / max(1, total)) * 100, 1) if total > 0 else 0.0
-                    rating_val = p.get(rating_col) or p.get("elo_rating") or 1200
+                    rating_val = p.get(rating_col) or p.get("elo_rating") or 400
                     leaderboard.append({
                         "rank": idx + 1,
                         "id": p.get("id"),
@@ -584,7 +584,7 @@ def get_multiplayer_profile(user_id: str):
                         "mode": g.get("time_control", "blitz"),
                         "time_control": g.get("time_control", "3+0"),
                         "opponent": g.get("opponent_name", "Opponent"),
-                        "opponent_rating": 1200,
+                        "opponent_rating": 400,
                         "opponent_country": "US",
                         "result": g.get("result", "*"),
                         "rating_delta": 0,
@@ -607,10 +607,10 @@ def get_multiplayer_profile(user_id: str):
         "avatar_url": profile.get("avatar_url", "") if profile else "",
         "country": country,
         "ratings": {
-            "bullet": profile.get("bullet_rating", overall_elo) if profile else 1200,
-            "blitz": profile.get("blitz_rating", overall_elo) if profile else 1200,
-            "rapid": profile.get("rapid_rating", overall_elo) if profile else 1200,
-            "classical": profile.get("classical_rating", overall_elo) if profile else 1200,
+            "bullet": profile.get("bullet_rating", overall_elo) if profile else 400,
+            "blitz": profile.get("blitz_rating", overall_elo) if profile else 400,
+            "rapid": profile.get("rapid_rating", overall_elo) if profile else 400,
+            "classical": profile.get("classical_rating", overall_elo) if profile else 400,
             "overall": overall_elo
         },
         "stats": {

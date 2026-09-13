@@ -82,13 +82,6 @@ export const HomeScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.headerRightBadges}>
-            <TouchableOpacity 
-              style={styles.feedbackBadge}
-              onPress={() => navigation.navigate('Feedback')}
-              accessibilityLabel="Feedback"
-            >
-              <MessageSquarePlus size={14} color="#E5A93C" />
-            </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.streakBadge}

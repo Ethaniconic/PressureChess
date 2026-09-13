@@ -29,7 +29,7 @@ class ProfileResponse(BaseModel):
     username: Optional[str] = "Grandmaster"
     full_name: Optional[str] = "Chess Player"
     avatar_url: Optional[str] = None
-    elo_rating: int = 1200
+    elo_rating: int = 400
     daily_streak: int = 1
     board_theme: str = "emerald"
     piece_theme: str = "neo"
@@ -89,14 +89,14 @@ class CreateRoomRequest(BaseModel):
     user_id: Optional[str] = "guest"
     username: str = "Player 1"
     country: str = "US"
-    rating: int = 1200
+    rating: int = 400
 
 class JoinRoomRequest(BaseModel):
     room_code: str
     user_id: Optional[str] = "guest"
     username: str = "Player 2"
     country: str = "US"
-    rating: int = 1200
+    rating: int = 400
 
 class MatchmakingJoinRequest(BaseModel):
     mode: str = "blitz"
@@ -104,7 +104,7 @@ class MatchmakingJoinRequest(BaseModel):
     user_id: str
     username: str
     country: str = "US"
-    rating: int = 1200
+    rating: int = 400
 
 class MatchmakingLeaveRequest(BaseModel):
     user_id: str

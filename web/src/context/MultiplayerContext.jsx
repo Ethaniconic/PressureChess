@@ -45,11 +45,11 @@ export const MultiplayerProvider = ({ children }) => {
   const [userRatings, setUserRatings] = useState(() => {
     const saved = localStorage.getItem('pressure_chess_mode_ratings');
     return saved ? JSON.parse(saved) : {
-      bullet: 1200,
-      blitz: 1200,
-      rapid: 1200,
-      classical: 1200,
-      overall: 1200
+      bullet: 400,
+      blitz: 400,
+      rapid: 400,
+      classical: 400,
+      overall: 400
     };
   });
 
@@ -98,11 +98,11 @@ export const MultiplayerProvider = ({ children }) => {
         if (!error && data && isMounted) {
           if (data.country) setUserCountry(data.country);
           setUserRatings({
-            bullet: data.bullet_rating || 1200,
-            blitz: data.blitz_rating || 1200,
-            rapid: data.rapid_rating || 1200,
-            classical: data.classical_rating || 1200,
-            overall: data.elo_rating || 1200
+            bullet: data.bullet_rating || 400,
+            blitz: data.blitz_rating || 400,
+            rapid: data.rapid_rating || 400,
+            classical: data.classical_rating || 400,
+            overall: data.elo_rating || 400
           });
           const wins = data.wins || 0;
           const losses = data.losses || 0;
@@ -135,11 +135,11 @@ export const MultiplayerProvider = ({ children }) => {
         const updated = payload.new;
         if (updated && isMounted) {
           setUserRatings({
-            bullet: updated.bullet_rating || 1200,
-            blitz: updated.blitz_rating || 1200,
-            rapid: updated.rapid_rating || 1200,
-            classical: updated.classical_rating || 1200,
-            overall: updated.elo_rating || 1200
+            bullet: updated.bullet_rating || 400,
+            blitz: updated.blitz_rating || 400,
+            rapid: updated.rapid_rating || 400,
+            classical: updated.classical_rating || 400,
+            overall: updated.elo_rating || 400
           });
           const wins = updated.wins || 0;
           const losses = updated.losses || 0;
@@ -282,7 +282,11 @@ export const MultiplayerProvider = ({ children }) => {
 
   // Subscribe to Supabase Realtime channel for live peer-to-peer sync
   const subscribeToGameChannel = (gameId, myColor) => {
-    if (!isSupabaseConfigured || !supabase) return;
+    return new Promise((resolve) => {
+      if (!isSupabaseConfigured || !supabase) {
+        resolve();
+        return;
+      }
 
     if (realtimeChannelRef.current) {
       realtimeChannelRef.current.unsubscribe();
@@ -326,14 +330,16 @@ export const MultiplayerProvider = ({ children }) => {
       .subscribe((status) => {
         if (status === 'SUBSCRIBED') {
           console.log(`[Realtime] Subscribed to game channel: game:${gameId}`);
+          resolve();
         }
       });
 
     realtimeChannelRef.current = channel;
+    });
   };
 
   // Initialize a new active game state
-  const initializeGame = (gameData, color, oppData) => {
+  const initializeGame = async (gameData, color, oppData) => {
     const { initial } = getTimeControlSeconds(gameData.time_control);
     setActiveGame(gameData);
     setPlayerColor(color);
@@ -350,7 +356,7 @@ export const MultiplayerProvider = ({ children }) => {
     setMatchmakingState('in_game');
 
     // Subscribe to Supabase Realtime
-    subscribeToGameChannel(gameData.id, color);
+    await subscribeToGameChannel(gameData.id, color);
   };
 
   // Quick Match: Matchmaking queue
@@ -359,7 +365,7 @@ export const MultiplayerProvider = ({ children }) => {
     setSelectedTimeControl(timeControl);
     setMatchmakingState('searching');
 
-    const myCurrentRating = userRatings[mode] || 1200;
+    const myCurrentRating = userRatings[mode] || 400;
 
     if (isSupabaseConfigured && supabase) {
       try {
@@ -395,8 +401,8 @@ export const MultiplayerProvider = ({ children }) => {
             black_player_id: blackPlayer.id || blackPlayer.user_id,
             white_username: whitePlayer.username,
             black_username: blackPlayer.username,
-            white_rating: whitePlayer.rating || 1200,
-            black_rating: blackPlayer.rating || 1200,
+            white_rating: whitePlayer.rating || 400,
+            black_rating: blackPlayer.rating || 400,
             white_country: whitePlayer.country || 'US',
             black_country: blackPlayer.country || 'US',
             status: 'active',
@@ -415,7 +421,7 @@ export const MultiplayerProvider = ({ children }) => {
           initializeGame(newGame, amIWhite ? 'white' : 'black', {
             username: oppEntry.username,
             country: oppEntry.country || 'US',
-            rating: oppEntry.rating || 1200,
+            rating: oppEntry.rating || 400,
             avatar: '♟️'
           });
           return;
@@ -496,7 +502,7 @@ export const MultiplayerProvider = ({ children }) => {
   // Create private custom room
   const createPrivateRoom = async (mode = selectedMode, timeControl = selectedTimeControl) => {
     const { initial, inc } = getTimeControlSeconds(timeControl);
-    const myCurrentRating = userRatings[mode] || 1200;
+    const myCurrentRating = userRatings[mode] || 400;
     const code = `PR-${Math.floor(1000 + Math.random() * 9000)}`;
 
     let gameData = {
@@ -512,7 +518,7 @@ export const MultiplayerProvider = ({ children }) => {
       white_country: userCountry,
       black_country: 'US',
       white_rating: myCurrentRating,
-      black_rating: 1200,
+      black_rating: 400,
       white_time_remaining: initial,
       black_time_remaining: initial,
       current_turn: 'white',
@@ -565,7 +571,7 @@ export const MultiplayerProvider = ({ children }) => {
     initializeGame(gameData, 'white', {
       username: 'Waiting for friend...',
       country: 'US',
-      rating: 1200,
+      rating: 400,
       avatar: '⏳'
     });
     return gameData;
@@ -574,7 +580,7 @@ export const MultiplayerProvider = ({ children }) => {
   // Join private custom room via code
   const joinPrivateRoom = async (code) => {
     const cleanCode = code.trim().toUpperCase();
-    const myCurrentRating = userRatings[selectedMode] || 1200;
+    const myCurrentRating = userRatings[selectedMode] || 400;
 
     let gameData = null;
 
@@ -634,7 +640,7 @@ export const MultiplayerProvider = ({ children }) => {
     }
 
     setRoomCode(gameData.room_code);
-    initializeGame(gameData, 'black', {
+    await initializeGame(gameData, 'black', {
       username: gameData.white_username,
       country: gameData.white_country,
       rating: gameData.white_rating,
@@ -871,8 +877,8 @@ export const MultiplayerProvider = ({ children }) => {
     const isDraw = res === '1/2-1/2' || res === 'draw';
 
     const currentModeKey = activeGame?.mode || selectedMode;
-    const currentElo = userRatings[currentModeKey] || 1200;
-    const oppElo = opponent?.rating || 1200;
+    const currentElo = userRatings[currentModeKey] || 400;
+    const oppElo = opponent?.rating || 400;
 
     // Calculate rating delta
     const expected = 1.0 / (1.0 + Math.pow(10, (oppElo - currentElo) / 400.0));
@@ -897,7 +903,7 @@ export const MultiplayerProvider = ({ children }) => {
 
     // Update rating
     setUserRatings((prev) => {
-      const newModeRating = Math.max(100, (prev[currentModeKey] || 1200) + delta);
+      const newModeRating = Math.max(100, (prev[currentModeKey] || 400) + delta);
       return {
         ...prev,
         [currentModeKey]: newModeRating,
@@ -934,7 +940,7 @@ export const MultiplayerProvider = ({ children }) => {
       supabase
         .from('profiles')
         .update({
-          [`${currentModeKey}_rating`]: Math.max(100, (userRatings[currentModeKey] || 1200) + delta),
+          [`${currentModeKey}_rating`]: Math.max(100, (userRatings[currentModeKey] || 400) + delta),
           elo_rating: newOverall,
           wins: isWin ? userStats.wins + 1 : userStats.wins,
           losses: !isWin && !isDraw ? userStats.losses + 1 : userStats.losses,
@@ -1023,7 +1029,7 @@ export const MultiplayerProvider = ({ children }) => {
             const draws = p.draws || 0;
             const total = wins + losses + draws;
             const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
-            const rating = p[ratingCol] || p.elo_rating || 1200;
+            const rating = p[ratingCol] || p.elo_rating || 400;
             return {
               rank: idx + 1,
               id: p.id,

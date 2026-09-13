@@ -7,7 +7,7 @@ const GUEST_USER = {
   id: 'guest',
   email: 'guest@pressurechess.com',
   username: 'Guest Grandmaster',
-  elo_rating: 1200,
+  elo_rating: 400,
   daily_streak: 1,
   isGuest: true
 };
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
         id: 'user-' + Math.random().toString(36).substring(2, 9),
         email,
         username: username || email.split('@')[0],
-        elo_rating: 1200,
+        elo_rating: 400,
         daily_streak: 1,
         isGuest: false
       };

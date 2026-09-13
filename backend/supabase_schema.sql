@@ -11,7 +11,7 @@ create table if not exists public.profiles (
   username text unique,
   full_name text,
   avatar_url text,
-  elo_rating integer default 1200,
+  elo_rating integer default 400,
   daily_streak integer default 1,
   last_active_date date default current_date,
   board_theme text default 'emerald',
@@ -144,8 +144,8 @@ create policy "Users can insert their own achievements."
 create table if not exists public.user_puzzle_stats (
   id uuid default uuid_generate_v4() primary key,
   user_id uuid references public.profiles(id) on delete cascade unique not null,
-  puzzle_rating integer default 1200,
-  highest_rating integer default 1200,
+  puzzle_rating integer default 400,
+  highest_rating integer default 400,
   puzzles_attempted integer default 0,
   puzzles_solved integer default 0,
   current_streak integer default 0,
@@ -178,7 +178,7 @@ create table if not exists public.puzzle_history (
   time_taken_seconds numeric(6, 2) not null,
   solved boolean not null,
   rating_delta integer default 0,
-  user_rating_after integer default 1200,
+  user_rating_after integer default 400,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
@@ -233,10 +233,10 @@ create policy "Users can insert game reviews."
 
 -- Add country and mode-specific ratings to profiles table if they don't exist
 alter table public.profiles add column if not exists country text default 'US';
-alter table public.profiles add column if not exists bullet_rating integer default 1200;
-alter table public.profiles add column if not exists blitz_rating integer default 1200;
-alter table public.profiles add column if not exists rapid_rating integer default 1200;
-alter table public.profiles add column if not exists classical_rating integer default 1200;
+alter table public.profiles add column if not exists bullet_rating integer default 400;
+alter table public.profiles add column if not exists blitz_rating integer default 400;
+alter table public.profiles add column if not exists rapid_rating integer default 400;
+alter table public.profiles add column if not exists classical_rating integer default 400;
 alter table public.profiles add column if not exists wins integer default 0;
 alter table public.profiles add column if not exists losses integer default 0;
 alter table public.profiles add column if not exists draws integer default 0;
@@ -255,8 +255,8 @@ create table if not exists public.multiplayer_games (
   black_username text default 'Waiting for opponent...',
   white_country text default 'US',
   black_country text default 'US',
-  white_rating integer default 1200,
-  black_rating integer default 1200,
+  white_rating integer default 400,
+  black_rating integer default 400,
   white_time_remaining numeric(10, 2) not null default 180,
   black_time_remaining numeric(10, 2) not null default 180,
   current_turn text default 'white' check (current_turn in ('white', 'black')),
@@ -295,7 +295,7 @@ create table if not exists public.matchmaking_queue (
   id uuid default uuid_generate_v4() primary key,
   user_id uuid references public.profiles(id) on delete cascade not null,
   username text not null,
-  rating integer not null default 1200,
+  rating integer not null default 400,
   country text default 'US',
   mode text not null check (mode in ('bullet', 'blitz', 'rapid', 'classical')),
   time_control text not null,
