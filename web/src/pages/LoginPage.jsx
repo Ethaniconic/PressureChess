@@ -4,7 +4,7 @@ import { GlassCard } from '../components/GlassCard';
 import { Mail, Lock, LogIn, UserCheck, AlertCircle } from 'lucide-react';
 
 export const LoginPage = ({ onNavigate }) => {
-  const { login, loginAsGuest } = useAuth();
+  const { login, loginAsGuest, loginWithGoogle } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -116,7 +116,7 @@ export const LoginPage = ({ onNavigate }) => {
 
         <button
           type="button"
-          onClick={() => {}} // Placeholder for Google Auth
+          onClick={loginWithGoogle}
           className="w-full py-3 mb-3 rounded-xl bg-white hover:bg-slate-100 text-black font-bold text-sm flex items-center justify-center gap-3 transition-colors shadow-md"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">

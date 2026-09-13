@@ -80,8 +80,7 @@ function AppContent() {
       <footer className="border-t border-white/[0.06] bg-dark-950/90 py-6 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="text-cyan-400 font-bold">PressureChess</span>
-            <span>— Phase 5 Public Beta • 100% Free For All Players</span>
+            <span className="text-white font-black tracking-tight">PressureChess</span>
           </div>
           <div className="flex items-center gap-3">
             <button 
@@ -90,8 +89,7 @@ function AppContent() {
             >
               v0.5.0 Release Notes
             </button>
-            <span>•</span>
-            <div>React Vite • Expo Mobile • FastAPI • Supabase Realtime</div>
+            <span className="text-white font-bold opacity-90 tracking-wide">PressureChess</span>
           </div>
         </div>
       </footer>

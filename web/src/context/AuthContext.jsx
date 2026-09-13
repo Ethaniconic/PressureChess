@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
         id: 'user-' + Math.random().toString(36).substring(2, 9),
         email,
         username: email.split('@')[0],
-        elo_rating: 1250,
+        elo_rating: 400,
         daily_streak: 2,
         isGuest: false
       };
@@ -132,6 +132,20 @@ export const AuthProvider = ({ children }) => {
     return { success: true };
   };
 
+  const loginWithGoogle = async () => {
+    if (isSupabaseConfigured && supabase) {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        }
+      });
+      if (error) throw error;
+    } else {
+      throw new Error("Supabase is not configured. Google login unavailable.");
+    }
+  };
+
   const logout = async () => {
     if (isSupabaseConfigured && supabase) {
       await supabase.auth.signOut();
@@ -151,6 +165,7 @@ export const AuthProvider = ({ children }) => {
       login,
       signup,
       loginAsGuest,
+      loginWithGoogle,
       logout,
       forgotPassword
     }}>

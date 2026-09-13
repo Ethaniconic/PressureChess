@@ -317,7 +317,7 @@ export const ProfilePage = ({ onNavigate }) => {
                 <Trophy className="w-3.5 h-3.5" /> Overall ELO
               </div>
               <div className="text-2xl font-mono font-black text-cyan-300 mt-0.5">
-                {userStats?.totalGames > 0 ? (userRatings?.overall || 1200) : '1200?'}
+                {userStats?.totalGames > 0 ? (userRatings?.overall || 400) : '400?'}
               </div>
               <div className="text-[9px] text-slate-400 font-sans">
                 {userStats?.totalGames > 0 ? `${userStats.totalGames} Games Played` : 'Provisional (0 Games)'}
@@ -362,7 +362,7 @@ export const ProfilePage = ({ onNavigate }) => {
             </div>
             <div className="text-xs text-slate-400 font-semibold">Bullet</div>
             <div className="text-2xl font-black font-mono text-white mt-1">
-              {userStats?.totalGames > 0 ? (userRatings.bullet || 1200) : '1200?'}
+              {userStats?.totalGames > 0 ? (userRatings.bullet || 400) : '400?'}
             </div>
             <div className="text-[10px] text-slate-500 mt-1">
               {userStats?.totalGames > 0 ? 'Rated' : 'Provisional'}
@@ -378,7 +378,7 @@ export const ProfilePage = ({ onNavigate }) => {
             </div>
             <div className="text-xs text-slate-400 font-semibold">Blitz</div>
             <div className="text-2xl font-black font-mono text-white mt-1">
-              {userStats?.totalGames > 0 ? (userRatings.blitz || 1200) : '1200?'}
+              {userStats?.totalGames > 0 ? (userRatings.blitz || 400) : '400?'}
             </div>
             <div className="text-[10px] text-slate-500 mt-1">
               {userStats?.totalGames > 0 ? 'Rated' : 'Provisional'}
@@ -394,7 +394,7 @@ export const ProfilePage = ({ onNavigate }) => {
             </div>
             <div className="text-xs text-slate-400 font-semibold">Rapid</div>
             <div className="text-2xl font-black font-mono text-white mt-1">
-              {userStats?.totalGames > 0 ? (userRatings.rapid || 1200) : '1200?'}
+              {userStats?.totalGames > 0 ? (userRatings.rapid || 400) : '400?'}
             </div>
             <div className="text-[10px] text-slate-500 mt-1">
               {userStats?.totalGames > 0 ? 'Rated' : 'Provisional'}
@@ -410,7 +410,7 @@ export const ProfilePage = ({ onNavigate }) => {
             </div>
             <div className="text-xs text-slate-400 font-semibold">Classical</div>
             <div className="text-2xl font-black font-mono text-white mt-1">
-              {userStats?.totalGames > 0 ? (userRatings.classical || 1200) : '1200?'}
+              {userStats?.totalGames > 0 ? (userRatings.classical || 400) : '400?'}
             </div>
             <div className="text-[10px] text-slate-500 mt-1">
               {userStats?.totalGames > 0 ? 'Rated' : 'Provisional'}

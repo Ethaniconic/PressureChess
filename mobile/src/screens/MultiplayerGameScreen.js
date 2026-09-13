@@ -120,7 +120,7 @@ export const MultiplayerGameScreen = ({ navigation }) => {
             {selectedMode.toUpperCase()} • {selectedTimeControl}
           </Text>
           <Text style={styles.searchingDesc}>
-            Searching matchmaking pool near {userRatings[selectedMode] || 1200} Elo...
+            Searching matchmaking pool near {userRatings[selectedMode] || 400} Elo...
           </Text>
 
           <TouchableOpacity
@@ -249,7 +249,7 @@ export const MultiplayerGameScreen = ({ navigation }) => {
             <View>
               <Text style={styles.playerNameText}>{user?.username || 'Tactician'}</Text>
               <Text style={styles.playerRatingText}>
-                {userRatings[selectedMode] || 1200} • Playing {playerColor.toUpperCase()}
+                {userRatings[selectedMode] || 400} • Playing {playerColor.toUpperCase()}
               </Text>
             </View>
           </View>
@@ -366,7 +366,7 @@ export const MultiplayerGameScreen = ({ navigation }) => {
                 styles.deltaVal,
                 ratingChange > 0 ? { color: '#10B981' } : (ratingChange < 0 ? { color: '#EF4444' } : { color: '#94A3B8' })
               ]}>
-                {ratingChange > 0 ? `+${ratingChange}` : ratingChange} ({userRatings[selectedMode] || 1200})
+                {ratingChange > 0 ? `+${ratingChange}` : ratingChange} ({userRatings[selectedMode] || 400})
               </Text>
             </View>
 

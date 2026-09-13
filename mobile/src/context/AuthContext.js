@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
         id: 'user-' + Math.random().toString(36).substring(2, 9),
         email,
         username: email.split('@')[0],
-        elo_rating: 1250,
+        elo_rating: 400,
         daily_streak: 2,
         isGuest: false
       };

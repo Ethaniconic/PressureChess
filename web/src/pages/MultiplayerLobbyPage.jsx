@@ -85,7 +85,7 @@ export const MultiplayerLobbyPage = ({ onNavigate }) => {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[4px] bg-[#E5A93C]/15 border border-[#E5A93C]/35 text-[#E5A93C] text-xs font-black uppercase tracking-wider">
             <Radio className="w-3.5 h-3.5 text-[#E5A93C] animate-pulse" />
-            <span>Supabase Realtime Matchmaking • Instant Pairings</span>
+            <span>Live Matchmaking • Instant Pairings</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-3">
             <span>Online Multiplayer Arena</span>
@@ -313,7 +313,7 @@ export const MultiplayerLobbyPage = ({ onNavigate }) => {
         <div className="flex items-center gap-3">
           <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-500 animate-ping" />
           <span className="text-xs font-bold text-slate-300">
-            <span className="text-white font-black font-mono">1,482</span> players currently battling online
+            Players currently battling online
           </span>
         </div>
         <div className="flex items-center gap-4 text-xs text-slate-400">

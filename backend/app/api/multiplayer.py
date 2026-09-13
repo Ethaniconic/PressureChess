@@ -594,7 +594,7 @@ def get_multiplayer_profile(user_id: str):
             logger.warning(f"Error fetching profile: {e}")
 
     country = profile.get("country", "US") if profile else "US"
-    overall_elo = profile.get("elo_rating", 1200) if profile else 1200
+    overall_elo = profile.get("elo_rating", 400) if profile else 400
     wins = profile.get("wins", 0) if profile else 0
     losses = profile.get("losses", 0) if profile else 0
     draws = profile.get("draws", 0) if profile else 0

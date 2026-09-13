@@ -313,7 +313,7 @@ export const HomePage = ({ onNavigate }) => {
               <div className="space-y-2.5 max-w-xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[4px] bg-[#E5A93C]/15 border border-[#E5A93C]/30 text-[#E5A93C] text-[10px] font-black uppercase tracking-wider">
                   <Swords className="w-3.5 h-3.5 text-[#E5A93C]" />
-                  <span>Public Beta • Supabase Realtime • Elo Matchmaking</span>
+                  <span>Ranked Elo Matchmaking</span>
                 </div>
                 <h3 className="text-xl font-black text-white">
                   Realtime Online Multiplayer & Ranked Arena
