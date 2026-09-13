@@ -34,6 +34,9 @@
         "projectId": "c7c76e24-fc00-4546-b5ff-8ce4722fbd64"
       }
     },
-    "owner": "ethaniconic"
+    "owner": "ethaniconic",
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }

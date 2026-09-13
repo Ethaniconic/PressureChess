@@ -5,12 +5,42 @@ import { colors } from '../theme/colors';
 import { GlassCard } from '../components/GlassCard';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, LogIn, UserCheck } from 'lucide-react-native';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import { supabase } from '../services/supabase';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export const LoginScreen = ({ navigation }) => {
   const { login, loginAsGuest } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Initialize Google Auth Request
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    // You have this from your Website setup (now securely in .env)
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, 
+    
+    // You MUST generate this for the APK using your EAS SHA-1
+    androidClientId: '979732756870-8j8gh10donr1qfm5aq5q23hdti67vap2.apps.googleusercontent.com'
+  });
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      const { idToken } = response.authentication;
+      if (idToken) {
+        setLoading(true);
+        supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: idToken,
+        }).then(({ error }) => {
+          setLoading(false);
+          if (error) Alert.alert('Google Login Error', error.message);
+        });
+      }
+    }
+  }, [response]);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -97,7 +127,8 @@ export const LoginScreen = ({ navigation }) => {
 
           <TouchableOpacity
             style={styles.googleBtn}
-            onPress={() => {}} // Placeholder for Google Auth
+            disabled={!request || loading}
+            onPress={() => promptAsync()}
           >
             <Text style={styles.googleIcon}>G</Text>
             <Text style={styles.googleText}>Continue with Google</Text>
