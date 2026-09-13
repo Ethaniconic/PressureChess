@@ -99,6 +99,30 @@ export const MultiplayerProvider = ({ children }) => {
             setUserStats(liveStats);
             await AsyncStorage.setItem('pc_ratings', JSON.stringify(liveRatings));
             await AsyncStorage.setItem('pc_stats', JSON.stringify(liveStats));
+          } else if (!data && !error && isMounted) {
+            // If no profile exists (e.g. registered before trigger was added), create one natively
+            const newProfile = {
+              id: userId,
+              username: username || 'Tactician',
+              elo_rating: 400,
+              bullet_rating: 400,
+              blitz_rating: 400,
+              rapid_rating: 400,
+              classical_rating: 400,
+              country: 'US',
+              wins: 0,
+              losses: 0,
+              draws: 0
+            };
+            const { error: insertError } = await supabase.from('profiles').insert(newProfile);
+            if (!insertError && isMounted) {
+              const baseRatings = { bullet: 400, blitz: 400, rapid: 400, classical: 400, overall: 400 };
+              const baseStats = { wins: 0, losses: 0, draws: 0 };
+              setUserRatings(baseRatings);
+              setUserStats(baseStats);
+              await AsyncStorage.setItem('pc_ratings', JSON.stringify(baseRatings));
+              await AsyncStorage.setItem('pc_stats', JSON.stringify(baseStats));
+            }
           }
         }
       } catch (e) {

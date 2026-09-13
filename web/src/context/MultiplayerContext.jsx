@@ -115,6 +115,26 @@ export const MultiplayerProvider = ({ children }) => {
             totalGames: total,
             winRatePct: total > 0 ? Math.round((wins / total) * 100) : 0
           });
+        } else if (!data && !error && isMounted) {
+          // If no profile exists (e.g. registered before trigger was added), create one natively
+          const newProfile = {
+            id: userId,
+            username: username || 'Tactician',
+            elo_rating: 400,
+            bullet_rating: 400,
+            blitz_rating: 400,
+            rapid_rating: 400,
+            classical_rating: 400,
+            country: 'US',
+            wins: 0,
+            losses: 0,
+            draws: 0
+          };
+          const { error: insertError } = await supabase.from('profiles').insert(newProfile);
+          if (!insertError && isMounted) {
+            setUserRatings({ bullet: 400, blitz: 400, rapid: 400, classical: 400, overall: 400 });
+            setUserStats({ wins: 0, losses: 0, draws: 0, totalGames: 0, winRatePct: 0 });
+          }
         }
       } catch (e) {
         console.warn('Profile sync error:', e);
